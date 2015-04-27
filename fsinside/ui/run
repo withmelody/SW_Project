@@ -1,0 +1,2 @@
+gcc -g project.c load_screen.c controller.c about.c -lncurses -lpthread
+./a.out
