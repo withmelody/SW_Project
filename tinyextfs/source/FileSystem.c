@@ -56,23 +56,24 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 	{
 		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
 		{
-			if( inodeInfo.type == FILE_TYPE_DIR )
+			if( inodeInfo.type == FILE_TYPE_DIR ) {
 				ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
-			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
-			{
-				if ( strcmp(dirBlock.dirEntries[j].name, abspath) == 0
-						&& dirBlock.dirEntries[j].type == FILE_TYPE_DIR)
-				{// 마지막 상위 디렉토리(찾는 파일 또는 디렉토리의 ..)를 찾으면
-					ReadInode(&inodeInfo, dirBlock.dirEntries[j].inodeNum);
-					parent_inodeno = dirBlock.dirEntries[j].inodeNum;
-					found++;
+				for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
+				{
+					if ( strcmp(dirBlock.dirEntries[j].name, abspath) == 0
+							&& dirBlock.dirEntries[j].type == FILE_TYPE_DIR)
+					{// 마지막 상위 디렉토리(찾는 파일 또는 디렉토리의 ..)를 찾으면
+						ReadInode(&inodeInfo, dirBlock.dirEntries[j].inodeNum);
+						parent_inodeno = dirBlock.dirEntries[j].inodeNum;
+						found++;
+						break;
+					}
+				}
+				if ( found == 1 )
+				{
+					found = 0;
 					break;
 				}
-			}
-			if ( found == 1 )
-			{
-				found = 0;
-				break;
 			}
 		}
 		abspath = strtok(NULL, "/");

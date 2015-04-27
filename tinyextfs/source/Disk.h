@@ -3,6 +3,7 @@
 
 
 #define BLOCK_SIZE 512
+//#define BLOCK_SIZE 1024
 
 extern void DevInit(void);
 

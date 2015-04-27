@@ -3,7 +3,7 @@ OBJ = Buf.o Disk.o TestCase.o FileSystem.o
 TARGET = FileSystem
 
 $(TARGET) : $(OBJ)
-	gcc -o $@ $^ -lm
+	gcc -o $@ $^ -lm -g
 	mkdir OBJ
 	mv *.o OBJ
 
