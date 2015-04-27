@@ -1,1 +1,5 @@
 *.swp
+tinyextfs/source/FileSystem
+tinyextfs/source/MY_DISK
+tinyextfs/source/OBJ/*
+

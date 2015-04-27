@@ -83,14 +83,14 @@ typedef struct __fileDescTable {
 }FileDescTable;
 
 // function appended from assignment3
-int		OpenFile(const char* szFileName, OpenFlag flag);
+int		OpenFile(const char* pFileName, OpenFlag flag);
 int		WriteFile(int fileDesc, char* pBuffer, int length);
 int		ReadFile(int fileDesc, char* pBuffer, int length);
 int		CloseFile(int fileDesc);
-int		RemoveFile(const char* szFileName);
-int		MakeDir(const char* szDirName);
-int		RemoveDir(const char* szDirName);
-int		EnumerateDirStatus(const char* szDirName, DirEntry* pDirEntry, int dirEntries);
+int		RemoveFile(const char* pFileName);
+int		MakeDir(const char* pDirName);
+int		RemoveDir(const char* pDirName);
+int		EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries);
 void	Mount(MountType type);
 void	Unmount(void);
 

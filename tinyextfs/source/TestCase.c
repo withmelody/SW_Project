@@ -207,7 +207,7 @@ int main(int argc, char** argv)
 
 	if (argc < 3)
 	{
-		printf("Usage: %s [format | readwrite] TestCaseNumber\n", argv[1]);
+		printf("Usage: %s [format | readwrite] TestCaseNumber\n", argv[0]);
 		exit(0);
 	}
 	if (strcmp(argv[1], "format") == 0)

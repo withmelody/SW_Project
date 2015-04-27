@@ -8,11 +8,11 @@ int		inodeListSize 	= 0;
 double	blockBitmapSize	= 0;
 double	dataRegionSize 	= 0;
 
-int	OpenFile(const char* szFileName, OpenFlag flag)
+int	OpenFile(const char* pFileName, OpenFlag flag)
 {
 /*
  * precondition		: usage) OpenFile(absfilepath, flag);
- * 					  szFileName은 오픈할 파일의 이름. 단, 파일 이름은 절대경로이다.
+ * 					  pFileName은 오픈할 파일의 이름. 단, 파일 이름은 절대경로이다.
  * 					  flag는 OPEN_FLAG_READWRITE, OPEN_FLAG_CREATE가 있다.
  * postcondition	: 파일을 open한다.
  *					  성공하면, file descriptor를 리턴한다.
@@ -21,8 +21,8 @@ int	OpenFile(const char* szFileName, OpenFlag flag)
  */
 	InodeInfo	inodeInfo, newInode;
 	DirBlock	dirBlock;
-	char* 	abspath = malloc(strlen(szFileName) + 1);
-	char* 	ptr = malloc(strlen(szFileName) + 1);
+	char* 	abspath = malloc(strlen(pFileName) + 1);
+	char* 	ptr = malloc(strlen(pFileName) + 1);
 	char	filename[NAME_LEN_MAX];
 	int 	i = 0, j = 0;
 	int		found = 0;
@@ -30,8 +30,8 @@ int	OpenFile(const char* szFileName, OpenFlag flag)
 	int		parent_inodeno = 0;
 	int		current_inodeno = 0;
 
-	strcpy(abspath, szFileName);
-	strcpy(ptr, szFileName);
+	strcpy(abspath, pFileName);
+	strcpy(ptr, pFileName);
 
 	memset(&newInode, 0, sizeof(InodeInfo));
 
@@ -356,10 +356,10 @@ int CloseFile(int fileDesc)
 	fileDescTable.file[fileDesc].valid_bit = 0;
 	BufSync();
 }
-int RemoveFile(const char* szFileName)
+int RemoveFile(const char* pFileName)
 {
 /*
- * precondition		: usage ) RemoveFile(szFileName);
+ * precondition		: usage ) RemoveFile(pFileName);
  * postcondition	: 파일을 제거한다. 단, open된 파일을 제거 할 수 없다.
  * 					  성공하면 0을 리턴한다. 실패 했을 때는 -1을 리턴한다.
  * 					  실패 원인은 다음과 같다.
@@ -367,14 +367,14 @@ int RemoveFile(const char* szFileName)
  * 					  2) 제거될 파일이 open 되어 있을 경우
  */
 	char filename[NAME_LEN_MAX] = {NULL,};
-	char* abspath = malloc(strlen(szFileName) + 1);
+	char* abspath = malloc(strlen(pFileName) + 1);
 	char* ptr = abspath;
 	InodeInfo inodeInfo;
 	DirBlock dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 	int parent_blockno = 0;
-	memcpy(abspath, szFileName, strlen(szFileName) + 1);
+	memcpy(abspath, pFileName, strlen(pFileName) + 1);
 
 	GetEntryName(filename, abspath);	// dirname 최종 디렉토리명
 //	GetEntryPath(abspath, filename);	// abspath는 dirname을 제외한 path
@@ -445,24 +445,24 @@ int RemoveFile(const char* szFileName)
 //
 ///////////////////////////////////////////////////
 }
-int MakeDir(const char* szDirName)
+int MakeDir(const char* pDirName)
 {
 /*
- * precondition		: usage ) MakeFir(szDirName);
+ * precondition		: usage ) MakeFir(pDirName);
  * postcondition	: 디렉토리를 생성한다.
  * 					  성공하면 0을 리턴한다. 실패 했을 때는 -1을 리턴한다.
  * 					  실패 원인은 생성하고자 하는 디렉토리의 이름과
  * 					  동일한 디렉토리 또는 파일이 존재할 경우이다.
  */
 	char dirname[NAME_LEN_MAX] = {NULL,};
-	char* abspath = malloc(strlen(szDirName) + 1);
+	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
 	InodeInfo inodeInfo;
 	DirBlock dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 
-	memcpy(abspath, szDirName, strlen(szDirName) + 1);
+	memcpy(abspath, pDirName, strlen(pDirName) + 1);
 
 	GetEntryName(dirname, abspath);		// dirname 최종 디렉토리명
 	GetEntryPath(abspath, dirname);	// abspath는 dirname을 제외한 path
@@ -512,10 +512,10 @@ int MakeDir(const char* szDirName)
 	free(abspath);
 	return 0;
 }
-int RemoveDir(const char* szDirName)
+int RemoveDir(const char* pDirName)
 {
 /*
- * precondition		: usage ) RemoveDir(szDirName);
+ * precondition		: usage ) RemoveDir(pDirName);
  * postcondition	: 디렉토리를 제거한다. 단, 리눅스 파일 시스템처럼 빈 디렉토리만 제거가 가능하다.
  * 					  성공하면 0을 리턴한다. 실패 했을 때는 -1을 리턴한다.
  * 					  실패 원인은 다음과 같다.
@@ -523,14 +523,14 @@ int RemoveDir(const char* szDirName)
  * 					  2) 제거하고자 하는 디렉토리가 없을 경우
  */
 	char dirname[NAME_LEN_MAX] = {NULL,};
-	char* abspath = malloc(strlen(szDirName) + 1);
+	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
 	InodeInfo inodeInfo;
 	DirBlock dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 
-	memcpy(abspath, szDirName, strlen(szDirName) + 1);
+	memcpy(abspath, pDirName, strlen(pDirName) + 1);
 
 	GetEntryName(dirname, abspath);	// dirname 최종 디렉토리명
 	GetEntryPath(abspath, dirname);	// abspath는 dirname을 제외한 path
@@ -581,10 +581,10 @@ int RemoveDir(const char* szDirName)
 	free(abspath);
 	return 0;
 }
-int EnumerateDirStatus(const char* szDirName, DirEntry* pDirEntry, int dirEntries)
+int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries)
 {
 /*
- * precondition		: usage ) EnumerateDirStatus(szDirName, pDirEntry, dirEntries);
+ * precondition		: usage ) EnumerateDirStatus(pDirName, pDirEntry, dirEntries);
  * postcondition	: 디렉토리에 포함된 파일 또는 디렉토리 정보를 얻어낸다.
  * 					  이 함수는 해당 디렉토리를 구성하고 있는 디렉토리 엔트리들의
  * 					  묶음을 리턴한다.
@@ -596,7 +596,7 @@ int EnumerateDirStatus(const char* szDirName, DirEntry* pDirEntry, int dirEntrie
  * 					  내용이 pDirEntry로 리턴되어야 한다. 에러 발생시 -1을 리턴한다.
  */
 	char dirname[NAME_LEN_MAX] = {NULL,};
-	char* abspath = malloc(strlen(szDirName) + 1);
+	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
 	DirEntry* dirEntry = pDirEntry;
 	InodeInfo inodeInfo;
@@ -605,7 +605,7 @@ int EnumerateDirStatus(const char* szDirName, DirEntry* pDirEntry, int dirEntrie
 	int found = 0;
 	int	cnt = 0;
 
-	memcpy(abspath, szDirName, strlen(szDirName) + 1);
+	memcpy(abspath, pDirName, strlen(pDirName) + 1);
 
 	GetEntryName(dirname, abspath);	// dirname 최종 디렉토리명
 	ReadInode(&inodeInfo, fileSysInfo.rootInodeNum);
