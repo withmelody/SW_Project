@@ -1,0 +1,164 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BLKNO_INVALID	Buf.h	11;"	d
+BLOCK_SIZE	Disk.h	5;"	d
+BOOL	Buf.h	/^typedef int BOOL;$/;"	t
+BUF_LIST_CLEAN	Buf.h	/^    BUF_LIST_CLEAN,$/;"	e	enum:__BufList
+BUF_LIST_DIRTY	Buf.h	/^    BUF_LIST_DIRTY,$/;"	e	enum:__BufList
+BUF_LIST_FREE	Buf.h	/^    BUF_LIST_FREE$/;"	e	enum:__BufList
+BUF_STATE_CLEAN	Buf.h	/^	BUF_STATE_CLEAN,$/;"	e	enum:__BufState
+BUF_STATE_DIRTY	Buf.h	/^	BUF_STATE_DIRTY$/;"	e	enum:__BufState
+Buf	Buf.h	/^struct Buf$/;"	s
+Buf	Buf.h	/^typedef struct Buf Buf;$/;"	t	typeref:struct:Buf
+BufDelete	Buf.c	/^BOOL BufDelete(Buf* pBuf)$/;"	f
+BufFind	Buf.c	/^Buf* BufFind(int blkno)$/;"	f
+BufGetNewBuffer	Buf.c	/^Buf* BufGetNewBuffer(void)$/;"	f
+BufInsert	Buf.c	/^void BufInsert(Buf* pBuf, BufList listNum)$/;"	f
+BufList	Buf.h	/^} BufList;$/;"	t	typeref:enum:__BufList
+BufRead	Buf.c	/^Buf* BufRead(int blkno)$/;"	f
+BufState	Buf.h	/^} BufState;$/;"	t	typeref:enum:__BufState
+BufSync	Buf.c	/^void BufSync(void)$/;"	f
+BufWrite	Buf.c	/^BOOL BufWrite(Buf* pBuf, void* pData, int size)$/;"	f
+CloseFile	FileSystem.c	/^int CloseFile(int fileDesc)$/;"	f
+DIR_NUM_MAX	TestCase.c	14;"	d	file:
+DecUseBlock	FileSystem.c	/^int DecUseBlock()	\/\/ Block 1개 해제$/;"	f
+DecUseInode	FileSystem.c	/^int DecUseInode()	\/\/ Inode 1개 해제$/;"	f
+DevInit	Disk.c	/^void DevInit(void)$/;"	f
+DevLoad	Disk.c	/^void DevLoad(void)$/;"	f
+DevMoveBlock	Disk.c	/^void DevMoveBlock(int blkno){$/;"	f
+DevReadBlock	Disk.c	/^void DevReadBlock(int blkno, char* pBuf)$/;"	f
+DevWriteBlock	Disk.c	/^void DevWriteBlock(int blkno, char* pBuf)$/;"	f
+DirBlock	FileSystem.h	/^}DirBlock;$/;"	t	typeref:struct:__dirBlock
+DirEntry	FileSystem.h	/^} DirEntry;$/;"	t	typeref:struct:__dirEntry
+DirIsEmpty	FileSystem.c	/^int DirIsEmpty(InodeInfo* inodeInfo)$/;"	f
+EnumerateDirStatus	FileSystem.c	/^int EnumerateDirStatus(const char* szDirName, DirEntry* pDirEntry, int dirEntries)$/;"	f
+FALSE	Buf.h	12;"	d
+FILE_MODE_EXEC	FileSystem.h	/^	FILE_MODE_EXEC$/;"	e	enum:__fileMode
+FILE_MODE_READONLY	FileSystem.h	/^	FILE_MODE_READONLY,$/;"	e	enum:__fileMode
+FILE_MODE_READWRITE	FileSystem.h	/^	FILE_MODE_READWRITE,$/;"	e	enum:__fileMode
+FILE_TYPE_DEV	FileSystem.h	/^    FILE_TYPE_DEV$/;"	e	enum:__fileType
+FILE_TYPE_DIR	FileSystem.h	/^    FILE_TYPE_DIR,$/;"	e	enum:__fileType
+FILE_TYPE_FILE	FileSystem.h	/^    FILE_TYPE_FILE,$/;"	e	enum:__fileType
+FS_DISK_CAPACITY	FilesysConfig.h	4;"	d
+FS_INODE_COUNT	FilesysConfig.h	5;"	d
+FileDesc	FileSystem.h	/^}FileDesc;$/;"	t	typeref:struct:__fileDesc
+FileDescTable	FileSystem.h	/^}FileDescTable;$/;"	t	typeref:struct:__fileDescTable
+FileMode	FileSystem.h	/^}FileMode;$/;"	t	typeref:enum:__fileMode
+FileSysInfo	FileSystem.h	/^} FileSysInfo;$/;"	t	typeref:struct:_fileSysInfo
+FileType	FileSystem.h	/^} FileType;$/;"	t	typeref:enum:__fileType
+GetBufInfoByHashIndex	Buf.c	/^void GetBufInfoByHashIndex(int index, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetBufInfoByListNum	Buf.c	/^void GetBufInfoByListNum(BufList listNum, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetEntryName	FileSystem.c	/^int GetEntryName(char* dest, char* abspath)$/;"	f
+GetEntryPath	FileSystem.c	/^void GetEntryPath(char* abspath, char* filename)$/;"	f
+GetFreeBlock	FileSystem.c	/^int GetFreeBlock()$/;"	f
+GetFreeDir	FileSystem.c	/^int GetFreeDir(DirBlock* dirBlock)$/;"	f
+GetFreeEntry	FileSystem.c	/^int GetFreeEntry(char* Bitmap, int BitmapBlockSize)$/;"	f
+GetFreeInode	FileSystem.c	/^int GetFreeInode()$/;"	f
+HASH_TBL_SIZE	Buf.h	9;"	d
+IncUseBlock	FileSystem.c	/^int IncUseBlock()	\/\/ Block 1개 사용$/;"	f
+IncUseInode	FileSystem.c	/^int IncUseInode()	\/\/ Inode 1개 사용$/;"	f
+Init	Buf.c	/^void Init(void)$/;"	f
+InitObjectLink	Buf.c	/^void InitObjectLink(Buf* pBuf)$/;"	f
+InodeInfo	FileSystem.h	/^}InodeInfo;$/;"	t	typeref:struct:__inodeInfo
+InsertBufIntoFreelist	Buf.c	/^void InsertBufIntoFreelist(Buf* pBuf)$/;"	f
+ListDirContents	TestCase.c	/^void ListDirContents(const char* dirName, int dirNum)$/;"	f
+MAX_BUFLIST_NUM	Buf.h	10;"	d
+MAX_INDEX_OF_DIRBLK	FileSystem.h	9;"	d
+MT_TYPE_FORMAT	FileSystem.h	/^    MT_TYPE_FORMAT,		\/\/ 마운트가 되는 해당 파티션은 포맷된다.$/;"	e	enum:__mountType
+MT_TYPE_READWRITE	FileSystem.h	/^    MT_TYPE_READWRITE,	\/\/ 마운트가 되는 해당 파티션은 그대로 유지된다.$/;"	e	enum:__mountType
+MakeDir	FileSystem.c	/^int MakeDir(const char* szDirName)$/;"	f
+MakeDirentry	FileSystem.c	/^int MakeDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+Mount	FileSystem.c	/^void Mount(MountType type)$/;"	f
+MountType	FileSystem.h	/^} MountType;$/;"	t	typeref:enum:__mountType
+NAME_LEN_MAX	FileSystem.h	10;"	d
+NUM_OF_DIRENT_IN_1BLK	FileSystem.h	8;"	d
+NUM_OF_INDIRECT_BLOCK	FileSystem.h	11;"	d
+NUM_OF_INODE_IN_1BLK	FileSystem.h	7;"	d
+OBJ	Makefile	/^OBJ = Buf.o Disk.o TestCase.o FileSystem.o$/;"	m
+OPEN_FLAG_CREATE	FileSystem.h	/^	OPEN_FLAG_CREATE	\/\/ 파일이 존재하지 않으면 생성 후 파일을 open함$/;"	e	enum:__openFlag
+OPEN_FLAG_READWRITE	FileSystem.h	/^	OPEN_FLAG_READWRITE,$/;"	e	enum:__openFlag
+OpenFile	FileSystem.c	/^int	OpenFile(const char* szFileName, OpenFlag flag)$/;"	f
+OpenFlag	FileSystem.h	/^} OpenFlag;$/;"	t	typeref:enum:__openFlag
+ReadDirBlock	FileSystem.c	/^void ReadDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+ReadFile	FileSystem.c	/^int ReadFile(int fileDesc, char* pBuffer, int length)$/;"	f
+ReadInode	FileSystem.c	/^void ReadInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+RemoveDir	FileSystem.c	/^int RemoveDir(const char* szDirName)$/;"	f
+RemoveDirentry	FileSystem.c	/^int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+RemoveFile	FileSystem.c	/^int RemoveFile(const char* szFileName)$/;"	f
+SRCS	Makefile	/^SRCS = Buf.c Disk.c TestCase.c FileSystem.c$/;"	m
+SetBlockAllocToFree	FileSystem.c	/^int SetBlockAllocToFree(int blockno)$/;"	f
+SetBlockFreeToAlloc	FileSystem.c	/^int SetBlockFreeToAlloc()$/;"	f
+SetFreeToAlloc	FileSystem.c	/^int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)$/;"	f
+SetInodeAllocToFree	FileSystem.c	/^int SetInodeAllocToFree(int inodeno)$/;"	f
+SetInodeFreeToAlloc	FileSystem.c	/^int SetInodeFreeToAlloc()$/;"	f
+TARGET	Makefile	/^TARGET = FileSystem$/;"	m
+TRUE	Buf.h	13;"	d
+TestCase1	TestCase.c	/^void TestCase1(void)$/;"	f
+TestCase2	TestCase.c	/^void TestCase2(void)$/;"	f
+TestCase3	TestCase.c	/^void TestCase3(void)$/;"	f
+TestCase4	TestCase.c	/^void TestCase4(void)$/;"	f
+Unmount	FileSystem.c	/^void Unmount(void)$/;"	f
+WRONG_VALUE	Buf.h	14;"	d
+WriteDirBlock	FileSystem.c	/^void WriteDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+WriteFile	FileSystem.c	/^int WriteFile(int fileDesc, char* pBuffer, int length)$/;"	f
+WriteInode	FileSystem.c	/^void WriteInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+__BUF_H__	Buf.h	2;"	d
+__BufList	Buf.h	/^typedef enum __BufList{$/;"	g
+__BufState	Buf.h	/^typedef enum __BufState$/;"	g
+__DISK_H__	Disk.h	2;"	d
+__FILESYSTEM_H__	FileSystem.h	2;"	d
+__FS_CONF__	FilesysConfig.h	2;"	d
+__dirBlock	FileSystem.h	/^typedef struct __dirBlock {$/;"	s
+__dirEntry	FileSystem.h	/^typedef struct __dirEntry {$/;"	s
+__fileDesc	FileSystem.h	/^typedef struct __fileDesc {$/;"	s
+__fileDescTable	FileSystem.h	/^typedef struct __fileDescTable {$/;"	s
+__fileMode	FileSystem.h	/^typedef enum __fileMode {$/;"	g
+__fileType	FileSystem.h	/^typedef enum __fileType {$/;"	g
+__inodeInfo	FileSystem.h	/^typedef struct __inodeInfo {$/;"	s
+__mountType	FileSystem.h	/^typedef enum __mountType {$/;"	g
+__openFlag	FileSystem.h	/^typedef enum __openFlag {$/;"	g
+_fileSysInfo	FileSystem.h	/^typedef struct _fileSysInfo {$/;"	s
+blkno	Buf.h	/^    int					blkno;$/;"	m	struct:Buf
+blockBitmapSize	FileSystem.c	/^double	blockBitmapSize	= 0;$/;"	v
+blockBitmapStart	FileSystem.h	/^	int blockBitmapStart;	\/\/ block bitmap이 저장된 블록 번호$/;"	m	struct:_fileSysInfo
+blocks	FileSystem.h	/^	int			blocks;$/;"	m	struct:__inodeInfo
+blocks	FileSystem.h	/^	int blocks;				\/\/ 파일 시스템의 설정된 블록 크기$/;"	m	struct:_fileSysInfo
+dataRegionSize	FileSystem.c	/^double	dataRegionSize 	= 0;$/;"	v
+dataStart	FileSystem.h	/^	int dataStart;			\/\/ data 영역의 시작 블록 번호$/;"	m	struct:_fileSysInfo
+dirEntries	FileSystem.h	/^	DirEntry	dirEntries[NUM_OF_DIRENT_IN_1BLK];$/;"	m	struct:__dirBlock
+diskCapacity	FileSystem.h	/^	int diskCapacity;		\/\/ 디스크의 용량. 블록 개수로 저장됨$/;"	m	struct:_fileSysInfo
+fd	Disk.c	/^int fd; $/;"	v
+file	FileSystem.h	/^	FileDesc	file[FS_INODE_COUNT];$/;"	m	struct:__fileDescTable
+fileDescTable	FileSystem.c	/^FileDescTable	fileDescTable;$/;"	v
+fileSysInfo	FileSystem.c	/^FileSysInfo		fileSysInfo;$/;"	v
+hash	Buf.h	/^    TAILQ_ENTRY(Buf)	hash;$/;"	m	struct:Buf
+i_block	FileSystem.h	/^	int			i_block[NUM_OF_INDIRECT_BLOCK];$/;"	m	struct:__inodeInfo
+inodeBitmapSize	FileSystem.c	/^int		inodeBitmapSize	= 0;$/;"	v
+inodeBitmapStart	FileSystem.h	/^	int inodeBitmapStart;	\/\/ inode bitmap이 저장된 블록의 번호$/;"	m	struct:_fileSysInfo
+inodeListSize	FileSystem.c	/^int		inodeListSize 	= 0;$/;"	v
+inodeListStart	FileSystem.h	/^	int inodeListStart;		\/\/ inode list를 저장하는 영역의 시작 블록 번호$/;"	m	struct:_fileSysInfo
+inodeNo	FileSystem.h	/^	int	inodeNo;$/;"	m	struct:__fileDesc
+inodeNum	FileSystem.h	/^    int inodeNum;$/;"	m	struct:__dirEntry
+link	Buf.h	/^    TAILQ_ENTRY(Buf)	link;$/;"	m	struct:Buf
+main	TestCase.c	/^int main(int argc, char** argv)$/;"	f
+mode	FileSystem.h	/^	FileMode	mode;$/;"	m	struct:__inodeInfo
+name	FileSystem.h	/^    char name[NAME_LEN_MAX\/*60byte 혹은 가변적*\/];$/;"	m	struct:__dirEntry
+numAllocBlocks	FileSystem.h	/^	int numAllocBlocks;		\/\/ 할당된 블록 개수$/;"	m	struct:_fileSysInfo
+numAllocInodes	FileSystem.h	/^	int numAllocInodes;		\/\/ 할당된 inode의 개수$/;"	m	struct:_fileSysInfo
+numFreeBlocks	FileSystem.h	/^	int numFreeBlocks;		\/\/ 할당되지 않은 블록 개수$/;"	m	struct:_fileSysInfo
+numFreeInodes	FileSystem.h	/^	int numFreeInodes;		\/\/ 할당되지 않은 inode의 개수$/;"	m	struct:_fileSysInfo
+numInodes	FileSystem.h	/^	int numInodes;			\/\/ 전체 inode의 개수$/;"	m	struct:_fileSysInfo
+offset	FileSystem.h	/^	int	offset;$/;"	m	struct:__fileDesc
+pBlockBitmap	FileSystem.h	/^	char* pBlockBitmap; 	\/\/ block bitmap 정보가 저장된 메모리 주소$/;"	m	struct:_fileSysInfo
+pInodeBitmap	FileSystem.h	/^	char* pInodeBitmap; 	\/\/ inode bitmap 정보가 저장된 메모리 주소$/;"	m	struct:_fileSysInfo
+pMem	Buf.h	/^    void*				pMem;$/;"	m	struct:Buf
+rootInodeNum	FileSystem.h	/^	int rootInodeNum; 		\/\/ root inode number 저장$/;"	m	struct:_fileSysInfo
+size	FileSystem.h	/^	int			size;$/;"	m	struct:__inodeInfo
+state	Buf.h	/^    BufState			state;$/;"	m	struct:Buf
+type	FileSystem.h	/^	FileType	type;$/;"	m	struct:__inodeInfo
+type	FileSystem.h	/^    FileType type;$/;"	m	struct:__dirEntry
+valid_bit	FileSystem.h	/^	int	valid_bit;$/;"	m	struct:__fileDesc
