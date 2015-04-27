@@ -82,7 +82,6 @@ typedef struct __fileDescTable {
 	FileDesc	file[FS_INODE_COUNT];
 }FileDescTable;
 
-// function appended from assignment3
 int		OpenFile(const char* pFileName, OpenFlag flag);
 int		WriteFile(int fileDesc, char* pBuffer, int length);
 int		ReadFile(int fileDesc, char* pBuffer, int length);
