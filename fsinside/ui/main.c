@@ -2,23 +2,35 @@
 
 int main(int argc, char** argv) {
 
-	// Screen Initialize
+	// Get terminal size
 	initscr();
+	getmaxyx(stdscr, terminal_screen_row, terminal_screen_col);
+
+	// Check terminal width 
+	if (terminal_screen_col < 197) {
+		fprintf(stderr, " - FSinside initialize error : \r\n");
+		fprintf(stderr, "       This Terminal width is too short! Must be longer than 196.\r\n");
+		fprintf(stderr, "       Current width : %d\n", terminal_screen_col);
+		endwin();
+		return 0;
+	}
+
+	// Screen Initialize
 	if (has_colors() == FALSE) {
-		printf("This Terminal cannot support colored display\n");
+		fprintf(stderr, " - FSinside initialize error : \r\n");
+		fprintf(stderr, "       This Terminal cannot support color display.\n");
+		endwin();
 		return 0;
 	}
 
 	// Do not print keyboard input
 	noecho();
+
 	// Cursor visibility off
 	curs_set(0);
 
 	// Enable keypad
     keypad(stdscr, TRUE);
-
-	// Get terminal size
-	getmaxyx(stdscr, terminal_screen_row, terminal_screen_col);
 
 	// Print screens
 	load_screen();
