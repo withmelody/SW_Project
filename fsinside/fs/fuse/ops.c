@@ -38,6 +38,23 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 	return res;
 }
 
+/*
+   -> op_readdir.c
+int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
+		off_t offset, struct fuse_file_info *info)
+{
+	fprintf(stderr, "[TINYFS] %s", __func__);
+
+	if (strcmp(path, "/") != 0)
+		return -ENOENT;
+
+	filler(buf, ".", NULL, 0);
+	filler(buf, "..", NULL, 0);
+
+	return 0;
+}
+*/
+
 int tiny_mkdir(const char *path, mode_t mode)
 {
 	fprintf(stderr, "[TINYFS] %s", __func__);
@@ -94,20 +111,6 @@ int tiny_write(const char *path, const char *buf, size_t size,
 int tiny_release(const char *path, struct fuse_file_info *info)
 {
 	fprintf(stderr, "[TINYFS] %s", __func__);
-	return 0;
-}
-
-int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
-		off_t offset, struct fuse_file_info *info)
-{
-	fprintf(stderr, "[TINYFS] %s", __func__);
-
-	if (strcmp(path, "/") != 0)
-		return -ENOENT;
-
-	filler(buf, ".", NULL, 0);
-	filler(buf, "..", NULL, 0);
-
 	return 0;
 }
 

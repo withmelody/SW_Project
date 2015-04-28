@@ -91,7 +91,6 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 
 	/* There is no such file */
 	if (pDentry == NULL) {
-		//TODO: create a new file
 		target = __create_file(&i_tmp, base_name);
 		if (!target) {
 			ret = -EDQUOT;

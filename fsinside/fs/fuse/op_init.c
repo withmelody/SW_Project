@@ -107,6 +107,9 @@ void *tiny_init(struct fuse_conn_info *conn)
 		strncpy(dirBlock.dirEntries[0].name, ".", NAME_LEN_MAX);
 		dirBlock.dirEntries[0].inodeNum = 0;
 		dirBlock.dirEntries[0].type = FILE_TYPE_DIR;
+		strncpy(dirBlock.dirEntries[1].name, "..", NAME_LEN_MAX);
+		dirBlock.dirEntries[1].inodeNum = 0;
+		dirBlock.dirEntries[1].type = FILE_TYPE_DIR;
 		// dir block 저장
 		pBuf = BufRead(tiny_superblk.s_datablk_start);
 		BufWrite(pBuf, &dirBlock, sizeof(tiny_dirblk));
