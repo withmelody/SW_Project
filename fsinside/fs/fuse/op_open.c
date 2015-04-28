@@ -43,6 +43,9 @@ int tiny_open(const char *path, struct fuse_file_info *fi)
 	int ino;
 	int ret = 0;
 
+	if (strcmp(path, "/") == 0) {
+		return 0;
+	}
 
 	/* Get inode of the parent directory */
 	path_copy = (char*)malloc(strlen(path) + 1);
@@ -53,7 +56,8 @@ int tiny_open(const char *path, struct fuse_file_info *fi)
 	while (token) {
 		pDentry = __find_dentry(&i_tmp, token);
 		if (!pDentry || pDentry->type == FILE_TYPE_FILE) {
-			//TODO: error - invalid path	
+			ret = -ENOTDIR;
+			goto err;
 		}
 		
 		ReadInode(&i_tmp, pDentry->inodeNum);
@@ -67,32 +71,24 @@ int tiny_open(const char *path, struct fuse_file_info *fi)
 	base_name = basename(path_copy);
 	pDentry = __find_dentry(&i_tmp, base_name);
 
+	/* There is no such file */
+	if (pDentry == NULL) {
+		ret = -ENOENT;
+		goto err;
+	}
+
+	/* Path indicates a directory */
+	if (pDentry->type == FILE_TYPE_DIR) {
+		ret = 0;
+		goto err;
+	}
+
 	/* Get inode of the target */
 	target = (tiny_inode*)malloc(sizeof(tiny_inode));
 	ReadInode(target, pDentry->inodeNum);
 	fi->fh = (uint64_t)target;
 
-
-	/*
-	if (!pDentry) {
-		if (fi->flags & O_CREAT) {
-			//TODO: create a file
-		} else {
-			ret = ENOENT;
-		}
-	} else {
-		if (fi->flags & O_CREAT) {
-			if (fi->flags & O_EXCL) {
-				ret = EEXIST;
-			} else if (fi->flags & O_TRUNC) {
-				//TODO: truncate the file
-			} else {
-				fi->fh = pDentry->inodeNum;
-			}
-		}
-	}
-	*/
-
+err:
 	free(path_copy);
 
 	return ret;

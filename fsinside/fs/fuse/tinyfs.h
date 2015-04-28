@@ -10,17 +10,28 @@
 #include "disk.h"
 #include "buf.h"
 
+#define FS_DISK_CAPACITY	(8388608) /* 8M */
 #define FS_INODE_COUNT			(128)
-#ifndef BLOCK_SIZE
 #define BLOCK_SIZE				(512)
-#endif
 #define NUM_OF_INODE_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_inode))
 #define NUM_OF_DIRENT_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_dentry))
 #define MAX_INDEX_OF_DIRBLK		(NUM_OF_DIRENT_IN_1BLK)
 #define NAME_LEN_MAX			(60)
 #define TINY_N_DIRECT_BLOCKS	(12)
 
+typedef enum { 
+	MT_TYPE_UNKNOWN = 0,
+	MT_TYPE_FORMAT,     // 마운트가 되는 해당 파티션은 포맷된다. 
+	MT_TYPE_READWRITE,  // 마운트가 되는 해당 파티션은 그대로 유지된다. 
+} MountType; 
+
 typedef struct {
+	int	s_ibitmap_size;
+	int	s_inodeblk_size;
+	int	s_dbitmap_size;
+	int	s_datablk_size;
+
+	int s_disk_fd; 
 	int s_blksize;
 	int s_ninode_in_blk;
 //	int s_ndentry_in_blk;
@@ -61,23 +72,6 @@ typedef struct {
 typedef struct {
 	tiny_dentry	dirEntries[NUM_OF_DIRENT_IN_1BLK];
 } tiny_dirblk;
-
-/*
-typedef struct __fileDesc {
-	int	valid_bit;
-	int	offset;
-	int	inodeNo;
-}FileDesc
-
-typedef struct __fileDescTable {
-	FileDesc	file[FS_INODE_COUNT];
-}FileDescTable;
-
-typedef enum __mountType {
-    MT_TYPE_FORMAT,		// 마운트가 되는 해당 파티션은 포맷된다.
-    MT_TYPE_READWRITE,	// 마운트가 되는 해당 파티션은 그대로 유지된다.
-} MountType;
-*/
 
 int tiny_getattr(const char *path, struct stat *stbuf);
 int tiny_mkdir(const char *path, mode_t mode);

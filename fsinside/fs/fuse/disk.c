@@ -5,43 +5,45 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <assert.h>
+#include "tinyfs.h"
 #include "disk.h"
 
-static int fd; 
+extern FileSysInfo tiny_superblk;
 
 void DevInit(void)
 {
 	char* buf = malloc(FS_DISK_CAPACITY);
 	memset(buf, 0x0, FS_DISK_CAPACITY);
 
-	fd = open("MY_DISK", O_RDWR | O_CREAT | O_TRUNC, 0644);
+	tiny_superblk.s_disk_fd = open("MY_DISK", O_RDWR | O_CREAT | O_TRUNC, 0644);
 
-	write(fd, buf, FS_DISK_CAPACITY);
-	lseek(fd, 0, SEEK_SET);
+	write(tiny_superblk.s_disk_fd, buf, FS_DISK_CAPACITY);
+	lseek(tiny_superblk.s_disk_fd, 0, SEEK_SET);
 	free(buf);
 }
 
 void DevLoad(void)
 {
-	fd = open("MY_DISK", O_RDWR);
+	tiny_superblk.s_disk_fd = open("MY_DISK", O_RDWR);
 }
 
-extern void DevRelease(void)
+void DevRelease(void)
 {
-	close(fd);
+	close(tiny_superblk.s_disk_fd);
 }
+
 void DevMoveBlock(int blkno){
-    lseek(fd, (off_t)+(BLOCK_SIZE*blkno),SEEK_SET);
+    lseek(tiny_superblk.s_disk_fd, (off_t)+(BLOCK_SIZE*blkno),SEEK_SET);
 }
 
 void DevReadBlock(int blkno, char* pBuf)
 {
    DevMoveBlock(blkno);
-   read(fd, pBuf, BLOCK_SIZE);
+   read(tiny_superblk.s_disk_fd, pBuf, BLOCK_SIZE);
 }
 
 void DevWriteBlock(int blkno, char* pBuf)
 {
    DevMoveBlock(blkno);
-   write(fd, pBuf, BLOCK_SIZE);
+   write(tiny_superblk.s_disk_fd, pBuf, BLOCK_SIZE);
 }

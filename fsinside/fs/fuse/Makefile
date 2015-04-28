@@ -1,6 +1,6 @@
 SRC = $(wildcard *.c)
 OBJ = $(patsubst %.c, %.o, $(SRC))
-OPT = -lfuse -D_FILE_OFFSET_BITS=64
+OPT = -lfuse -D_FILE_OFFSET_BITS=64 -lm -g
 TARGET = tinyfs
 
 $(TARGET) : $(OBJ)

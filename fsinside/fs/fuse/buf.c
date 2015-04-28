@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <stdio.h>
 #include "buf.h"
 
 void Init(void)
@@ -19,7 +21,7 @@ void Init(void)
 	for ( i = 0 ; i < 30 ; i++ )
 	{
 		pNew = (Buf*)malloc(sizeof(Buf));
-		memset(pNew, NULL, sizeof(Buf));
+		memset(pNew, 0, sizeof(Buf));
 		InsertBufIntoFreelist(pNew);
 	}
 }
@@ -93,7 +95,7 @@ Buf* BufGetNewBuffer(void)
 		// Clean list와 Dirty list 모두 비어 있는 경우는 없다.
 		// 위 2개의 리스트에 아무것도 없으면 Free list에 반드시 있음
 	}
-	return BLKNO_INVALID;
+	return (Buf*)BLKNO_INVALID;
 }
 void BufInsert(Buf* pBuf, BufList listNum)
 {

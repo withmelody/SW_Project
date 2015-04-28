@@ -2,6 +2,8 @@
 #define __BUF_H__
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/queue.h>
 #include <math.h>		// ceil()
 #include "disk.h"

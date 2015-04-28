@@ -1,4 +1,5 @@
 *.swp
+test/
 tinyextfs/source/FileSystem
 tinyextfs/source/MY_DISK
 tinyextfs/source/OBJ/*

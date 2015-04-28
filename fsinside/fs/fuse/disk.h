@@ -1,19 +1,18 @@
 #ifndef __DISK_H__
 #define __DISK_H__
 
-#define FS_DISK_CAPACITY	(8388608) /* 8M */
-#define BLOCK_SIZE 512
+#include "tinyfs.h"
 
-extern void DevInit(void);
+void DevInit(void);
 
-extern void DevLoad(void);
+void DevLoad(void);
 
-extern void DevRelease(void);
+void DevRelease(void);
 
-extern void DevMoveBlock(int blkno);
+void DevMoveBlock(int blkno);
     
-extern void DevReadBlock(int blkno, char* pBuf);
+void DevReadBlock(int blkno, char* pBuf);
 
-extern void DevWriteBlock(int blkno, char* pBuf);
+void DevWriteBlock(int blkno, char* pBuf);
 
 #endif /* __DISK_H__ */
