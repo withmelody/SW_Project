@@ -73,6 +73,11 @@ typedef struct {
 	tiny_dentry	dirEntries[NUM_OF_DIRENT_IN_1BLK];
 } tiny_dirblk;
 
+#define __get_dirblk_from_buf(buf)	\
+	((tiny_dirblk*)((buf)->pMem))
+
+tiny_dentry *__find_dentry(tiny_inode *dir, const char *entry_name);
+
 int tiny_getattr(const char *path, struct stat *stbuf);
 int tiny_mkdir(const char *path, mode_t mode);
 int tiny_unlink(const char *path);

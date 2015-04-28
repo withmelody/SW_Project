@@ -7,6 +7,7 @@ int		IncUseInode();	// Inode 1개 사용
 int		DecUseInode();	// Inode 1개 해제
 int		IncUseBlock();	// Block 1개 사용
 int		DecUseBlock();	// Block 1개 해제
+
 int		GetFreeEntry(char* Bitmap, int BitmapBlockSize);
 int		GetFreeInode();
 int		GetFreeBlock();

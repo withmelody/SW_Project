@@ -1,6 +1,27 @@
 #include <errno.h>
 #include "tinyfs.h"
 
+tiny_dentry *__find_dentry(tiny_inode *dir, const char *entry_name)
+{
+	tiny_dirblk *dirblk;
+	tiny_dentry *dentry;
+	Buf *buf;
+	int i, j;
+
+	for (i = 0; i < dir->i_nblk; i++) {
+		buf = BufRead(dir->i_block[i]);
+		dirblk = __get_dirblk_from_buf(buf);
+
+		for (j = 0; j < NUM_OF_DIRENT_IN_1BLK; j++) {
+			dentry = &dirblk->dirEntries[j];
+			if (strncmp(entry_name, dentry->name, NAME_LEN_MAX) == 0)
+				return dentry;
+		}
+	}
+
+	return NULL;
+}
+
 int tiny_getattr(const char *path, struct stat *stbuf)
 {
 	int res = 0;
@@ -76,15 +97,6 @@ int tiny_release(const char *path, struct fuse_file_info *info)
 	return 0;
 }
 
-/*
-   -> op_opendir.c
-int tiny_opendir(const char *path, struct fuse_file_info *info)
-{
-	fprintf(stderr, "[TINYFS] %s", __func__);
-	return 0;
-}
-*/
-
 int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		off_t offset, struct fuse_file_info *info)
 {
@@ -114,13 +126,19 @@ void *tiny_init(struct fuse_conn_info *conn)
 }
  */
 
+/*
+   -> op_destroy.c
 void tiny_destroy(void *user_data)
 {
 	fprintf(stderr, "[TINYFS] %s", __func__);
 }
+*/
 
+/*
+   -> op_create.c
 int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info)
 {
 	fprintf(stderr, "[TINYFS] %s", __func__);
 	return 0;
 }
+*/

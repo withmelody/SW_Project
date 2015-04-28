@@ -41,7 +41,6 @@ struct Buf
 TAILQ_HEAD(hashTable, Buf) ppHashTable[HASH_TBL_SIZE];
 TAILQ_HEAD(bufList, Buf) ppBufListHead[MAX_BUFLIST_NUM];
 
-// assignment1
 void	BufInsert(Buf* pBuf, BufList listNum);
 Buf*	BufFind(int blkno);
 BOOL	BufDelete(Buf* pBuf);
@@ -53,7 +52,6 @@ void	Init(void);
 // custom global function
 void	InitObjectLink(Buf* pBuf);
 
-// function appended from assignment2
 Buf*	BufRead(int blkno);
 BOOL	BufWrite(Buf* pBuf, void* pData, int size);
 void	BufSync(void);
