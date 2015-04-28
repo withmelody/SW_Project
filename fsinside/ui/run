@@ -1,2 +1,6 @@
-gcc -g project.c load_screen.c controller.c about.c -lncurses -lpthread
+gcc -g -W main.c load_screen.c controller.c menu_controller.c \
+		  screen/update_time.c \
+		  screen/about.c screen/screen_middle_left.c screen/screen_middle_right.c \
+		  screen/screen_top.c screen/screen_bottom.c \
+		  -lncurses -lpthread
 ./a.out
