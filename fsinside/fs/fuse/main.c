@@ -1,5 +1,7 @@
 #include "tinyfs.h"
 
+FileSysInfo tiny_superblk;
+
 static struct fuse_operations tiny_ops = {
 	.getattr        = tiny_getattr,
 	.readlink       = NULL,

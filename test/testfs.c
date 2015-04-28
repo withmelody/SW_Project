@@ -107,6 +107,7 @@ int test_open(const char *path, struct fuse_file_info *info)
 	fprintf(stderr, "[TESTFS] %s - path: %s\n",
 			__func__, path);
 
+	fprintf(stderr, "[TESTFS] flags: 0x%x\n", info->flags);
 	info->fh = 128;
 }
 
