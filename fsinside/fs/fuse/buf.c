@@ -6,7 +6,7 @@ void Init(void)
  * precondition		: usage ) Init();
  * postcondition	: TAILQ_HEAD 변수 모두 초기화
  * 					  가상디스크 초기화
- * 					  버퍼캐쉬노드 10개 생성
+ * 					  버퍼캐쉬 30개 생성
  */
 	int i;
 	Buf* pNew = NULL;
@@ -16,14 +16,12 @@ void Init(void)
 	for ( i = 0 ; i < MAX_BUFLIST_NUM ; i++ )
 		TAILQ_INIT(&ppBufListHead[i]);
 
-	for ( i = 0 ; i < 10 ; i++ )
+	for ( i = 0 ; i < 30 ; i++ )
 	{
 		pNew = (Buf*)malloc(sizeof(Buf));
 		memset(pNew, NULL, sizeof(Buf));
 		InsertBufIntoFreelist(pNew);
 	}
-
-//	DevInit();
 }
 void InsertBufIntoFreelist(Buf* pBuf)
 {

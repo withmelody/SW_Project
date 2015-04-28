@@ -1,12 +1,12 @@
 #include "FileSystem.h"
 #include "string.h"		// strtok(), strstr()
 
-FileSysInfo		fileSysInfo;
-FileDescTable	fileDescTable;
-int		inodeBitmapSize	= 0;
-int		inodeListSize 	= 0;
-double	blockBitmapSize	= 0;
-double	dataRegionSize 	= 0;
+static FileSysInfo	fileSysInfo;
+static FileDescTable	fileDescTable;
+static int		inodeBitmapSize	= 0;
+static int		inodeListSize 	= 0;
+static double	blockBitmapSize	= 0;
+static double	dataRegionSize 	= 0;
 
 int	OpenFile(const char* pFileName, OpenFlag flag)
 {

@@ -7,9 +7,6 @@
 #include <assert.h>
 #include "disk.h"
 
-#define FS_DISK_CAPACITY	(8388608) /* 8M */
-#define FS_INODE_COUNT		(128)
-
 static int fd; 
 
 void DevInit(void)
@@ -29,6 +26,10 @@ void DevLoad(void)
 	fd = open("MY_DISK", O_RDWR);
 }
 
+extern void DevRelease(void)
+{
+	close(fd);
+}
 void DevMoveBlock(int blkno){
     lseek(fd, (off_t)+(BLOCK_SIZE*blkno),SEEK_SET);
 }

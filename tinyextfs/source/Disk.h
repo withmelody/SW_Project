@@ -9,6 +9,8 @@ extern void DevInit(void);
 
 extern void DevLoad(void);
 
+extern void DevRelease(void);
+
 extern void DevMoveBlock(int blkno);
     
 extern void DevReadBlock(int blkno, char* pBuf);

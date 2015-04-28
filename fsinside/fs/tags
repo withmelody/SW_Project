@@ -1,0 +1,381 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BLKNO_INVALID	Buf.h	11;"	d
+BLKNO_INVALID	fuse/buf.h	11;"	d
+BLOCK_SIZE	Disk.h	5;"	d
+BLOCK_SIZE	fuse/disk.h	4;"	d
+BLOCK_SIZE	fuse/tinyfs.h	11;"	d
+BOOL	Buf.h	/^typedef int BOOL;$/;"	t
+BOOL	fuse/buf.h	/^typedef int BOOL;$/;"	t
+BUF_LIST_CLEAN	Buf.h	/^    BUF_LIST_CLEAN,$/;"	e	enum:__BufList
+BUF_LIST_CLEAN	fuse/buf.h	/^    BUF_LIST_CLEAN,$/;"	e	enum:__BufList
+BUF_LIST_DIRTY	Buf.h	/^    BUF_LIST_DIRTY,$/;"	e	enum:__BufList
+BUF_LIST_DIRTY	fuse/buf.h	/^    BUF_LIST_DIRTY,$/;"	e	enum:__BufList
+BUF_LIST_FREE	Buf.h	/^    BUF_LIST_FREE$/;"	e	enum:__BufList
+BUF_LIST_FREE	fuse/buf.h	/^    BUF_LIST_FREE$/;"	e	enum:__BufList
+BUF_STATE_CLEAN	Buf.h	/^	BUF_STATE_CLEAN,$/;"	e	enum:__BufState
+BUF_STATE_CLEAN	fuse/buf.h	/^	BUF_STATE_CLEAN,$/;"	e	enum:__BufState
+BUF_STATE_DIRTY	Buf.h	/^	BUF_STATE_DIRTY$/;"	e	enum:__BufState
+BUF_STATE_DIRTY	fuse/buf.h	/^	BUF_STATE_DIRTY$/;"	e	enum:__BufState
+Buf	Buf.h	/^struct Buf$/;"	s
+Buf	Buf.h	/^typedef struct Buf Buf;$/;"	t	typeref:struct:Buf
+Buf	fuse/buf.h	/^struct Buf$/;"	s
+Buf	fuse/buf.h	/^typedef struct Buf Buf;$/;"	t	typeref:struct:Buf
+BufDelete	Buf.c	/^BOOL BufDelete(Buf* pBuf)$/;"	f
+BufDelete	fuse/buf.c	/^BOOL BufDelete(Buf* pBuf)$/;"	f
+BufFind	Buf.c	/^Buf* BufFind(int blkno)$/;"	f
+BufFind	fuse/buf.c	/^Buf* BufFind(int blkno)$/;"	f
+BufGetNewBuffer	Buf.c	/^Buf* BufGetNewBuffer(void)$/;"	f
+BufGetNewBuffer	fuse/buf.c	/^Buf* BufGetNewBuffer(void)$/;"	f
+BufInsert	Buf.c	/^void BufInsert(Buf* pBuf, BufList listNum)$/;"	f
+BufInsert	fuse/buf.c	/^void BufInsert(Buf* pBuf, BufList listNum)$/;"	f
+BufList	Buf.h	/^} BufList;$/;"	t	typeref:enum:__BufList
+BufList	fuse/buf.h	/^} BufList;$/;"	t	typeref:enum:__BufList
+BufRead	Buf.c	/^Buf* BufRead(int blkno)$/;"	f
+BufRead	fuse/buf.c	/^Buf* BufRead(int blkno)$/;"	f
+BufState	Buf.h	/^} BufState;$/;"	t	typeref:enum:__BufState
+BufState	fuse/buf.h	/^} BufState;$/;"	t	typeref:enum:__BufState
+BufSync	Buf.c	/^void BufSync(void)$/;"	f
+BufSync	fuse/buf.c	/^void BufSync(void)$/;"	f
+BufWrite	Buf.c	/^BOOL BufWrite(Buf* pBuf, void* pData, int size)$/;"	f
+BufWrite	fuse/buf.c	/^BOOL BufWrite(Buf* pBuf, void* pData, int size)$/;"	f
+CloseFile	FileSystem.c	/^int CloseFile(int fileDesc)$/;"	f
+CloseFile	fuse/FileSystem.cc	/^int CloseFile(int fileDesc)$/;"	f
+DIR_NUM_MAX	TestCase.c	14;"	d	file:
+DecUseBlock	FileSystem.c	/^int DecUseBlock()	\/\/ Block 1개 해제$/;"	f
+DecUseBlock	fuse/FileSystem.cc	/^int DecUseBlock()	\/\/ Block 1개 해제$/;"	f
+DecUseInode	FileSystem.c	/^int DecUseInode()	\/\/ Inode 1개 해제$/;"	f
+DecUseInode	fuse/FileSystem.cc	/^int DecUseInode()	\/\/ Inode 1개 해제$/;"	f
+DevInit	Disk.c	/^void DevInit(void)$/;"	f
+DevInit	fuse/disk.c	/^void DevInit(void)$/;"	f
+DevLoad	Disk.c	/^void DevLoad(void)$/;"	f
+DevLoad	fuse/disk.c	/^void DevLoad(void)$/;"	f
+DevMoveBlock	Disk.c	/^void DevMoveBlock(int blkno){$/;"	f
+DevMoveBlock	fuse/disk.c	/^void DevMoveBlock(int blkno){$/;"	f
+DevReadBlock	Disk.c	/^void DevReadBlock(int blkno, char* pBuf)$/;"	f
+DevReadBlock	fuse/disk.c	/^void DevReadBlock(int blkno, char* pBuf)$/;"	f
+DevRelease	fuse/disk.c	/^extern void DevRelease(void)$/;"	f
+DevWriteBlock	Disk.c	/^void DevWriteBlock(int blkno, char* pBuf)$/;"	f
+DevWriteBlock	fuse/disk.c	/^void DevWriteBlock(int blkno, char* pBuf)$/;"	f
+DirBlock	FileSystem.h	/^}DirBlock;$/;"	t	typeref:struct:__dirBlock
+DirEntry	FileSystem.h	/^} DirEntry;$/;"	t	typeref:struct:__dirEntry
+DirIsEmpty	FileSystem.c	/^int DirIsEmpty(InodeInfo* inodeInfo)$/;"	f
+DirIsEmpty	fuse/FileSystem.cc	/^int DirIsEmpty(InodeInfo* inodeInfo)$/;"	f
+EnumerateDirStatus	FileSystem.c	/^int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries)$/;"	f
+EnumerateDirStatus	fuse/FileSystem.cc	/^int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries)$/;"	f
+FALSE	Buf.h	12;"	d
+FALSE	fuse/buf.h	12;"	d
+FILE_MODE_EXEC	FileSystem.h	/^	FILE_MODE_EXEC$/;"	e	enum:__fileMode
+FILE_MODE_READONLY	FileSystem.h	/^	FILE_MODE_READONLY,$/;"	e	enum:__fileMode
+FILE_MODE_READWRITE	FileSystem.h	/^	FILE_MODE_READWRITE,$/;"	e	enum:__fileMode
+FILE_TYPE_DEV	FileSystem.h	/^    FILE_TYPE_DEV$/;"	e	enum:__fileType
+FILE_TYPE_DIR	FileSystem.h	/^    FILE_TYPE_DIR,$/;"	e	enum:__fileType
+FILE_TYPE_DIR	fuse/tinyfs.h	/^    FILE_TYPE_DIR,$/;"	e	enum:__anon3
+FILE_TYPE_FILE	FileSystem.h	/^    FILE_TYPE_FILE,$/;"	e	enum:__fileType
+FILE_TYPE_FILE	fuse/tinyfs.h	/^    FILE_TYPE_FILE,$/;"	e	enum:__anon3
+FS_DISK_CAPACITY	FilesysConfig.h	4;"	d
+FS_DISK_CAPACITY	fuse/disk.c	10;"	d	file:
+FS_INODE_COUNT	FilesysConfig.h	5;"	d
+FS_INODE_COUNT	fuse/disk.c	11;"	d	file:
+FUSE_USE_VERSION	fuse/tinyfs.h	4;"	d
+FileDesc	FileSystem.h	/^}FileDesc;$/;"	t	typeref:struct:__fileDesc
+FileDescTable	FileSystem.h	/^}FileDescTable;$/;"	t	typeref:struct:__fileDescTable
+FileMode	FileSystem.h	/^}FileMode;$/;"	t	typeref:enum:__fileMode
+FileSysInfo	FileSystem.h	/^} FileSysInfo;$/;"	t	typeref:struct:_fileSysInfo
+FileSysInfo	fuse/tinyfs.h	/^} FileSysInfo;$/;"	t	typeref:struct:__anon2
+FileType	FileSystem.h	/^} FileType;$/;"	t	typeref:enum:__fileType
+FileType	fuse/tinyfs.h	/^} FileType;$/;"	t	typeref:enum:__anon3
+GetBufInfoByHashIndex	Buf.c	/^void GetBufInfoByHashIndex(int index, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetBufInfoByHashIndex	fuse/buf.c	/^void GetBufInfoByHashIndex(int index, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetBufInfoByListNum	Buf.c	/^void GetBufInfoByListNum(BufList listNum, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetBufInfoByListNum	fuse/buf.c	/^void GetBufInfoByListNum(BufList listNum, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetEntryName	FileSystem.c	/^int GetEntryName(char* dest, char* abspath)$/;"	f
+GetEntryName	fuse/FileSystem.cc	/^int GetEntryName(char* dest, char* abspath)$/;"	f
+GetEntryPath	FileSystem.c	/^void GetEntryPath(char* abspath, char* filename)$/;"	f
+GetEntryPath	fuse/FileSystem.cc	/^void GetEntryPath(char* abspath, char* filename)$/;"	f
+GetFreeBlock	FileSystem.c	/^int GetFreeBlock()$/;"	f
+GetFreeBlock	fuse/FileSystem.cc	/^int GetFreeBlock()$/;"	f
+GetFreeDir	FileSystem.c	/^int GetFreeDir(DirBlock* dirBlock)$/;"	f
+GetFreeDir	fuse/FileSystem.cc	/^int GetFreeDir(DirBlock* dirBlock)$/;"	f
+GetFreeEntry	FileSystem.c	/^int GetFreeEntry(char* Bitmap, int BitmapBlockSize)$/;"	f
+GetFreeEntry	fuse/FileSystem.cc	/^int GetFreeEntry(char* Bitmap, int BitmapBlockSize)$/;"	f
+GetFreeInode	FileSystem.c	/^int GetFreeInode()$/;"	f
+GetFreeInode	fuse/FileSystem.cc	/^int GetFreeInode()$/;"	f
+HASH_TBL_SIZE	Buf.h	9;"	d
+HASH_TBL_SIZE	fuse/buf.h	9;"	d
+IncUseBlock	FileSystem.c	/^int IncUseBlock()	\/\/ Block 1개 사용$/;"	f
+IncUseBlock	fuse/FileSystem.cc	/^int IncUseBlock()	\/\/ Block 1개 사용$/;"	f
+IncUseInode	FileSystem.c	/^int IncUseInode()	\/\/ Inode 1개 사용$/;"	f
+IncUseInode	fuse/FileSystem.cc	/^int IncUseInode()	\/\/ Inode 1개 사용$/;"	f
+Init	Buf.c	/^void Init(void)$/;"	f
+Init	fuse/buf.c	/^void Init(void)$/;"	f
+InitObjectLink	Buf.c	/^void InitObjectLink(Buf* pBuf)$/;"	f
+InitObjectLink	fuse/buf.c	/^void InitObjectLink(Buf* pBuf)$/;"	f
+InodeInfo	FileSystem.h	/^}InodeInfo;$/;"	t	typeref:struct:__inodeInfo
+InsertBufIntoFreelist	Buf.c	/^void InsertBufIntoFreelist(Buf* pBuf)$/;"	f
+InsertBufIntoFreelist	fuse/buf.c	/^void InsertBufIntoFreelist(Buf* pBuf)$/;"	f
+ListDirContents	TestCase.c	/^void ListDirContents(const char* dirName, int dirNum)$/;"	f
+MAX_BUFLIST_NUM	Buf.h	10;"	d
+MAX_BUFLIST_NUM	fuse/buf.h	10;"	d
+MAX_INDEX_OF_DIRBLK	FileSystem.h	9;"	d
+MAX_INDEX_OF_DIRBLK	fuse/tinyfs.h	14;"	d
+MT_TYPE_FORMAT	FileSystem.h	/^    MT_TYPE_FORMAT,		\/\/ 마운트가 되는 해당 파티션은 포맷된다.$/;"	e	enum:__mountType
+MT_TYPE_FORMAT	fuse/op_tiny_init.c	/^	MT_TYPE_FORMAT,     \/\/ 마운트가 되는 해당 파티션은 포맷된다. $/;"	e	enum:__anon1	file:
+MT_TYPE_READWRITE	FileSystem.h	/^    MT_TYPE_READWRITE,	\/\/ 마운트가 되는 해당 파티션은 그대로 유지된다.$/;"	e	enum:__mountType
+MT_TYPE_READWRITE	fuse/op_tiny_init.c	/^	MT_TYPE_READWRITE,  \/\/ 마운트가 되는 해당 파티션은 그대로 유지된다. $/;"	e	enum:__anon1	file:
+MT_TYPE_UNKNOWN	fuse/op_tiny_init.c	/^	MT_TYPE_UNKNOWN = 0,$/;"	e	enum:__anon1	file:
+MakeDir	FileSystem.c	/^int MakeDir(const char* pDirName)$/;"	f
+MakeDir	fuse/FileSystem.cc	/^int MakeDir(const char* pDirName)$/;"	f
+MakeDirentry	FileSystem.c	/^int MakeDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+MakeDirentry	fuse/FileSystem.cc	/^int MakeDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+Mount	FileSystem.c	/^void Mount(MountType type)$/;"	f
+Mount	fuse/FileSystem.cc	/^void Mount(MountType type)$/;"	f
+MountType	FileSystem.h	/^} MountType;$/;"	t	typeref:enum:__mountType
+MountType	fuse/op_tiny_init.c	/^} MountType; $/;"	t	typeref:enum:__anon1	file:
+NAME_LEN_MAX	FileSystem.h	10;"	d
+NAME_LEN_MAX	fuse/tinyfs.h	15;"	d
+NUM_OF_DIRENT_IN_1BLK	FileSystem.h	8;"	d
+NUM_OF_DIRENT_IN_1BLK	fuse/tinyfs.h	13;"	d
+NUM_OF_INDIRECT_BLOCK	FileSystem.h	11;"	d
+NUM_OF_INODE_IN_1BLK	FileSystem.h	7;"	d
+NUM_OF_INODE_IN_1BLK	fuse/tinyfs.h	12;"	d
+OBJ	Makefile	/^OBJ = Buf.o Disk.o TestCase.o FileSystem.o$/;"	m
+OBJ	fuse/Makefile	/^OBJ = $(patsubst %.c, %.o, $(SRC))$/;"	m
+OPEN_FLAG_CREATE	FileSystem.h	/^	OPEN_FLAG_CREATE	\/\/ 파일이 존재하지 않으면 생성 후 파일을 open함$/;"	e	enum:__openFlag
+OPEN_FLAG_READWRITE	FileSystem.h	/^	OPEN_FLAG_READWRITE,$/;"	e	enum:__openFlag
+OPT	fuse/Makefile	/^OPT = -lfuse -D_FILE_OFFSET_BITS=64$/;"	m
+OpenFile	FileSystem.c	/^int	OpenFile(const char* pFileName, OpenFlag flag)$/;"	f
+OpenFile	fuse/FileSystem.cc	/^int	OpenFile(const char* pFileName, OpenFlag flag)$/;"	f
+OpenFlag	FileSystem.h	/^} OpenFlag;$/;"	t	typeref:enum:__openFlag
+ReadDirBlock	FileSystem.c	/^void ReadDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+ReadDirBlock	fuse/FileSystem.cc	/^void ReadDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+ReadFile	FileSystem.c	/^int ReadFile(int fileDesc, char* pBuffer, int length)$/;"	f
+ReadFile	fuse/FileSystem.cc	/^int ReadFile(int fileDesc, char* pBuffer, int length)$/;"	f
+ReadInode	FileSystem.c	/^void ReadInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+ReadInode	fuse/FileSystem.cc	/^void ReadInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+RemoveDir	FileSystem.c	/^int RemoveDir(const char* pDirName)$/;"	f
+RemoveDir	fuse/FileSystem.cc	/^int RemoveDir(const char* pDirName)$/;"	f
+RemoveDirentry	FileSystem.c	/^int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+RemoveDirentry	fuse/FileSystem.cc	/^int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+RemoveFile	FileSystem.c	/^int RemoveFile(const char* pFileName)$/;"	f
+RemoveFile	fuse/FileSystem.cc	/^int RemoveFile(const char* pFileName)$/;"	f
+SRC	fuse/Makefile	/^SRC = $(wildcard *.c)$/;"	m
+SRCS	Makefile	/^SRCS = Buf.c Disk.c TestCase.c FileSystem.c$/;"	m
+SetBlockAllocToFree	FileSystem.c	/^int SetBlockAllocToFree(int blockno)$/;"	f
+SetBlockAllocToFree	fuse/FileSystem.cc	/^int SetBlockAllocToFree(int blockno)$/;"	f
+SetBlockFreeToAlloc	FileSystem.c	/^int SetBlockFreeToAlloc()$/;"	f
+SetBlockFreeToAlloc	fuse/FileSystem.cc	/^int SetBlockFreeToAlloc()$/;"	f
+SetFreeToAlloc	FileSystem.c	/^int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)$/;"	f
+SetFreeToAlloc	fuse/FileSystem.cc	/^int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)$/;"	f
+SetInodeAllocToFree	FileSystem.c	/^int SetInodeAllocToFree(int inodeno)$/;"	f
+SetInodeAllocToFree	fuse/FileSystem.cc	/^int SetInodeAllocToFree(int inodeno)$/;"	f
+SetInodeFreeToAlloc	FileSystem.c	/^int SetInodeFreeToAlloc()$/;"	f
+SetInodeFreeToAlloc	fuse/FileSystem.cc	/^int SetInodeFreeToAlloc()$/;"	f
+TARGET	Makefile	/^TARGET = FileSystem$/;"	m
+TARGET	fuse/Makefile	/^TARGET = tinyfs$/;"	m
+TINY_N_DIRECT_BLOCKS	fuse/tinyfs.h	16;"	d
+TRUE	Buf.h	13;"	d
+TRUE	fuse/buf.h	13;"	d
+TestCase1	TestCase.c	/^void TestCase1(void)$/;"	f
+TestCase2	TestCase.c	/^void TestCase2(void)$/;"	f
+TestCase3	TestCase.c	/^void TestCase3(void)$/;"	f
+TestCase4	TestCase.c	/^void TestCase4(void)$/;"	f
+Unmount	FileSystem.c	/^void Unmount(void)$/;"	f
+Unmount	fuse/FileSystem.cc	/^void Unmount(void)$/;"	f
+WRONG_VALUE	Buf.h	14;"	d
+WRONG_VALUE	fuse/buf.h	14;"	d
+WriteDirBlock	FileSystem.c	/^void WriteDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+WriteDirBlock	fuse/FileSystem.cc	/^void WriteDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+WriteFile	FileSystem.c	/^int WriteFile(int fileDesc, char* pBuffer, int length)$/;"	f
+WriteFile	fuse/FileSystem.cc	/^int WriteFile(int fileDesc, char* pBuffer, int length)$/;"	f
+WriteInode	FileSystem.c	/^void WriteInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+WriteInode	fuse/FileSystem.cc	/^void WriteInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+_TINYFS_H_	fuse/tinyfs.h	2;"	d
+__BUF_H__	Buf.h	2;"	d
+__BUF_H__	fuse/buf.h	2;"	d
+__BufList	Buf.h	/^typedef enum __BufList{$/;"	g
+__BufList	fuse/buf.h	/^typedef enum __BufList{$/;"	g
+__BufState	Buf.h	/^typedef enum __BufState$/;"	g
+__BufState	fuse/buf.h	/^typedef enum __BufState$/;"	g
+__DISK_H__	Disk.h	2;"	d
+__DISK_H__	fuse/disk.h	2;"	d
+__FILESYSTEM_H__	FileSystem.h	2;"	d
+__FS_CONF__	FilesysConfig.h	2;"	d
+__dirBlock	FileSystem.h	/^typedef struct __dirBlock {$/;"	s
+__dirEntry	FileSystem.h	/^typedef struct __dirEntry {$/;"	s
+__fileDesc	FileSystem.h	/^typedef struct __fileDesc {$/;"	s
+__fileDescTable	FileSystem.h	/^typedef struct __fileDescTable {$/;"	s
+__fileMode	FileSystem.h	/^typedef enum __fileMode {$/;"	g
+__fileType	FileSystem.h	/^typedef enum __fileType {$/;"	g
+__inodeInfo	FileSystem.h	/^typedef struct __inodeInfo {$/;"	s
+__mountType	FileSystem.h	/^typedef enum __mountType {$/;"	g
+__openFlag	FileSystem.h	/^typedef enum __openFlag {$/;"	g
+__pad1	impl2.c	/^		unsigned long	__pad1;$/;"	m	struct:fuse_operations::stat	file:
+__pad2	impl2.c	/^		int		__pad2;$/;"	m	struct:fuse_operations::stat	file:
+__unused4	impl2.c	/^		unsigned int	__unused4;$/;"	m	struct:fuse_operations::stat	file:
+__unused5	impl2.c	/^		unsigned int	__unused5;$/;"	m	struct:fuse_operations::stat	file:
+_fileSysInfo	FileSystem.h	/^typedef struct _fileSysInfo {$/;"	s
+async_read	impl2.c	/^		unsigned async_read;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+blkno	Buf.h	/^    int					blkno;$/;"	m	struct:Buf
+blkno	fuse/buf.h	/^    int					blkno;$/;"	m	struct:Buf
+blockBitmapSize	FileSystem.c	/^double	blockBitmapSize	= 0;$/;"	v
+blockBitmapSize	fuse/FileSystem.cc	/^double	blockBitmapSize	= 0;$/;"	v
+blockBitmapStart	FileSystem.h	/^	int blockBitmapStart;	\/\/ block bitmap이 저장된 블록 번호$/;"	m	struct:_fileSysInfo
+blocks	FileSystem.h	/^	int			blocks;$/;"	m	struct:__inodeInfo
+blocks	FileSystem.h	/^	int blocks;				\/\/ 파일 시스템의 설정된 블록 크기$/;"	m	struct:_fileSysInfo
+capable	impl2.c	/^		unsigned capable;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+congestion_threshold	impl2.c	/^		unsigned congestion_threshold;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+create	impl2.c	/^	int (*create) (const char *path, mode_t mode, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+dataRegionSize	FileSystem.c	/^double	dataRegionSize 	= 0;$/;"	v
+dataRegionSize	fuse/FileSystem.cc	/^double	dataRegionSize 	= 0;$/;"	v
+dataStart	FileSystem.h	/^	int dataStart;			\/\/ data 영역의 시작 블록 번호$/;"	m	struct:_fileSysInfo
+destroy	impl2.c	/^	void (*destroy) (void *user_data);$/;"	m	struct:fuse_operations	file:
+dirEntries	FileSystem.h	/^	DirEntry	dirEntries[NUM_OF_DIRENT_IN_1BLK];$/;"	m	struct:__dirBlock
+dirEntries	fuse/tinyfs.h	/^	tiny_dentry	dirEntries[NUM_OF_DIRENT_IN_1BLK];$/;"	m	struct:__anon6
+direct_io	impl2.c	/^		unsigned int direct_io : 1;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+diskCapacity	FileSystem.h	/^	int diskCapacity;		\/\/ 디스크의 용량. 블록 개수로 저장됨$/;"	m	struct:_fileSysInfo
+fd	Disk.c	/^int fd; $/;"	v
+fd	fuse/disk.c	/^static int fd; $/;"	v	file:
+fh	impl2.c	/^		uint64_t fh;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+fh_old	impl2.c	/^		unsigned long fh_old;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+file	FileSystem.h	/^	FileDesc	file[FS_INODE_COUNT];$/;"	m	struct:__fileDescTable
+fileDescTable	FileSystem.c	/^FileDescTable	fileDescTable;$/;"	v
+fileDescTable	fuse/FileSystem.cc	/^FileDescTable	fileDescTable;$/;"	v
+fileSysInfo	FileSystem.c	/^FileSysInfo		fileSysInfo;$/;"	v
+fileSysInfo	fuse/FileSystem.cc	/^FileSysInfo		fileSysInfo;$/;"	v
+flag_nopath	impl2.c	/^	unsigned int flag_nopath:1;$/;"	m	struct:fuse_operations	file:
+flag_nullpath_ok	impl2.c	/^	unsigned int flag_nullpath_ok:1;$/;"	m	struct:fuse_operations	file:
+flag_reserved	impl2.c	/^	unsigned int flag_reserved:29;$/;"	m	struct:fuse_operations	file:
+flag_utime_omit_ok	impl2.c	/^	unsigned int flag_utime_omit_ok:1;$/;"	m	struct:fuse_operations	file:
+flags	impl2.c	/^		int flags;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+flock_release	impl2.c	/^		unsigned int flock_release : 1;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+flush	impl2.c	/^		unsigned int flush : 1;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+fuse_conn_info	impl2.c	/^	struct fuse_conn_info {$/;"	s	struct:fuse_operations	file:
+fuse_file_info	impl2.c	/^	struct fuse_file_info {$/;"	s	struct:fuse_operations	file:
+fuse_fill_dir_t	impl2.c	/^	typedef int (*fuse_fill_dir_t) (void *buf, const char *name,$/;"	t	struct:fuse_operations	file:
+fuse_operations	impl2.c	/^struct fuse_operations {$/;"	s	file:
+getattr	impl2.c	/^	int (*getattr) (const char *path, struct stat *stbuf);$/;"	m	struct:fuse_operations	file:
+hash	Buf.h	/^    TAILQ_ENTRY(Buf)	hash;$/;"	m	struct:Buf
+hash	fuse/buf.h	/^    TAILQ_ENTRY(Buf)	hash;$/;"	m	struct:Buf
+i_block	FileSystem.h	/^	int			i_block[NUM_OF_INDIRECT_BLOCK];$/;"	m	struct:__inodeInfo
+i_block	fuse/tinyfs.h	/^	int			i_block[TINY_N_DIRECT_BLOCKS];$/;"	m	struct:__anon4
+i_nblk	fuse/tinyfs.h	/^	int			i_nblk;$/;"	m	struct:__anon4
+i_size	fuse/tinyfs.h	/^	int			i_size;$/;"	m	struct:__anon4
+i_type	fuse/tinyfs.h	/^	FileType	i_type;$/;"	m	struct:__anon4
+init	impl2.c	/^	void *(*init) (struct fuse_conn_info *conn);$/;"	m	struct:fuse_operations	file:
+inodeBitmapSize	FileSystem.c	/^int		inodeBitmapSize	= 0;$/;"	v
+inodeBitmapSize	fuse/FileSystem.cc	/^int		inodeBitmapSize	= 0;$/;"	v
+inodeBitmapStart	FileSystem.h	/^	int inodeBitmapStart;	\/\/ inode bitmap이 저장된 블록의 번호$/;"	m	struct:_fileSysInfo
+inodeListSize	FileSystem.c	/^int		inodeListSize 	= 0;$/;"	v
+inodeListSize	fuse/FileSystem.cc	/^int		inodeListSize 	= 0;$/;"	v
+inodeListStart	FileSystem.h	/^	int inodeListStart;		\/\/ inode list를 저장하는 영역의 시작 블록 번호$/;"	m	struct:_fileSysInfo
+inodeNo	FileSystem.h	/^	int	inodeNo;$/;"	m	struct:__fileDesc
+inodeNum	FileSystem.h	/^    int inodeNum;$/;"	m	struct:__dirEntry
+inodeNum	fuse/tinyfs.h	/^    unsigned	inodeNum;$/;"	m	struct:__anon5
+keep_cache	impl2.c	/^		unsigned int keep_cache : 1;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+link	Buf.h	/^    TAILQ_ENTRY(Buf)	link;$/;"	m	struct:Buf
+link	fuse/buf.h	/^    TAILQ_ENTRY(Buf)	link;$/;"	m	struct:Buf
+lock_owner	impl2.c	/^		uint64_t lock_owner;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+main	TestCase.c	/^int main(int argc, char** argv)$/;"	f
+main	fuse/main.c	/^int main(int argc, char *argv[])$/;"	f
+max_background	impl2.c	/^		unsigned max_background;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+max_readahead	impl2.c	/^		unsigned max_readahead;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+max_write	impl2.c	/^		unsigned max_write;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+mkdir	impl2.c	/^	int (*mkdir) (const char *path, mode_t mode);$/;"	m	struct:fuse_operations	file:
+mode	FileSystem.h	/^	FileMode	mode;$/;"	m	struct:__inodeInfo
+name	FileSystem.h	/^    char name[NAME_LEN_MAX\/*60byte 혹은 가변적*\/];$/;"	m	struct:__dirEntry
+name	fuse/tinyfs.h	/^    char 		name[NAME_LEN_MAX];$/;"	m	struct:__anon5
+nonseekable	impl2.c	/^		unsigned int nonseekable : 1;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+numAllocBlocks	FileSystem.h	/^	int numAllocBlocks;		\/\/ 할당된 블록 개수$/;"	m	struct:_fileSysInfo
+numAllocInodes	FileSystem.h	/^	int numAllocInodes;		\/\/ 할당된 inode의 개수$/;"	m	struct:_fileSysInfo
+numFreeBlocks	FileSystem.h	/^	int numFreeBlocks;		\/\/ 할당되지 않은 블록 개수$/;"	m	struct:_fileSysInfo
+numFreeInodes	FileSystem.h	/^	int numFreeInodes;		\/\/ 할당되지 않은 inode의 개수$/;"	m	struct:_fileSysInfo
+numInodes	FileSystem.h	/^	int numInodes;			\/\/ 전체 inode의 개수$/;"	m	struct:_fileSysInfo
+offset	FileSystem.h	/^	int	offset;$/;"	m	struct:__fileDesc
+open	impl2.c	/^	int (*open) (const char *path, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+opendir	impl2.c	/^	int (*opendir) (const char *, struct fuse_file_info *);$/;"	m	struct:fuse_operations	file:
+pBlockBitmap	FileSystem.h	/^	char* pBlockBitmap; 	\/\/ block bitmap 정보가 저장된 메모리 주소$/;"	m	struct:_fileSysInfo
+pInodeBitmap	FileSystem.h	/^	char* pInodeBitmap; 	\/\/ inode bitmap 정보가 저장된 메모리 주소$/;"	m	struct:_fileSysInfo
+pMem	Buf.h	/^    void*				pMem;$/;"	m	struct:Buf
+pMem	fuse/buf.h	/^    void*				pMem;$/;"	m	struct:Buf
+padding	impl2.c	/^		unsigned int padding : 27;$/;"	m	struct:fuse_operations::fuse_file_info	file:
+proto_major	impl2.c	/^		unsigned proto_major;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+proto_minor	impl2.c	/^		unsigned proto_minor;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+read	impl2.c	/^	int (*read) (const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+readdir	impl2.c	/^	int (*readdir) (const char *path, void *buf, fuse_fill_dir_t filler, off_t offset, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+release	impl2.c	/^	int (*release) (const char *path, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+releasedir	impl2.c	/^	int (*releasedir) (const char *, struct fuse_file_info *);$/;"	m	struct:fuse_operations	file:
+rename	impl2.c	/^	int (*rename) (const char *before, const char *after);$/;"	m	struct:fuse_operations	file:
+reserved	impl2.c	/^		unsigned reserved[23];$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+rmdir	impl2.c	/^	int (*rmdir) (const char *path);$/;"	m	struct:fuse_operations	file:
+rootInodeNum	FileSystem.h	/^	int rootInodeNum; 		\/\/ root inode number 저장$/;"	m	struct:_fileSysInfo
+s_blksize	fuse/tinyfs.h	/^	int s_blksize;$/;"	m	struct:__anon2
+s_datablk_start	fuse/tinyfs.h	/^	int s_datablk_start;			\/\/ data 영역의 시작 블록 번호$/;"	m	struct:__anon2
+s_dbitmap_ptr	fuse/tinyfs.h	/^	char* s_dbitmap_ptr; 	\/\/ block bitmap 정보가 저장된 메모리 주소$/;"	m	struct:__anon2
+s_dbitmap_start	fuse/tinyfs.h	/^	int s_dbitmap_start;	\/\/ block bitmap이 저장된 블록 번호$/;"	m	struct:__anon2
+s_ibitmap_ptr	fuse/tinyfs.h	/^	char* s_ibitmap_ptr; 	\/\/ inode bitmap 정보가 저장된 메모리 주소$/;"	m	struct:__anon2
+s_ibitmap_start	fuse/tinyfs.h	/^	int s_ibitmap_start;	\/\/ inode bitmap이 저장된 블록의 번호$/;"	m	struct:__anon2
+s_inodeblk_start	fuse/tinyfs.h	/^	int s_inodeblk_start;		\/\/ inode list를 저장하는 영역의 시작 블록 번호$/;"	m	struct:__anon2
+s_nblk	fuse/tinyfs.h	/^	int s_nblk;				\/\/ 파일 시스템의 설정된 블록 크기$/;"	m	struct:__anon2
+s_nblk_free	fuse/tinyfs.h	/^	int s_nblk_free;		\/\/ 할당되지 않은 블록 개수$/;"	m	struct:__anon2
+s_nblk_use	fuse/tinyfs.h	/^	int s_nblk_use;		\/\/ 할당된 블록 개수$/;"	m	struct:__anon2
+s_ndatablk	fuse/tinyfs.h	/^	int s_ndatablk;		\/\/ 디스크의 용량. 블록 개수로 저장됨$/;"	m	struct:__anon2
+s_ninode	fuse/tinyfs.h	/^	int s_ninode;			\/\/ 전체 inode의 개수$/;"	m	struct:__anon2
+s_ninode_free	fuse/tinyfs.h	/^	int s_ninode_free;		\/\/ 할당되지 않은 inode의 개수$/;"	m	struct:__anon2
+s_ninode_in_blk	fuse/tinyfs.h	/^	int s_ninode_in_blk;$/;"	m	struct:__anon2
+s_ninode_use	fuse/tinyfs.h	/^	int s_ninode_use;		\/\/ 할당된 inode의 개수$/;"	m	struct:__anon2
+s_rdirino	fuse/tinyfs.h	/^	int s_rdirino; 		\/\/ root inode number 저장$/;"	m	struct:__anon2
+size	FileSystem.h	/^	int			size;$/;"	m	struct:__inodeInfo
+st_atime	impl2.c	/^		long		st_atime;	\/* Time of last access.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_atime_nsec	impl2.c	/^		unsigned long	st_atime_nsec;$/;"	m	struct:fuse_operations::stat	file:
+st_blksize	impl2.c	/^		int		st_blksize;	\/* Optimal block size for I\/O.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_blocks	impl2.c	/^		long		st_blocks;	\/* Number 512-byte blocks allocated. *\/$/;"	m	struct:fuse_operations::stat	file:
+st_ctime	impl2.c	/^		long		st_ctime;	\/* Time of last status change.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_ctime_nsec	impl2.c	/^		unsigned long	st_ctime_nsec;$/;"	m	struct:fuse_operations::stat	file:
+st_dev	impl2.c	/^		unsigned long	st_dev;		\/* Device.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_gid	impl2.c	/^		unsigned int	st_gid;		\/* Group ID of the file's group. *\/$/;"	m	struct:fuse_operations::stat	file:
+st_ino	impl2.c	/^		unsigned long	st_ino;		\/* File serial number.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_mode	impl2.c	/^		unsigned int	st_mode;	\/* File mode.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_mtime	impl2.c	/^		long		st_mtime;	\/* Time of last modification.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_mtime_nsec	impl2.c	/^		unsigned long	st_mtime_nsec;$/;"	m	struct:fuse_operations::stat	file:
+st_nlink	impl2.c	/^		unsigned int	st_nlink;	\/* Link count.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_rdev	impl2.c	/^		unsigned long	st_rdev;	\/* Device number, if device.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_size	impl2.c	/^		long		st_size;	\/* Size of file, in bytes.  *\/$/;"	m	struct:fuse_operations::stat	file:
+st_uid	impl2.c	/^		unsigned int	st_uid;		\/* User ID of the file's owner.  *\/$/;"	m	struct:fuse_operations::stat	file:
+stat	impl2.c	/^	struct stat {$/;"	s	struct:fuse_operations	file:
+state	Buf.h	/^    BufState			state;$/;"	m	struct:Buf
+state	fuse/buf.h	/^    BufState			state;$/;"	m	struct:Buf
+tiny_create	fuse/ops.c	/^int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info)$/;"	f
+tiny_dentry	fuse/tinyfs.h	/^} tiny_dentry;$/;"	t	typeref:struct:__anon5
+tiny_destroy	fuse/ops.c	/^void tiny_destroy(void *user_data)$/;"	f
+tiny_dirblk	fuse/tinyfs.h	/^} tiny_dirblk;$/;"	t	typeref:struct:__anon6
+tiny_getattr	fuse/ops.c	/^int tiny_getattr(const char *path, struct stat *stbuf)$/;"	f
+tiny_init	fuse/ops.c	/^void *tiny_init(struct fuse_conn_info *conn)$/;"	f
+tiny_inode	fuse/tinyfs.h	/^} tiny_inode;$/;"	t	typeref:struct:__anon4
+tiny_mkdir	fuse/ops.c	/^int tiny_mkdir(const char *path, mode_t mode)$/;"	f
+tiny_open	fuse/ops.c	/^int tiny_open(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_opendir	fuse/ops.c	/^int tiny_opendir(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_ops	fuse/main.c	/^static struct fuse_operations tiny_ops = {$/;"	v	typeref:struct:fuse_operations	file:
+tiny_read	fuse/ops.c	/^int tiny_read(const char *path, char *buf, size_t size,$/;"	f
+tiny_readdir	fuse/ops.c	/^int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,$/;"	f
+tiny_release	fuse/ops.c	/^int tiny_release(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_releasedir	fuse/ops.c	/^int tiny_releasedir(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_rename	fuse/ops.c	/^int tiny_rename(const char *before, const char *after)$/;"	f
+tiny_rmdir	fuse/ops.c	/^int tiny_rmdir(const char *path)$/;"	f
+tiny_superblk	fuse/main.c	/^FileSysInfo tiny_superblk;$/;"	v
+tiny_truncate	fuse/ops.c	/^int tiny_truncate(const char *path, off_t size)$/;"	f
+tiny_unlink	fuse/ops.c	/^int tiny_unlink(const char *path)$/;"	f
+tiny_write	fuse/ops.c	/^int tiny_write(const char *path, const char *buf, size_t size,$/;"	f
+truncate	impl2.c	/^	int (*truncate) (const char *path, off_t size);$/;"	m	struct:fuse_operations	file:
+type	FileSystem.h	/^	FileType	type;$/;"	m	struct:__inodeInfo
+type	FileSystem.h	/^    FileType type;$/;"	m	struct:__dirEntry
+type	fuse/tinyfs.h	/^    FileType	type;$/;"	m	struct:__anon5
+unlink	impl2.c	/^	int (*unlink) (const char *path);$/;"	m	struct:fuse_operations	file:
+valid_bit	FileSystem.h	/^	int	valid_bit;$/;"	m	struct:__fileDesc
+want	impl2.c	/^		unsigned want;$/;"	m	struct:fuse_operations::fuse_conn_info	file:
+write	impl2.c	/^	int (*write) (const char *path, const char *buf, size_t size, off_t offset, struct fuse_file_info *info);$/;"	m	struct:fuse_operations	file:
+writepage	impl2.c	/^		int writepage;$/;"	m	struct:fuse_operations::fuse_file_info	file:

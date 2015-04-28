@@ -55,9 +55,10 @@ int tiny_releasedir(const char *path, struct fuse_file_info *info)
 {
 }
 
+/*
 void *tiny_init(struct fuse_conn_info *conn)
 {
-}
+}*/
 
 void tiny_destroy(void *user_data)
 {

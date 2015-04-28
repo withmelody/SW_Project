@@ -1,0 +1,157 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BLKNO_INVALID	buf.h	11;"	d
+BLOCK_SIZE	disk.h	4;"	d
+BLOCK_SIZE	tinyfs.h	11;"	d
+BOOL	buf.h	/^typedef int BOOL;$/;"	t
+BUF_LIST_CLEAN	buf.h	/^    BUF_LIST_CLEAN,$/;"	e	enum:__BufList
+BUF_LIST_DIRTY	buf.h	/^    BUF_LIST_DIRTY,$/;"	e	enum:__BufList
+BUF_LIST_FREE	buf.h	/^    BUF_LIST_FREE$/;"	e	enum:__BufList
+BUF_STATE_CLEAN	buf.h	/^	BUF_STATE_CLEAN,$/;"	e	enum:__BufState
+BUF_STATE_DIRTY	buf.h	/^	BUF_STATE_DIRTY$/;"	e	enum:__BufState
+Buf	buf.h	/^struct Buf$/;"	s
+Buf	buf.h	/^typedef struct Buf Buf;$/;"	t	typeref:struct:Buf
+BufDelete	buf.c	/^BOOL BufDelete(Buf* pBuf)$/;"	f
+BufFind	buf.c	/^Buf* BufFind(int blkno)$/;"	f
+BufGetNewBuffer	buf.c	/^Buf* BufGetNewBuffer(void)$/;"	f
+BufInsert	buf.c	/^void BufInsert(Buf* pBuf, BufList listNum)$/;"	f
+BufList	buf.h	/^} BufList;$/;"	t	typeref:enum:__BufList
+BufRead	buf.c	/^Buf* BufRead(int blkno)$/;"	f
+BufState	buf.h	/^} BufState;$/;"	t	typeref:enum:__BufState
+BufSync	buf.c	/^void BufSync(void)$/;"	f
+BufWrite	buf.c	/^BOOL BufWrite(Buf* pBuf, void* pData, int size)$/;"	f
+CloseFile	FileSystem.cc	/^int CloseFile(int fileDesc)$/;"	f
+DecUseBlock	FileSystem.cc	/^int DecUseBlock()	\/\/ Block 1개 해제$/;"	f
+DecUseInode	FileSystem.cc	/^int DecUseInode()	\/\/ Inode 1개 해제$/;"	f
+DevInit	disk.c	/^void DevInit(void)$/;"	f
+DevLoad	disk.c	/^void DevLoad(void)$/;"	f
+DevMoveBlock	disk.c	/^void DevMoveBlock(int blkno){$/;"	f
+DevReadBlock	disk.c	/^void DevReadBlock(int blkno, char* pBuf)$/;"	f
+DevRelease	disk.c	/^extern void DevRelease(void)$/;"	f
+DevWriteBlock	disk.c	/^void DevWriteBlock(int blkno, char* pBuf)$/;"	f
+DirIsEmpty	FileSystem.cc	/^int DirIsEmpty(InodeInfo* inodeInfo)$/;"	f
+EnumerateDirStatus	FileSystem.cc	/^int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries)$/;"	f
+FALSE	buf.h	12;"	d
+FILE_TYPE_DIR	tinyfs.h	/^    FILE_TYPE_DIR,$/;"	e	enum:__anon3
+FILE_TYPE_FILE	tinyfs.h	/^    FILE_TYPE_FILE,$/;"	e	enum:__anon3
+FS_DISK_CAPACITY	disk.c	10;"	d	file:
+FS_INODE_COUNT	disk.c	11;"	d	file:
+FUSE_USE_VERSION	tinyfs.h	4;"	d
+FileSysInfo	tinyfs.h	/^} FileSysInfo;$/;"	t	typeref:struct:__anon2
+FileType	tinyfs.h	/^} FileType;$/;"	t	typeref:enum:__anon3
+GetBufInfoByHashIndex	buf.c	/^void GetBufInfoByHashIndex(int index, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetBufInfoByListNum	buf.c	/^void GetBufInfoByListNum(BufList listNum, Buf** ppObjInfo, int* pNumBuf)$/;"	f
+GetEntryName	FileSystem.cc	/^int GetEntryName(char* dest, char* abspath)$/;"	f
+GetEntryPath	FileSystem.cc	/^void GetEntryPath(char* abspath, char* filename)$/;"	f
+GetFreeBlock	FileSystem.cc	/^int GetFreeBlock()$/;"	f
+GetFreeDir	FileSystem.cc	/^int GetFreeDir(DirBlock* dirBlock)$/;"	f
+GetFreeEntry	FileSystem.cc	/^int GetFreeEntry(char* Bitmap, int BitmapBlockSize)$/;"	f
+GetFreeInode	FileSystem.cc	/^int GetFreeInode()$/;"	f
+HASH_TBL_SIZE	buf.h	9;"	d
+IncUseBlock	FileSystem.cc	/^int IncUseBlock()	\/\/ Block 1개 사용$/;"	f
+IncUseInode	FileSystem.cc	/^int IncUseInode()	\/\/ Inode 1개 사용$/;"	f
+Init	buf.c	/^void Init(void)$/;"	f
+InitObjectLink	buf.c	/^void InitObjectLink(Buf* pBuf)$/;"	f
+InsertBufIntoFreelist	buf.c	/^void InsertBufIntoFreelist(Buf* pBuf)$/;"	f
+MAX_BUFLIST_NUM	buf.h	10;"	d
+MAX_INDEX_OF_DIRBLK	tinyfs.h	14;"	d
+MT_TYPE_FORMAT	op_tiny_init.c	/^	MT_TYPE_FORMAT,     \/\/ 마운트가 되는 해당 파티션은 포맷된다. $/;"	e	enum:__anon1	file:
+MT_TYPE_READWRITE	op_tiny_init.c	/^	MT_TYPE_READWRITE,  \/\/ 마운트가 되는 해당 파티션은 그대로 유지된다. $/;"	e	enum:__anon1	file:
+MT_TYPE_UNKNOWN	op_tiny_init.c	/^	MT_TYPE_UNKNOWN = 0,$/;"	e	enum:__anon1	file:
+MakeDir	FileSystem.cc	/^int MakeDir(const char* pDirName)$/;"	f
+MakeDirentry	FileSystem.cc	/^int MakeDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+Mount	FileSystem.cc	/^void Mount(MountType type)$/;"	f
+MountType	op_tiny_init.c	/^} MountType; $/;"	t	typeref:enum:__anon1	file:
+NAME_LEN_MAX	tinyfs.h	15;"	d
+NUM_OF_DIRENT_IN_1BLK	tinyfs.h	13;"	d
+NUM_OF_INODE_IN_1BLK	tinyfs.h	12;"	d
+OBJ	Makefile	/^OBJ = $(patsubst %.c, %.o, $(SRC))$/;"	m
+OPT	Makefile	/^OPT = -lfuse -D_FILE_OFFSET_BITS=64$/;"	m
+OpenFile	FileSystem.cc	/^int	OpenFile(const char* pFileName, OpenFlag flag)$/;"	f
+ReadDirBlock	FileSystem.cc	/^void ReadDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+ReadFile	FileSystem.cc	/^int ReadFile(int fileDesc, char* pBuffer, int length)$/;"	f
+ReadInode	FileSystem.cc	/^void ReadInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+RemoveDir	FileSystem.cc	/^int RemoveDir(const char* pDirName)$/;"	f
+RemoveDirentry	FileSystem.cc	/^int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)$/;"	f
+RemoveFile	FileSystem.cc	/^int RemoveFile(const char* pFileName)$/;"	f
+SRC	Makefile	/^SRC = $(wildcard *.c)$/;"	m
+SetBlockAllocToFree	FileSystem.cc	/^int SetBlockAllocToFree(int blockno)$/;"	f
+SetBlockFreeToAlloc	FileSystem.cc	/^int SetBlockFreeToAlloc()$/;"	f
+SetFreeToAlloc	FileSystem.cc	/^int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)$/;"	f
+SetInodeAllocToFree	FileSystem.cc	/^int SetInodeAllocToFree(int inodeno)$/;"	f
+SetInodeFreeToAlloc	FileSystem.cc	/^int SetInodeFreeToAlloc()$/;"	f
+TARGET	Makefile	/^TARGET = tinyfs$/;"	m
+TINY_N_DIRECT_BLOCKS	tinyfs.h	16;"	d
+TRUE	buf.h	13;"	d
+Unmount	FileSystem.cc	/^void Unmount(void)$/;"	f
+WRONG_VALUE	buf.h	14;"	d
+WriteDirBlock	FileSystem.cc	/^void WriteDirBlock(DirBlock* dirBlock, int blockNo)$/;"	f
+WriteFile	FileSystem.cc	/^int WriteFile(int fileDesc, char* pBuffer, int length)$/;"	f
+WriteInode	FileSystem.cc	/^void WriteInode(InodeInfo* inodeInfo, int inodeNo)$/;"	f
+_TINYFS_H_	tinyfs.h	2;"	d
+__BUF_H__	buf.h	2;"	d
+__BufList	buf.h	/^typedef enum __BufList{$/;"	g
+__BufState	buf.h	/^typedef enum __BufState$/;"	g
+__DISK_H__	disk.h	2;"	d
+blkno	buf.h	/^    int					blkno;$/;"	m	struct:Buf
+blockBitmapSize	FileSystem.cc	/^double	blockBitmapSize	= 0;$/;"	v
+dataRegionSize	FileSystem.cc	/^double	dataRegionSize 	= 0;$/;"	v
+dirEntries	tinyfs.h	/^	tiny_dentry	dirEntries[NUM_OF_DIRENT_IN_1BLK];$/;"	m	struct:__anon6
+fd	disk.c	/^static int fd; $/;"	v	file:
+fileDescTable	FileSystem.cc	/^FileDescTable	fileDescTable;$/;"	v
+fileSysInfo	FileSystem.cc	/^FileSysInfo		fileSysInfo;$/;"	v
+hash	buf.h	/^    TAILQ_ENTRY(Buf)	hash;$/;"	m	struct:Buf
+i_block	tinyfs.h	/^	int			i_block[TINY_N_DIRECT_BLOCKS];$/;"	m	struct:__anon4
+i_nblk	tinyfs.h	/^	int			i_nblk;$/;"	m	struct:__anon4
+i_size	tinyfs.h	/^	int			i_size;$/;"	m	struct:__anon4
+i_type	tinyfs.h	/^	FileType	i_type;$/;"	m	struct:__anon4
+inodeBitmapSize	FileSystem.cc	/^int		inodeBitmapSize	= 0;$/;"	v
+inodeListSize	FileSystem.cc	/^int		inodeListSize 	= 0;$/;"	v
+inodeNum	tinyfs.h	/^    unsigned	inodeNum;$/;"	m	struct:__anon5
+link	buf.h	/^    TAILQ_ENTRY(Buf)	link;$/;"	m	struct:Buf
+main	main.c	/^int main(int argc, char *argv[])$/;"	f
+name	tinyfs.h	/^    char 		name[NAME_LEN_MAX];$/;"	m	struct:__anon5
+pMem	buf.h	/^    void*				pMem;$/;"	m	struct:Buf
+s_blksize	tinyfs.h	/^	int s_blksize;$/;"	m	struct:__anon2
+s_datablk_start	tinyfs.h	/^	int s_datablk_start;			\/\/ data 영역의 시작 블록 번호$/;"	m	struct:__anon2
+s_dbitmap_ptr	tinyfs.h	/^	char* s_dbitmap_ptr; 	\/\/ block bitmap 정보가 저장된 메모리 주소$/;"	m	struct:__anon2
+s_dbitmap_start	tinyfs.h	/^	int s_dbitmap_start;	\/\/ block bitmap이 저장된 블록 번호$/;"	m	struct:__anon2
+s_ibitmap_ptr	tinyfs.h	/^	char* s_ibitmap_ptr; 	\/\/ inode bitmap 정보가 저장된 메모리 주소$/;"	m	struct:__anon2
+s_ibitmap_start	tinyfs.h	/^	int s_ibitmap_start;	\/\/ inode bitmap이 저장된 블록의 번호$/;"	m	struct:__anon2
+s_inodeblk_start	tinyfs.h	/^	int s_inodeblk_start;		\/\/ inode list를 저장하는 영역의 시작 블록 번호$/;"	m	struct:__anon2
+s_nblk	tinyfs.h	/^	int s_nblk;				\/\/ 파일 시스템의 설정된 블록 크기$/;"	m	struct:__anon2
+s_nblk_free	tinyfs.h	/^	int s_nblk_free;		\/\/ 할당되지 않은 블록 개수$/;"	m	struct:__anon2
+s_nblk_use	tinyfs.h	/^	int s_nblk_use;		\/\/ 할당된 블록 개수$/;"	m	struct:__anon2
+s_ndatablk	tinyfs.h	/^	int s_ndatablk;		\/\/ 디스크의 용량. 블록 개수로 저장됨$/;"	m	struct:__anon2
+s_ninode	tinyfs.h	/^	int s_ninode;			\/\/ 전체 inode의 개수$/;"	m	struct:__anon2
+s_ninode_free	tinyfs.h	/^	int s_ninode_free;		\/\/ 할당되지 않은 inode의 개수$/;"	m	struct:__anon2
+s_ninode_in_blk	tinyfs.h	/^	int s_ninode_in_blk;$/;"	m	struct:__anon2
+s_ninode_use	tinyfs.h	/^	int s_ninode_use;		\/\/ 할당된 inode의 개수$/;"	m	struct:__anon2
+s_rdirino	tinyfs.h	/^	int s_rdirino; 		\/\/ root inode number 저장$/;"	m	struct:__anon2
+state	buf.h	/^    BufState			state;$/;"	m	struct:Buf
+tiny_create	ops.c	/^int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info)$/;"	f
+tiny_dentry	tinyfs.h	/^} tiny_dentry;$/;"	t	typeref:struct:__anon5
+tiny_destroy	ops.c	/^void tiny_destroy(void *user_data)$/;"	f
+tiny_dirblk	tinyfs.h	/^} tiny_dirblk;$/;"	t	typeref:struct:__anon6
+tiny_getattr	ops.c	/^int tiny_getattr(const char *path, struct stat *stbuf)$/;"	f
+tiny_init	ops.c	/^void *tiny_init(struct fuse_conn_info *conn)$/;"	f
+tiny_inode	tinyfs.h	/^} tiny_inode;$/;"	t	typeref:struct:__anon4
+tiny_mkdir	ops.c	/^int tiny_mkdir(const char *path, mode_t mode)$/;"	f
+tiny_open	ops.c	/^int tiny_open(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_opendir	ops.c	/^int tiny_opendir(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_ops	main.c	/^static struct fuse_operations tiny_ops = {$/;"	v	typeref:struct:fuse_operations	file:
+tiny_read	ops.c	/^int tiny_read(const char *path, char *buf, size_t size,$/;"	f
+tiny_readdir	ops.c	/^int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,$/;"	f
+tiny_release	ops.c	/^int tiny_release(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_releasedir	ops.c	/^int tiny_releasedir(const char *path, struct fuse_file_info *info)$/;"	f
+tiny_rename	ops.c	/^int tiny_rename(const char *before, const char *after)$/;"	f
+tiny_rmdir	ops.c	/^int tiny_rmdir(const char *path)$/;"	f
+tiny_superblk	main.c	/^FileSysInfo tiny_superblk;$/;"	v
+tiny_truncate	ops.c	/^int tiny_truncate(const char *path, off_t size)$/;"	f
+tiny_unlink	ops.c	/^int tiny_unlink(const char *path)$/;"	f
+tiny_write	ops.c	/^int tiny_write(const char *path, const char *buf, size_t size,$/;"	f
+type	tinyfs.h	/^    FileType	type;$/;"	m	struct:__anon5

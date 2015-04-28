@@ -19,8 +19,8 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
  * 					  이 file descriptor는 file descriptor table의 entry의 index값으로 정의된다.
  * 					  실패했을때는 -1을 리턴한다.
  */
-	InodeInfo	inodeInfo, newInode;
-	DirBlock	dirBlock;
+	tiny_inode	inodeInfo, newInode;
+	tiny_dirblk	dirBlock;
 	char* 	abspath = malloc(strlen(pFileName) + 1);
 	char* 	ptr = malloc(strlen(pFileName) + 1);
 	char	filename[NAME_LEN_MAX];
@@ -33,7 +33,7 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 	strcpy(abspath, pFileName);
 	strcpy(ptr, pFileName);
 
-	memset(&newInode, 0, sizeof(InodeInfo));
+	memset(&newInode, 0, sizeof(tiny_inode));
 
 	if (*ptr != '/')		// 절대경로의 시작이 '/'가 아닐때
 	{
@@ -54,10 +54,10 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 	abspath = strtok(abspath, "/");
 	while(abspath)
 	{
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			if( inodeInfo.type == FILE_TYPE_DIR ) {
-				ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			if( inodeInfo.i_type == FILE_TYPE_DIR ) {
+				Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 				for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 				{
 					if ( strcmp(dirBlock.dirEntries[j].name, abspath) == 0
@@ -80,7 +80,7 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 	}
 	if ( strcmp(filename, "") == 0)	// 파일명이 없으면 실패리턴
 	{
-		if( i == inodeInfo.blocks )
+		if( i == inodeInfo.i_nblk )
 		{
 			free(abspath);
 			free(ptr);
@@ -98,10 +98,10 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 	{
 	case OPEN_FLAG_READWRITE:
 		// 파일명 찾고 permission readwrite로
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			if( inodeInfo.type == FILE_TYPE_DIR )
-				ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			if( inodeInfo.i_type == FILE_TYPE_DIR )
+				Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if ( strcmp(dirBlock.dirEntries[j].name, filename) == 0
@@ -109,7 +109,6 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 				{// 파일명 찾으면
 					// permission read로
 					ReadInode(&inodeInfo, dirBlock.dirEntries[j].inodeNum);
-					inodeInfo.mode = FILE_MODE_READWRITE;
 					for ( fd = 0 ; fd < FS_INODE_COUNT ; fd++ )
 					{// 이미 open 했던 경우
 						if ( fileDescTable.file[fd].inodeNo == dirBlock.dirEntries[j].inodeNum )
@@ -141,10 +140,10 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 		// 파일명 찾고 있으면 덮어쓰고 없으면 생성
 		// 파일명 찾고 permission readonly로
 		// 파일이 존재할 경우
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			if( inodeInfo.type == FILE_TYPE_DIR )
-				ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			if( inodeInfo.i_type == FILE_TYPE_DIR )
+				Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if ( strcmp(dirBlock.dirEntries[j].name, filename) == 0
@@ -152,7 +151,6 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 				{// 파일명 찾으면
 					// permission readwrite로
 					ReadInode(&inodeInfo, dirBlock.dirEntries[j].inodeNum);
-					inodeInfo.mode = FILE_MODE_READWRITE;
 					for ( fd = 0 ; fd < FS_INODE_COUNT ; fd++ )
 					{// 이미 open 했던 경우
 						if ( fileDescTable.file[fd].inodeNo == dirBlock.dirEntries[j].inodeNum )
@@ -179,10 +177,10 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 			}
 		}
 		// 파일이 없어서 생성해야 하는 경우
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			if( inodeInfo.type == FILE_TYPE_DIR )
-				ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			if( inodeInfo.i_type == FILE_TYPE_DIR )
+				Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if ( strcmp(dirBlock.dirEntries[j].name,"") == 0 )
@@ -190,12 +188,11 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 					strcpy(dirBlock.dirEntries[j].name, filename);
 					dirBlock.dirEntries[j].type = FILE_TYPE_FILE;
 					dirBlock.dirEntries[j].inodeNum = GetFreeInode();
-					WriteDirBlock(&dirBlock, inodeInfo.i_block[i]); // 변경된 상위디렉토리의 dirBlock 갱신
+					Writetiny_dirblk(&dirBlock, inodeInfo.i_block[i]); // 변경된 상위디렉토리의 dirBlock 갱신
 
-					newInode.size = 0;
-					newInode.type = FILE_TYPE_FILE;
-					newInode.mode = FILE_MODE_READWRITE;
-					newInode.blocks = 1;
+					newInode.i_size = 0;
+					newInode.i_type = FILE_TYPE_FILE;
+					newInode.i_nblk = 1;
 					newInode.i_block[0] = GetFreeBlock();
 
 					WriteInode(&newInode, dirBlock.dirEntries[j].inodeNum);
@@ -216,21 +213,21 @@ int	OpenFile(const char* pFileName, OpenFlag flag)
 			}
 		}
 		// 사용 가능한 다이렉트블락이 없다 -> 실패리턴
-		if ( inodeInfo.blocks != NUM_OF_INDIRECT_BLOCK )
+		if ( inodeInfo.i_nblk != NUM_OF_INDIRECT_BLOCK )
 		{
 			// 사용 가능한 다이렉트블락이 있다 -> 진행
-			inodeInfo.blocks++;
-			inodeInfo.i_block[inodeInfo.blocks-1] = GetFreeBlock();
+			inodeInfo.i_nblk++;
+			inodeInfo.i_block[inodeInfo.i_nblk-1] = GetFreeBlock();
 			SetBlockFreeToAlloc();
 			WriteInode(&inodeInfo, parent_inodeno);
 		//////////////////////////////////////////////////////////////
 		//	생성한 directory block 초기화
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[inodeInfo.blocks-1]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[inodeInfo.i_nblk-1]);
 			strcpy(dirBlock.dirEntries[0].name, filename);
 			dirBlock.dirEntries[0].inodeNum = GetFreeInode();
 			SetInodeFreeToAlloc();
 			dirBlock.dirEntries[0].type = FILE_TYPE_FILE;
-			WriteDirBlock(&dirBlock, inodeInfo.i_block[inodeInfo.blocks-1]);
+			Writetiny_dirblk(&dirBlock, inodeInfo.i_block[inodeInfo.i_nblk-1]);
 			return 0;
 		//
 		//////////////////////////////////////////////////////////////
@@ -259,8 +256,8 @@ int WriteFile(int fileDesc, char* pBuffer, int length)
 	int	remain = length;
 	char buf[BLOCK_SIZE] = {NULL,};
 	Buf* pBuf = NULL;
-	InodeInfo	inodeInfo;
-	DirBlock	dirBlock;
+	tiny_inode	inodeInfo;
+	tiny_dirblk	dirBlock;
 
 	if ( fileDescTable.file[fileDesc].valid_bit != 1 )
 		return WRONG_VALUE;
@@ -274,18 +271,18 @@ int WriteFile(int fileDesc, char* pBuffer, int length)
 	memcpy(&buf, pBuf->pMem, BLOCK_SIZE);
 	memcpy(&buf + offset, pBuffer, (remain + offset >= BLOCK_SIZE) ? BLOCK_SIZE - offset : remain);
 	BufWrite(pBuf, &buf, BLOCK_SIZE);
-	if ( inodeInfo.size < (remain - offset) )
-		inodeInfo.size = remain - offset;
+	if ( inodeInfo.i_size < (remain - offset) )
+		inodeInfo.i_size = remain - offset;
 	fileDescTable.file[fileDesc].offset += (remain + offset >= BLOCK_SIZE) ? BLOCK_SIZE - offset : remain;
 	remain -= (BLOCK_SIZE - offset);
 	if ( remain <= 0 )		return length;
 	// 두번째 블락부터 pBuffer 쓰기
 	for ( j = block + 1 ; j < (length / BLOCK_SIZE + 1) + block ; j++ )
 	{
-		// inodeInfo.blocks가 모자르면 새로 할당해줘야함
-		if ( j == inodeInfo.blocks && inodeInfo.blocks < NUM_OF_INDIRECT_BLOCK )
+		// inodeInfo.i_nblk가 모자르면 새로 할당해줘야함
+		if ( j == inodeInfo.i_nblk && inodeInfo.i_nblk < NUM_OF_INDIRECT_BLOCK )
 		{
-			inodeInfo.i_block[inodeInfo.blocks++] = GetFreeBlock();
+			inodeInfo.i_block[inodeInfo.i_nblk++] = GetFreeBlock();
 			SetBlockFreeToAlloc();
 		}
 		if ( j == NUM_OF_INDIRECT_BLOCK )
@@ -299,12 +296,12 @@ int WriteFile(int fileDesc, char* pBuffer, int length)
 		remain = remain - BLOCK_SIZE;
 		if ( remain <= 0 )
 		{
-			inodeInfo.size += BLOCK_SIZE + remain;
+			inodeInfo.i_size += BLOCK_SIZE + remain;
 			WriteInode(&inodeInfo, fileDescTable.file[fileDesc].inodeNo);
 			return length;
 		}
 		else
-			inodeInfo.size += BLOCK_SIZE;
+			inodeInfo.i_size += BLOCK_SIZE;
 	}
 	return 0;
 }
@@ -324,8 +321,8 @@ int ReadFile(int fileDesc, char* pBuffer, int length)
 	int exsist = 0;
 	int	wrote = length;
 	Buf* pBuf = NULL;
-	InodeInfo	inodeInfo;
-	DirBlock	dirBlock;
+	tiny_inode	inodeInfo;
+	tiny_dirblk	dirBlock;
 
 	ReadInode(&inodeInfo, fileDescTable.file[fileDesc].inodeNo);
 
@@ -370,8 +367,8 @@ int RemoveFile(const char* pFileName)
 	char filename[NAME_LEN_MAX] = {NULL,};
 	char* abspath = malloc(strlen(pFileName) + 1);
 	char* ptr = abspath;
-	InodeInfo inodeInfo;
-	DirBlock dirBlock;
+	tiny_inode inodeInfo;
+	tiny_dirblk dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 	int parent_blockno = 0;
@@ -384,9 +381,9 @@ int RemoveFile(const char* pFileName)
 	ptr = strtok(abspath, "/");
 	while(ptr)
 	{ // root 내부로 들어감
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if( strcmp(ptr, dirBlock.dirEntries[j].name) == 0
@@ -420,7 +417,7 @@ int RemoveFile(const char* pFileName)
 ///////////////////////////////////////////////////
 // 여기부터 해당 파일 삭제
 	// 사용중인 block 해제
-	for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+	for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 	{
 		if(SetBlockAllocToFree(inodeInfo.i_block[i]) == WRONG_VALUE)
 		{
@@ -439,7 +436,7 @@ int RemoveFile(const char* pFileName)
 				return WRONG_VALUE;
 			}
 			strcpy(dirBlock.dirEntries[i].name, "");
-			WriteDirBlock(&dirBlock, parent_blockno);
+			Writetiny_dirblk(&dirBlock, parent_blockno);
 			break;
 		}
 	}
@@ -458,8 +455,8 @@ int MakeDir(const char* pDirName)
 	char dirname[NAME_LEN_MAX] = {NULL,};
 	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
-	InodeInfo inodeInfo;
-	DirBlock dirBlock;
+	tiny_inode inodeInfo;
+	tiny_dirblk dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 
@@ -482,9 +479,9 @@ int MakeDir(const char* pDirName)
 	}
 	while(ptr)
 	{ // root directory block에 생성하지 않고 더 내부로 들어감
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if( strcmp(ptr, dirBlock.dirEntries[j].name) == 0
@@ -526,8 +523,8 @@ int RemoveDir(const char* pDirName)
 	char dirname[NAME_LEN_MAX] = {NULL,};
 	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
-	InodeInfo inodeInfo;
-	DirBlock dirBlock;
+	tiny_inode inodeInfo;
+	tiny_dirblk dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 
@@ -550,9 +547,9 @@ int RemoveDir(const char* pDirName)
 	}
 	while(ptr)
 	{ // root 내부로 들어감
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if( strcmp(ptr, dirBlock.dirEntries[j].name) == 0
@@ -582,26 +579,26 @@ int RemoveDir(const char* pDirName)
 	free(abspath);
 	return 0;
 }
-int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries)
+int EnumerateDirStatus(const char* pDirName, tiny_dentry* ptiny_dentry, int dirEntries)
 {
 /*
- * precondition		: usage ) EnumerateDirStatus(pDirName, pDirEntry, dirEntries);
+ * precondition		: usage ) EnumerateDirStatus(pDirName, ptiny_dentry, dirEntries);
  * postcondition	: 디렉토리에 포함된 파일 또는 디렉토리 정보를 얻어낸다.
  * 					  이 함수는 해당 디렉토리를 구성하고 있는 디렉토리 엔트리들의
  * 					  묶음을 리턴한다.
  * 					  성공하면 읽어진 디렉토리 엔트리 개수를 리턴한다. 예로, 임의의 디렉토리의 전체
  * 					  디렉토리 엔트리 개수가 40이지만, dirEntries가 60으로 입력됬을때, 리턴되는 값은
  * 					  유효한 디렉토리 엔트리 개수인 40을 리턴해야 한다. 또한, 40개의 디렉토리 엔트리
- * 					  내용을 pDirEntry 배열로 전달해야 한다. 또한, 전체 디렉토리 엔트리 개수가 40이지만
+ * 					  내용을 ptiny_dentry 배열로 전달해야 한다. 또한, 전체 디렉토리 엔트리 개수가 40이지만
  * 					  dirEntry가 20으로 입력되었을 때, 리턴되는 값은 20이며, 20개의 디렉토리 엔트리의
- * 					  내용이 pDirEntry로 리턴되어야 한다. 에러 발생시 -1을 리턴한다.
+ * 					  내용이 ptiny_dentry로 리턴되어야 한다. 에러 발생시 -1을 리턴한다.
  */
 	char dirname[NAME_LEN_MAX] = {NULL,};
 	char* abspath = malloc(strlen(pDirName) + 1);
 	char* ptr = abspath;
-	DirEntry* dirEntry = pDirEntry;
-	InodeInfo inodeInfo;
-	DirBlock dirBlock;
+	tiny_dentry* dirEntry = ptiny_dentry;
+	tiny_inode inodeInfo;
+	tiny_dirblk dirBlock;
 	int i = 0, j = 0;
 	int found = 0;
 	int	cnt = 0;
@@ -614,14 +611,14 @@ int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries
 	ptr = strtok(abspath, "/");
 	if (ptr == NULL && strcmp(dirname,"") == 0)		// root directory 일때
 	{
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++)
 			{
 				if ( strcmp(dirBlock.dirEntries[j].name, "") != 0)
 				{
-					memcpy(dirEntry, &dirBlock.dirEntries[j], sizeof(DirEntry));
+					memcpy(dirEntry, &dirBlock.dirEntries[j], sizeof(tiny_dentry));
 					dirEntry++;
 					cnt++;
 				}
@@ -637,9 +634,9 @@ int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries
 	}
 	while(ptr)
 	{ // root 내부로 들어감
-		for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+		for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 		{
-			ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+			Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 			for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++ )
 			{
 				if( strcmp(ptr, dirBlock.dirEntries[j].name) == 0
@@ -661,9 +658,9 @@ int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries
 	// 찾는 디렉토리가 없음
 	if ( j == MAX_INDEX_OF_DIRBLK )		return WRONG_VALUE;
 
-	for ( i = 0 ; i < inodeInfo.blocks ; i++ )
+	for ( i = 0 ; i < inodeInfo.i_nblk ; i++ )
 	{
-		ReadDirBlock(&dirBlock, inodeInfo.i_block[i]);
+		Readtiny_dirblk(&dirBlock, inodeInfo.i_block[i]);
 		for ( j = 0 ; j < MAX_INDEX_OF_DIRBLK ; j++)
 		{
 //			if ( strcmp(dirBlock.dirEntries[j].name, "") != 0)
@@ -671,7 +668,7 @@ int EnumerateDirStatus(const char* pDirName, DirEntry* pDirEntry, int dirEntries
 					&& strcmp(dirBlock.dirEntries[j].name, ".") != 0
 					&& strcmp(dirBlock.dirEntries[j].name, "..") != 0)
 			{
-				memcpy(dirEntry, &dirBlock.dirEntries[j], sizeof(DirEntry));
+				memcpy(dirEntry, &dirBlock.dirEntries[j], sizeof(tiny_dentry));
 				dirEntry++;
 				cnt++;
 			}
@@ -704,8 +701,8 @@ void Mount(MountType type)
  */
 	int i = 0;
 	Buf* pBuf = NULL;
-	InodeInfo	inodeInfo;
-	DirBlock	dirBlock;
+	tiny_inode	inodeInfo;
+	tiny_dirblk	dirBlock;
 
 //////////////////////////////////////////////////////////////////////
 // 모두 block 단위임
@@ -741,22 +738,21 @@ void Mount(MountType type)
 
 		memset(fileSysInfo.s_ibitmap_ptr, 0xFF, inodeBitmapSize * BLOCK_SIZE);
 		memset(fileSysInfo.s_dbitmap_ptr, 0xFF, (int)blockBitmapSize * BLOCK_SIZE);
-		memset(&inodeInfo, 0x0, sizeof(InodeInfo));
-		memset(&dirBlock, 0x0, sizeof(DirBlock));
+		memset(&inodeInfo, 0x0, sizeof(tiny_inode));
+		memset(&dirBlock, 0x0, sizeof(tiny_dirblk));
 
 	////////////////////////////////////////////////////
 	// root 생성
 	//
 		// inode 데이터 대입
-		inodeInfo.size = 0;
-		inodeInfo.type = FILE_TYPE_DIR;
-		inodeInfo.mode = FILE_MODE_READONLY;
-		inodeInfo.blocks = 1;
+		inodeInfo.i_size = 0;
+		inodeInfo.i_type = FILE_TYPE_DIR;
+		inodeInfo.i_nblk = 1;
 		inodeInfo.i_block[0] = fileSysInfo.s_datablk_start;
 
 		// inode 저장
 		pBuf = BufRead(fileSysInfo.s_inodeblk_start);
-		BufWrite(pBuf, &inodeInfo, sizeof(InodeInfo));
+		BufWrite(pBuf, &inodeInfo, sizeof(tiny_inode));
 		// inode 사용현황 변경
 		if ( SetInodeFreeToAlloc() == WRONG_VALUE )
 			fprintf(stderr, "* SetInodeFreeToAlloc() error!\n");
@@ -766,7 +762,7 @@ void Mount(MountType type)
 		dirBlock.dirEntries[0].type = FILE_TYPE_DIR;
 		// dir block 저장
 		pBuf = BufRead(fileSysInfo.s_datablk_start);
-		BufWrite(pBuf, &dirBlock, sizeof(DirBlock));
+		BufWrite(pBuf, &dirBlock, sizeof(tiny_dirblk));
 		// block 사용현황 변경
 		if ( SetBlockFreeToAlloc() == WRONG_VALUE )
 			fprintf(stderr, "* SetBlockFreeToAlloc() error!\n");
@@ -1029,7 +1025,7 @@ int DecUseBlock()	// Block 1개 해제
 	}
 	return WRONG_VALUE;
 }
-void ReadInode(InodeInfo* inodeInfo, int inodeNo)
+void ReadInode(tiny_inode* inodeInfo, int inodeNo)
 {
 /*
  * precondition		:
@@ -1037,16 +1033,16 @@ void ReadInode(InodeInfo* inodeInfo, int inodeNo)
  * 					  해당 inode number를 가진 inodeInfo를 디스크에서 읽어온다.
  */
 	Buf* pBuf = NULL;
-	InodeInfo* pMem = NULL;
+	tiny_inode* pMem = NULL;
 	int block = fileSysInfo.s_inodeblk_start + inodeNo / NUM_OF_INODE_IN_1BLK;	// inodeNo가 위치한 블럭
 	int inode = inodeNo % NUM_OF_INODE_IN_1BLK;	// 해당 block에서 inode가 위치한 순서
 
 	pBuf = BufRead(block);
 	pMem = pBuf->pMem;
 	pMem = pMem + inode;
-	memcpy(inodeInfo, pMem/*(InodeInfo*)pBuf->pMem + inode*/, sizeof(InodeInfo));
+	memcpy(inodeInfo, pMem/*(tiny_inode*)pBuf->pMem + inode*/, sizeof(tiny_inode));
 }
-void WriteInode(InodeInfo* inodeInfo, int inodeNo)
+void WriteInode(tiny_inode* inodeInfo, int inodeNo)
 {
 /*
  * precondition		:
@@ -1055,18 +1051,18 @@ void WriteInode(InodeInfo* inodeInfo, int inodeNo)
  */
 	Buf* pBuf = NULL;
 	void* pMem = malloc(BLOCK_SIZE);
-	InodeInfo* pCur = pMem;
+	tiny_inode* pCur = pMem;
 	int block = fileSysInfo.s_inodeblk_start + inodeNo / NUM_OF_INODE_IN_1BLK;
 	int inode = inodeNo % NUM_OF_INODE_IN_1BLK;
 
 	pBuf = BufRead(block);
 	memcpy(pMem, pBuf->pMem, BLOCK_SIZE);
 	pCur = pCur + inode;
-	memcpy(pCur, inodeInfo, sizeof(InodeInfo));
+	memcpy(pCur, inodeInfo, sizeof(tiny_inode));
 	BufWrite(pBuf, pMem, BLOCK_SIZE);
 	free(pMem);
 }
-void ReadDirBlock(DirBlock* dirBlock, int blockNo)
+void Readtiny_dirblk(tiny_dirblk* dirBlock, int blockNo)
 {
 /*
  * precondition		:
@@ -1076,9 +1072,9 @@ void ReadDirBlock(DirBlock* dirBlock, int blockNo)
 	Buf* pBuf = NULL;
 
 	pBuf = BufRead(blockNo);
-	memcpy(dirBlock, (DirBlock*)pBuf->pMem, sizeof(DirBlock));
+	memcpy(dirBlock, (tiny_dirblk*)pBuf->pMem, sizeof(tiny_dirblk));
 }
-void WriteDirBlock(DirBlock* dirBlock, int blockNo)
+void Writetiny_dirblk(tiny_dirblk* dirBlock, int blockNo)
 {
 /*
  * precondition		:
@@ -1088,7 +1084,7 @@ void WriteDirBlock(DirBlock* dirBlock, int blockNo)
 	Buf* pBuf = NULL;
 
 	pBuf = BufRead(blockNo);
-	BufWrite(pBuf, dirBlock, sizeof(DirBlock));
+	BufWrite(pBuf, dirBlock, sizeof(tiny_dirblk));
 }
 void GetEntryPath(char* abspath, char* filename)
 {
@@ -1124,7 +1120,7 @@ int GetEntryName(char* dest, char* abspath)
 	free(del);
 	return 0;
 }
-int GetFreeDir(DirBlock* dirBlock)
+int GetFreeDir(tiny_dirblk* dirBlock)
 {
 /*
  * precondition		: dirBlock != NULL
@@ -1143,7 +1139,7 @@ int GetFreeDir(DirBlock* dirBlock)
 	}
 	return WRONG_VALUE;
 }
-int MakeDirentry(InodeInfo* inodeInfo, char* dirname)
+int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 {
 /*
  * precondition		: inodeInfo != NULL, dirname != NULL
@@ -1155,13 +1151,13 @@ int MakeDirentry(InodeInfo* inodeInfo, char* dirname)
 	int index = 0;
 	int	parent_inodeno = 0;
 	int	current_inodeno = 0;
-	InodeInfo newInodeInfo;
-	DirBlock dirBlock;
-	ReadDirBlock(&dirBlock, inodeInfo->i_block[0]);
+	tiny_inode newtiny_inode;
+	tiny_dirblk dirBlock;
+	Readtiny_dirblk(&dirBlock, inodeInfo->i_block[0]);
 	parent_inodeno = dirBlock.dirEntries[0].inodeNum;
-	for ( block = 0 ; block < inodeInfo->blocks ; block++ )
+	for ( block = 0 ; block < inodeInfo->i_nblk ; block++ )
 	{
-		ReadDirBlock(&dirBlock, inodeInfo->i_block[block]);
+		Readtiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
 		if (( index = GetFreeDir(&dirBlock)) != WRONG_VALUE)
 		{// 비어있는곳을 찾으면
 			strcpy(dirBlock.dirEntries[index].name, dirname);
@@ -1169,68 +1165,66 @@ int MakeDirentry(InodeInfo* inodeInfo, char* dirname)
 			if ( SetInodeFreeToAlloc() == WRONG_VALUE )		return WRONG_VALUE;
 			dirBlock.dirEntries[index].type = FILE_TYPE_DIR;
 			current_inodeno = dirBlock.dirEntries[index].inodeNum;
-			WriteDirBlock(&dirBlock, inodeInfo->i_block[block]);
-			newInodeInfo.blocks = 1;
-			newInodeInfo.size = BLOCK_SIZE;
-			newInodeInfo.type = FILE_TYPE_DIR;
-			newInodeInfo.mode = FILE_MODE_READONLY;
-			newInodeInfo.i_block[0] = GetFreeBlock();
+			Writetiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
+			newtiny_inode.i_nblk = 1;
+			newtiny_inode.i_size = BLOCK_SIZE;
+			newtiny_inode.i_type = FILE_TYPE_DIR;
+			newtiny_inode.i_block[0] = GetFreeBlock();
 			SetBlockFreeToAlloc();
 		////////////////////////////////////////////
 		//	생성한 directory block 초기화
-			ReadDirBlock(&dirBlock, newInodeInfo.i_block[0]);
+			Readtiny_dirblk(&dirBlock, newtiny_inode.i_block[0]);
 			strcpy(dirBlock.dirEntries[0].name, ".");
 			dirBlock.dirEntries[0].inodeNum = current_inodeno;
 			dirBlock.dirEntries[0].type = FILE_TYPE_DIR;
 			strcpy(dirBlock.dirEntries[1].name, "..");
 			dirBlock.dirEntries[1].inodeNum = parent_inodeno;
 			dirBlock.dirEntries[1].type = FILE_TYPE_DIR;
-			WriteDirBlock(&dirBlock, newInodeInfo.i_block[0]);
+			Writetiny_dirblk(&dirBlock, newtiny_inode.i_block[0]);
 		//
 		////////////////////////////////////////////
-			WriteInode(&newInodeInfo, current_inodeno);
+			WriteInode(&newtiny_inode, current_inodeno);
 			return 0;
 		}
 	}
-	if( inodeInfo->blocks < NUM_OF_INDIRECT_BLOCK )
+	if( inodeInfo->i_nblk < NUM_OF_INDIRECT_BLOCK )
 	{// indirect block을 더 생성할 수 있을때
-		inodeInfo->blocks++;
-		inodeInfo->i_block[inodeInfo->blocks - 1] = GetFreeBlock();
+		inodeInfo->i_nblk++;
+		inodeInfo->i_block[inodeInfo->i_nblk - 1] = GetFreeBlock();
 		SetBlockFreeToAlloc();
 		WriteInode(inodeInfo, parent_inodeno);
-		ReadDirBlock(&dirBlock, inodeInfo->i_block[inodeInfo->blocks - 1]);
+		Readtiny_dirblk(&dirBlock, inodeInfo->i_block[inodeInfo->i_nblk - 1]);
 		strcpy(dirBlock.dirEntries[0].name, dirname);
 		dirBlock.dirEntries[0].inodeNum = GetFreeInode();
 		if ( SetInodeFreeToAlloc() == WRONG_VALUE )		return WRONG_VALUE;
 		dirBlock.dirEntries[0].type = FILE_TYPE_DIR;
 		current_inodeno = dirBlock.dirEntries[0].inodeNum;
-		WriteDirBlock(&dirBlock, inodeInfo->i_block[block]);
-		newInodeInfo.blocks = 1;
-		newInodeInfo.size += BLOCK_SIZE;
-		newInodeInfo.type = FILE_TYPE_DIR;
-		newInodeInfo.mode = FILE_MODE_READONLY;
-		newInodeInfo.i_block[0] = GetFreeBlock();
+		Writetiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
+		newtiny_inode.i_nblk = 1;
+		newtiny_inode.i_size += BLOCK_SIZE;
+		newtiny_inode.i_type = FILE_TYPE_DIR;
+		newtiny_inode.i_block[0] = GetFreeBlock();
 		SetBlockFreeToAlloc();
 	////////////////////////////////////////////
 	//	생성한 directory block 초기화
-		ReadDirBlock(&dirBlock, newInodeInfo.i_block[0]);
-		memset(&dirBlock, 0, sizeof(DirBlock));
+		Readtiny_dirblk(&dirBlock, newtiny_inode.i_block[0]);
+		memset(&dirBlock, 0, sizeof(tiny_dirblk));
 		strcpy(dirBlock.dirEntries[0].name, ".");
 		dirBlock.dirEntries[0].inodeNum = current_inodeno;
 		dirBlock.dirEntries[0].type = FILE_TYPE_DIR;
 		strcpy(dirBlock.dirEntries[1].name, "..");
 		dirBlock.dirEntries[1].inodeNum = parent_inodeno;
 		dirBlock.dirEntries[1].type = FILE_TYPE_DIR;
-		WriteDirBlock(&dirBlock, newInodeInfo.i_block[0]);
+		Writetiny_dirblk(&dirBlock, newtiny_inode.i_block[0]);
 	//
 	////////////////////////////////////////////
-		WriteInode(&newInodeInfo, current_inodeno);
+		WriteInode(&newtiny_inode, current_inodeno);
 		return 0;
 	}
 	// 모든 indirect block을 사용중이며 또한 모든 directory block에 빈 공간이 없다.
 	return WRONG_VALUE;
 }
-int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)
+int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 {
 /*
  * precondition		: inodeInfo != NULL, dirname != NULL
@@ -1243,43 +1237,43 @@ int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)
 	int	current_inodeno = 0;
 	int ret_value = 0;
 	int i = 0;
-	InodeInfo delInodeInfo;
-	InodeInfo nullinode;
-	DirBlock dirBlock;
-	DirBlock nullblock;
-	memset(&nullinode, 0, sizeof(InodeInfo));
-	memset(&nullblock, 0, sizeof(DirBlock));
+	tiny_inode delinode;
+	tiny_inode nullinode;
+	tiny_dirblk dirBlock;
+	tiny_dirblk nullblock;
+	memset(&nullinode, 0, sizeof(tiny_inode));
+	memset(&nullblock, 0, sizeof(tiny_dirblk));
 
-	ReadDirBlock(&dirBlock, inodeInfo->i_block[0]);
+	Readtiny_dirblk(&dirBlock, inodeInfo->i_block[0]);
 	current_inodeno = dirBlock.dirEntries[0].inodeNum;
 	parent_inodeno = dirBlock.dirEntries[1].inodeNum;
-	for ( block = 0 ; block < inodeInfo->blocks ; block++ )
+	for ( block = 0 ; block < inodeInfo->i_nblk ; block++ )
 	{
-		ReadDirBlock(&dirBlock, inodeInfo->i_block[block]);
+		Readtiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
 		for ( index = 0 ; index < MAX_INDEX_OF_DIRBLK ; index++ )
 		{
 			if(strcmp(dirBlock.dirEntries[index].name, dirname) == 0
 					&& dirBlock.dirEntries[index].type == FILE_TYPE_DIR)
 			{// 지울 디렉토리명을 찾으면
-				ReadInode(&delInodeInfo, dirBlock.dirEntries[index].inodeNum);
-				if ( (ret_value = DirIsEmpty(&delInodeInfo)) == WRONG_VALUE )
+				ReadInode(&delinode, dirBlock.dirEntries[index].inodeNum);
+				if ( (ret_value = DirIsEmpty(&delinode)) == WRONG_VALUE )
 				{
 					fprintf(stderr, "dirname is not a DIRECTORY!\n");
 					fprintf(stderr, "DirIsEmpty() Error!\n");
 				}
 				if ( ret_value == TRUE )
 				{// 디렉토리가 비어있다. ==> 삭제
-					for ( i = 0 ; i < delInodeInfo.blocks ; i++ )
+					for ( i = 0 ; i < delinode.i_nblk ; i++ )
 					{
-						WriteDirBlock(&nullblock, delInodeInfo.i_block[i]);
-						SetBlockAllocToFree(delInodeInfo.i_block[i]);
+						Writetiny_dirblk(&nullblock, delinode.i_block[i]);
+						SetBlockAllocToFree(delinode.i_block[i]);
 					}
 					WriteInode(&nullinode, dirBlock.dirEntries[index].inodeNum);
 					SetInodeAllocToFree(dirBlock.dirEntries[index].inodeNum);
 					dirBlock.dirEntries[index].inodeNum = 0;
 					strcpy(dirBlock.dirEntries[index].name, "");
-					// DirBlock과 InodeInfo 갱신하기
-					WriteDirBlock(&dirBlock, inodeInfo->i_block[block]);
+					// tiny_dirblk과 tiny_inode 갱신하기
+					Writetiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
 					return 0;
 				}
 			}
@@ -1287,7 +1281,7 @@ int RemoveDirentry(InodeInfo* inodeInfo, char* dirname)
 	}
 	return -1;
 }
-int DirIsEmpty(InodeInfo* inodeInfo)
+int DirIsEmpty(tiny_inode* inodeInfo)
 {
 /*
  * precondition		: inodeInfo != NULL
@@ -1295,11 +1289,11 @@ int DirIsEmpty(InodeInfo* inodeInfo)
  * 					  비어있지 않으면 0 리턴, 디렉토리가 아니면 -1 리턴
 */
 	int block = 0, index = 0;
-	DirBlock dirBlock;
+	tiny_dirblk dirBlock;
 
-	if(inodeInfo->type != FILE_TYPE_DIR)		return WRONG_VALUE;
+	if(inodeInfo->i_type != FILE_TYPE_DIR)		return WRONG_VALUE;
 
-	ReadDirBlock(&dirBlock, inodeInfo->i_block[0]);
+	Readtiny_dirblk(&dirBlock, inodeInfo->i_block[0]);
 	for( index = 0 ; index < MAX_INDEX_OF_DIRBLK ; index++ )
 	{	// .과 ..이 있는 블럭일때
 		if( strcmp(dirBlock.dirEntries[index].name, ".") == 0
@@ -1308,9 +1302,9 @@ int DirIsEmpty(InodeInfo* inodeInfo)
 		if( strcmp(dirBlock.dirEntries[index].name, "") != 0)
 			return FALSE;
 	}
-	for ( block = 1 ; block < inodeInfo->blocks ; block++)
+	for ( block = 1 ; block < inodeInfo->i_nblk ; block++)
 	{
-		ReadDirBlock(&dirBlock, inodeInfo->i_block[block]);
+		Readtiny_dirblk(&dirBlock, inodeInfo->i_block[block]);
 		for( index = 0 ; index < MAX_INDEX_OF_DIRBLK ; index++ )
 		{
 			if( strcmp(dirBlock.dirEntries[index].name, "") != 0)
