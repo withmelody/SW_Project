@@ -11,12 +11,13 @@ void exit_fsinside() {
 	exit_flag = true;
 
 	WINDOW* exit_popup;
-	exit_popup = newwin(11, terminal_screen_col / 4, 40, terminal_screen_col / 4 + terminal_screen_col / 8);
+	exit_popup = newwin(11, terminal_screen_col / 4, terminal_screen_row - 15, terminal_screen_col / 4 + terminal_screen_col / 8);
 	werase(exit_popup);
 	box(exit_popup, 0, 0);
 	wborder(exit_popup, '|', '|', '-', '-', '+', '+', '+', '+');
 
-	init_pair(MN_COLOR_SELECT, COLOR_RED, COLOR_GREEN);
+	init_pair(EXIT_COLOR_BKGD, COLOR_BLACK, COLOR_YELLOW);
+	wbkgd(exit_popup, COLOR_PAIR(EXIT_COLOR_BKGD));
 	mvwprintw(exit_popup, 3, EXIT_POPUP_WIDTH/2 - 3, "Exit program?");
 
 	wattron(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );

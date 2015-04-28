@@ -72,42 +72,42 @@ void* refresh_disk_block_screen(void* nouse) {
 			//////////////////////////////
 			// n block = 1024
 			// screen = 2400
-
-			for(i=0; i<windowW; i++) {
-				for(j=0;j<windowH; j++) {
+			int index;
+			for(i=0; i<windowH; i++) {
+				for(j=0;j<windowW; j++) {
+					index = j + (i * windowW);
 					// Free block
-					if (!blocks[j+(i*windowH)].isUse) {
+					if (!blocks[index].isUse) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_UNUSED));
-						mvwprintw(disk_screen, j, i, " ");
+						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_UNUSED));
 					}
 					// Used block
 					else {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_IDLE));
-						mvwprintw(disk_screen, j, i, " ");
+						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_IDLE));
 					}
-					if (blocks[j+(j*i)].isLocked) {
+					if (blocks[index].isLocked) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_LOCKED));
-						mvwprintw(disk_screen, j, i, " ");
+						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_LOCKED));
 					}
-					if (blocks[j+(j*i)].isReading) {
+					if (blocks[index].isReading) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_READING));
-						mvwprintw(disk_screen, j, i, " ");
+						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_READING));
 					}
-					if (blocks[j+(j*i)].isWriting) {
+					if (blocks[index].isWriting) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_WRITING));
-						mvwprintw(disk_screen, j, i, " ");
+						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_WRITING));
 					}
 				}
 			}
-		}
-
 		wrefresh(displayDisk_frame);
 		wrefresh(disk_screen);
+		}
 		nanosleep(&ts, NULL);//50 * 1000);
 	}
 

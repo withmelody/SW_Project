@@ -1,6 +1,8 @@
 #include "../header/project.h"
 #include <pthread.h>
 
+#define ABOUT_COLOR_PAIR(x) ( COLOR_PAIR((x) + 50) )
+
 static WINDOW* about_window;
 static WINDOW* bean_window;
 static int bean_loop;
@@ -21,8 +23,9 @@ void about() {
 	init_about_color();
 	about_window = newwin(0, 0, 0, 0);
 	box(about_window, 0, 0);
-	wborder(about_window, '#', '#', '#', '#', '#', '#', '#', '#');
+	werase(about_window);
 	touchwin(about_window);
+	wborder(about_window, '#', '#', '#', '#', '#', '#', '#', '#');
 	wrefresh(about_window);
 
 	// Draw bean
@@ -61,16 +64,15 @@ void about_print_right_side() {
 	int left_black = 95;
 	const int base = 3;
 
-	logo_count++;
-	logo_count = (logo_count%7) + 50;
+	logo_count = (++logo_count%7);
 
 	wattron(about_window, A_UNDERLINE);
 	mvwprintw(about_window,	base, left_black,          "                                                                                       ");
-
 	wattroff(about_window, A_UNDERLINE);
+	//mvwprintw(about_window,	base + 2,  left_black,     "%d", logo_count);//     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          @@@@        @@@@+           ");
 
-	wattron(about_window, COLOR_PAIR(logo_count));
-	mvwprintw(about_window,	base + 3,  left_black,     "     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          ++++        +++++           ");
+	wattron(about_window, ABOUT_COLOR_PAIR(logo_count));
+	mvwprintw(about_window,	base + 3,  left_black,     "     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          @@@@        @@@@+           ");
 	mvwprintw(about_window,	base + 4,  left_black,     "     @@@@@@@@@@  @@@@@@@@@@ @@@@;                         :@@@@        @@@@.           ");
 	mvwprintw(about_window,	base + 5,  left_black,     "    +@@@@@@@@@@ ;@@@@@@@@@@ ....                          ++++`        @@@@            ");
 	mvwprintw(about_window,	base + 6,  left_black,     "    @@@@.       @@@@       @@@@@ @@@@ @@@@#    :#@@@@@@@ :@@@@  .@@@@#;@@@@  ,@@@@@@@+ ");
@@ -78,12 +80,12 @@ void about_print_right_side() {
 	mvwprintw(about_window,	base + 8,  left_black,     "   @@@@@       @@@@@@@@@@  @@@@  @@@@  `@@@@ @@@@,     , @@@@  @@@@   @@@@ +@@@#  @@@@:");
 	mvwprintw(about_window,	base + 9,  left_black,     "   @@@@@@@@@@  @@@@@@@@@@ #@@@@ @@@@'  @@@@; @@@@@@@@@@  @@@@ #@@@+  #@@@+ @@@@   @@@@ ");
 	mvwprintw(about_window, base + 10, left_black,     "  .@@@@@@@@@@  `@@@@@@@@@ @@@@  @@@@   @@@@ .@@@@@@@@@@ #@@@' @@@@   @@@@ `@@@@@@@@@@@ ");
-	mvwprintw(about_window,	base + 11, left_black,     "  @@@@+              @@@#`@@@@ .@@@@  ,@@@@ ,@@@@@@@@@@ @@@@ `@@@@  `@@@@ @@@@;......` ");
+	mvwprintw(about_window,	base + 11, left_black,     "  @@@@+              @@@#`@@@@ .@@@@  ,@@@@ ,@@@@@@@@@@ @@@@ `@@@@  `@@@@ @@@@@@@@@@.` ");
 	mvwprintw(about_window,	base + 12, left_black,     "  @@@@        @@@@@@@@@@`@@@@+ @@@@,  @@@@.`      @@@@``@@@@ @@@@;  @@@@; @@@@         ");
 	mvwprintw(about_window,	base + 13, left_black,     " @@@@@       +@@@@@@@@@@ @@@@  @@@@   @@@@ +@@@@@@@@@@ @@@@: @@@@@@@@@@@  @@@@@@@@@@,  ");
-	mvwprintw(about_window,	base + 14, left_black,     " @@@@        ;@@@@@@@@: #@@@@ #@@@@  @@@@@ @@@@@@@@@: `@@@@  ,@@@@@#@@@@  #@@@@@@@@@   ");
+	mvwprintw(about_window,	base + 14, left_black,     " @@@@       ;@@@@@@@@@: #@@@@ #@@@@  @@@@@ @@@@@@@@@: `@@@@  ,@@@@@#@@@@  #@@@@@@@@@   ");
 
-	wattroff(about_window, COLOR_PAIR(logo_count));
+	wattroff(about_window, ABOUT_COLOR_PAIR(logo_count));
 
 	wattron(about_window, A_UNDERLINE);
 	mvwprintw(about_window,	base + 16, left_black,     "                                                                                       ");
@@ -153,9 +155,8 @@ void* draw_bean(void* nouse) {
 static int bean_motion = 0;
 
 void main_bean() {
-	struct timespec ts = {0, 80000000};
+	struct timespec ts = {0, 70000000};
 	while(bean_loop) {
-//		usleep(50 * 1000);
 		nanosleep(&ts, NULL);
 		about_print_right_side();
 		wmove(bean_window, 0, 0);

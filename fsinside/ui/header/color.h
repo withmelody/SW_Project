@@ -14,7 +14,8 @@
 #define DU_COLOR_START 10
 #define DU_COLOR_FREE  10
 #define DU_COLOR_USAGE 11
-#define DU_COLOR_END   12
+
+#define EXIT_COLOR_BKGD 12
 
 // Menu colors
 #define MN_COLOR_START  20
