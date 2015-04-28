@@ -14,7 +14,7 @@
 #define true 1
 #define false 0
 
-#define NUM_OF_BLOCKS 2400 //1024
+#define NUM_OF_BLOCKS 1024 * 1024//2400 //1024
 
 #define FILE_SYSTEM_MAX_SIZE 8*1024*1024
 

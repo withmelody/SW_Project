@@ -4,11 +4,13 @@
 static WINDOW* about_window;
 static WINDOW* bean_window;
 static int bean_loop;
+static int logo_count;
 int isAboutOpen;
 
 
 void* draw_bean(void*);
 void about_print_right_side();
+void init_about_color();
 
 void about() {
 	isAboutOpen = true;
@@ -16,10 +18,10 @@ void about() {
 	pthread_t draw_bean_thread;
 
 	bean_loop = true;
+	init_about_color();
 	about_window = newwin(0, 0, 0, 0);
 	box(about_window, 0, 0);
 	wborder(about_window, '#', '#', '#', '#', '#', '#', '#', '#');
-	about_print_right_side();
 	touchwin(about_window);
 	wrefresh(about_window);
 
@@ -45,15 +47,29 @@ void about() {
 	isAboutOpen = false;
 }
 
+void init_about_color() {
+	init_pair(50, COLOR_RED,     COLOR_BLACK);
+	init_pair(51, COLOR_GREEN,   COLOR_BLACK);
+	init_pair(52, COLOR_YELLOW,  COLOR_BLACK);
+	init_pair(53, COLOR_BLUE   , COLOR_BLACK);
+	init_pair(54, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(55, COLOR_CYAN,    COLOR_BLACK);
+	init_pair(56, COLOR_WHITE,   COLOR_BLACK);
+}
 
 void about_print_right_side() {
 	int left_black = 95;
 	const int base = 3;
 
+	logo_count++;
+	logo_count = (logo_count%7) + 50;
+
 	wattron(about_window, A_UNDERLINE);
-	mvwprintw(about_window,	base, left_black,     "                                                                                       ");
+	mvwprintw(about_window,	base, left_black,          "                                                                                       ");
 
 	wattroff(about_window, A_UNDERLINE);
+
+	wattron(about_window, COLOR_PAIR(logo_count));
 	mvwprintw(about_window,	base + 3,  left_black,     "     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          ++++        +++++           ");
 	mvwprintw(about_window,	base + 4,  left_black,     "     @@@@@@@@@@  @@@@@@@@@@ @@@@;                         :@@@@        @@@@.           ");
 	mvwprintw(about_window,	base + 5,  left_black,     "    +@@@@@@@@@@ ;@@@@@@@@@@ ....                          ++++`        @@@@            ");
@@ -66,6 +82,8 @@ void about_print_right_side() {
 	mvwprintw(about_window,	base + 12, left_black,     "  @@@@        @@@@@@@@@@`@@@@+ @@@@,  @@@@.`      @@@@``@@@@ @@@@;  @@@@; @@@@         ");
 	mvwprintw(about_window,	base + 13, left_black,     " @@@@@       +@@@@@@@@@@ @@@@  @@@@   @@@@ +@@@@@@@@@@ @@@@: @@@@@@@@@@@  @@@@@@@@@@,  ");
 	mvwprintw(about_window,	base + 14, left_black,     " @@@@        ;@@@@@@@@: #@@@@ #@@@@  @@@@@ @@@@@@@@@: `@@@@  ,@@@@@#@@@@  #@@@@@@@@@   ");
+
+	wattroff(about_window, COLOR_PAIR(logo_count));
 
 	wattron(about_window, A_UNDERLINE);
 	mvwprintw(about_window,	base + 16, left_black,     "                                                                                       ");
@@ -89,10 +107,10 @@ void about_print_right_side() {
 	mvwprintw(about_window, base + 31, left_black,     "              @@   +@@...@@#   @@@@@@@@@       ;@@...@@@   #@#...#@@   +@@@@@@@@     ");
 	mvwprintw(about_window, base + 32, left_black,     "              #+     @@@@@`     ++++++++         @@@@@.      @@@@@`     ++++++++     ");
 	mvwprintw(about_window, base + 35, left_black,     "      `@`  @' @@   @@@@@@@@@   +@@@@  @@         @+   #@   @@@@@# #@     @+   +@     ");
-	mvwprintw(about_window, base + 36, left_black,     "      `@@@@@' @@      '@       @+  @@@@@         @#   #@   @,  @@@@@     @@   +@     ");
+	mvwprintw(about_window, base + 36, left_black,     "      `@@@@@' @@      '@       @   @@@@@         @#   #@   @,  @@@@@     @@   +@     ");
 	mvwprintw(about_window, base + 37, left_black,     "      `@+++@' @@.    `@@@     '@   @@ @@        '@@   #@   @:  @# #@    ;@@  @@@     ");
 	mvwprintw(about_window, base + 38, left_black,     "      `@`  @' @@@ .@@@# @@@:  ;@   @@ @@        @@@`  #@   @:  @# #@    @@@.  +@     ");
-	mvwprintw(about_window, base + 39, left_black,     "      `@...@' @@   #       +   @@.;@@@@@       @@ @@  #@   @;..@@@@@   #@ @@  +@     ");
+	mvwprintw(about_window, base + 39, left_black,     "      `@...@' @@               @@  @@@@@       @@ @@  #@   @;..@@@@@   #@ @@  +@     ");
 	mvwprintw(about_window, base + 40, left_black,     "       @@@@@' @@  @@@@@@@@@@,  `@@@#  @@      @@   #@:#@   @@@@@# #@  @@   #@;+@     ");
 	mvwprintw(about_window, base + 41, left_black,     "                  ++++#@++++.      ..                 #@       ..             +@     ");
 	mvwprintw(about_window, base + 42, left_black,     "       @@@@@@@@@   .` ,@        @@@@@@@        ..     #@    @@@@@@@    `.     +@     ");
@@ -135,9 +153,11 @@ void* draw_bean(void* nouse) {
 static int bean_motion = 0;
 
 void main_bean() {
+	struct timespec ts = {0, 80000000};
 	while(bean_loop) {
-		//		halfdelay(100);
-		usleep(50 * 1000);
+//		usleep(50 * 1000);
+		nanosleep(&ts, NULL);
+		about_print_right_side();
 		wmove(bean_window, 0, 0);
 		switch(bean_motion++%13) {
 			case 0  : bean0(); break;

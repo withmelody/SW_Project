@@ -39,6 +39,7 @@ int displayDisk() {
 void* refresh_disk_block_screen(void* nouse) {
 	int i, j;
 	int windowW, windowH;
+	struct timespec ts = {0, 50000000};
 	getmaxyx(disk_screen, windowH, windowW);
 
 	/////////////////////////////
@@ -107,7 +108,7 @@ void* refresh_disk_block_screen(void* nouse) {
 
 		wrefresh(displayDisk_frame);
 		wrefresh(disk_screen);
-		usleep(50 * 1000);
+		nanosleep(&ts, NULL);//50 * 1000);
 	}
 
 }

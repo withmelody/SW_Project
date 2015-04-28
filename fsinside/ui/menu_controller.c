@@ -1,9 +1,100 @@
 #include "header/project.h"
 
 
+#define EXIT_POPUP_WIDTH (terminal_screen_col/4-8)
+
+static int exit_flag;
+
 void exit_fsinside() {
+	int key;
+	int isExitSelected = true;
+	exit_flag = true;
+
+	WINDOW* exit_popup;
+	exit_popup = newwin(11, terminal_screen_col / 4, 40, terminal_screen_col / 4 + terminal_screen_col / 8);
+	werase(exit_popup);
+	box(exit_popup, 0, 0);
+	wborder(exit_popup, '|', '|', '-', '-', '+', '+', '+', '+');
+
+	init_pair(MN_COLOR_SELECT, COLOR_RED, COLOR_GREEN);
+	mvwprintw(exit_popup, 3, EXIT_POPUP_WIDTH/2 - 3, "Exit program?");
+
+	wattron(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+	mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 - 7, "         ");
+	mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 - 7, "   Yes   ");
+	mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 - 7, "         ");
+
+	wattroff(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+	mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 + 7, "        ");
+	mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 + 7, "   No   ");
+	mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 + 7, "        ");
+
+	touchwin(exit_popup);
+	wrefresh(exit_popup);
+
+	while(1) {
+		switch ( key = getch() ) {
+			case KEY_LEFT:
+			case KEY_RIGHT:
+				if (isExitSelected) isExitSelected = false;
+				else                isExitSelected = true;
+				break;
+			case 'y':
+			case 'Y':
+				goto _EXIT_YES_SELECTED_;
+				break;
+			case 'n':
+			case 'N':
+				goto _EXIT_NO_SELECTED_;
+				break;
+			case KEY_ENTER:
+			case '\n':
+				if (isExitSelected) {
+					goto _EXIT_YES_SELECTED_;
+				}
+				else {
+					goto _EXIT_NO_SELECTED_;
+				}
+			default:
+				break;
+		}
+		// Paint selected item
+		if (isExitSelected) {
+			wattron(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+			mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 - 7, "         ");
+			mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 - 7, "   Yes   ");
+			mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 - 7, "         ");
+
+			wattroff(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+			mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 + 7, "        ");
+			mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 + 7, "   No   ");
+			mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 + 7, "        ");
+		}
+		else {
+			mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 - 7, "         ");
+			mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 - 7, "   Yes   ");
+			mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 - 7, "         ");
+			wattron(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+
+			mvwprintw(exit_popup, 5, EXIT_POPUP_WIDTH/2 + 7, "        ");
+			mvwprintw(exit_popup, 6, EXIT_POPUP_WIDTH/2 + 7, "   No   ");
+			mvwprintw(exit_popup, 7, EXIT_POPUP_WIDTH/2 + 7, "        ");
+			wattroff(exit_popup, COLOR_PAIR( MN_COLOR_SELECT) );
+
+		}
+		wrefresh(exit_popup);
+	}
+_EXIT_YES_SELECTED_:
 	endwin();
 	exit(0);
+
+_EXIT_NO_SELECTED_:
+	wclear(exit_popup);
+	delwin(exit_popup);
+	redrawwin(stdscr);//top_clock);
+	exit_flag = false;
+	return;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +168,7 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 
 	}
 
-//	mvwprintw(stdscr, 3, 3, "%d %d", selected, sub_selected);
+	//	mvwprintw(stdscr, 3, 3, "%d %d", selected, sub_selected);
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
