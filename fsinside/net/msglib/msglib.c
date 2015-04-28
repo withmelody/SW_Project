@@ -3,18 +3,18 @@
 #include <errno.h>
 #include "msglib.h"
 
-#define RECV_MQ(name, type)											\
-	long Recv##name(int qid, type *t) {					\
+#define RECV_MQ(name, type)														\
+	long Recv##name(int qid, type *t) {											\
 		int st = msgrcv(qid, t, sizeof(type), 1L, IPC_NOWAIT);	\
-		if(st < 0) return -1L;										\
-		return st; }												
+		if(st < 0) return -1L;													\
+		return 1L; }												
 
-#define SEND_MQ(name, type)											\
-long Send##name(int qid, type t) {					\
-		int st;	t.to_mtype = 1L;									\
-		st = msgsnd(qid, &t, sizeof(type), IPC_NOWAIT);				\
-		if(st < 0) return -1L;										\
-		return st; }
+#define SEND_MQ(name, type)														\
+long Send##name(int qid, type t) {												\
+		int st;	t.to_mtype = 1L;												\
+		st = msgsnd(qid, &t, sizeof(type), IPC_NOWAIT);			\
+		if(st < 0) return -1L;													\
+		return 1L; }
 
 int CreateMQ(key_t key)
 {
@@ -67,7 +67,7 @@ long SendMQ(int qid, MSG_TYPE type, void *data)
 			}
 			break;
 		case MSG_BLOCK_BITMAP:
-			printf("size = %lu\n", (*(BlockBitmap_t*)data).size);
+			printf("size = %d\n", (*(BlockBitmap_t*)data).size);
 			if(SendBlockBM(qid, *(BlockBitmap_t*)data) < 0) {
 				printf("bbm send fail %d\n", errno);
 				return -1L;

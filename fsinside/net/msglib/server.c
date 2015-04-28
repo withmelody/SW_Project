@@ -10,25 +10,28 @@ void LoadSuperBlk(int qid)
 
 	if(RecvSuperBlk(qid, &sb) < 0)
 	{
-		printf("q recv fail\n");
+		printf("super block recv fail\n");
 		return ;
 	}
-	printf("sb.fsi.blocks = %d\n", sb.fsi.blocks);
+	printf("sb.fsi.nblk = %d\n", sb.fsi.s_nblk);
 }
 
 void LoadInodeBM(int qid)
 {
 	printf("inode bitmap\n");
 	InodeBitmap_t ibm;
-	int i=0;
+	unsigned char temp;
+	int i,j;
 
 	if(RecvInodeBM(qid, &ibm) < 0)
 	{
-		printf("q recv fail\n");
+		printf("inode bitmap recv fail\n");
 		return ;
 	}
-	for(i=0; i<ibm.size; i++)
-		printf("%x", ibm.InodeBitmap[i]);
+	for(i=0; i<ibm.size; i++){
+		temp = ibm.s_ibitmap_ptr[i];
+		printf("%x ", temp);
+	}
 	printf("\n");
 }
 
@@ -36,15 +39,18 @@ void LoadBlockBM(int qid)
 {
 	printf("block bitmap\n");
 	BlockBitmap_t bbm;
-	int i=0;
+	unsigned char temp = 0;
+	int i, j;
 
 	if(RecvBlockBM(qid, &bbm) < 0)
 	{
-		printf("q recv fail\n");
+		printf("block bitmap recv fail\n");
 		return ;
 	}
-	for(i=0; i<bbm.size; i++)
-		printf("%x", bbm.BlockBitmap[i]);
+	for(i=0; i<bbm.size; i++){
+		temp = bbm.s_dbitmap_ptr[i];
+		printf("%x ", temp);
+	}
 	printf("\n");
 }
 

@@ -1,11 +1,14 @@
+#ifndef __MSG_LIB_H__
+#define __MSG_LIB_H__
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 
-#include "FileSystem.h"
+#include "../tinyfs.h"
 
 #define INODE_BITMAP_SIZE 100		// byte
-#define BLOCK_BITMAP_SIZE 100000		// byte
+#define BLOCK_BITMAP_SIZE 2048		// byte
 
 typedef enum {
 	MSG_SUPER_BLOCK = 0,
@@ -25,13 +28,13 @@ typedef struct {
 
 typedef struct {
 	long to_mtype;	
-	char InodeBitmap[INODE_BITMAP_SIZE];
+	char s_ibitmap_ptr[INODE_BITMAP_SIZE];
 	int size;
 } InodeBitmap_t;
 
 typedef struct {
 	long to_mtype;
-	char BlockBitmap[BLOCK_BITMAP_SIZE]; 
+	char s_dbitmap_ptr[BLOCK_BITMAP_SIZE]; 
 	int size;
 } BlockBitmap_t;
 
@@ -45,3 +48,8 @@ long RecvCtrl(int, Msg_t*);
 long RecvSuperBlk(int, SuperBlk_t*);
 long RecvInodeBM(int, InodeBitmap_t*);
 long RecvBlockBM(int, BlockBitmap_t*);
+
+
+#endif
+
+
