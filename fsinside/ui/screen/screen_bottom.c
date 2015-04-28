@@ -6,7 +6,7 @@ char* menu_str[] = {
 	// Must contain blank
 	" FSinside(f) ",
 	" Edit(e)     ",
-	" Mode(o)     ",
+	" Show(o)     ",
 	" About(a)    ",
 	" Exit(x)     "
 };
@@ -24,10 +24,10 @@ char* submenu2_str[] = {
 };
 
 char* submenu3_str[] = {
-	" All Inodes  ",
-	" All Blocks  ",
-	" One Inode   ",
-	" One Block   ",
+	" Inode Bitmap",
+	" Blcok Bitmap",
+	" Event Inode ",
+	" Event Block ",
 	" Cache       ",
 };
 
@@ -145,7 +145,7 @@ void displayDiskUsage() {
 	diskUsage_color_init();
 
 	// for test
-	displayBar(68, bar_width);
+	displayBar(rand() % 100, bar_width);
 
 	wrefresh(display_diskUsage);
 }

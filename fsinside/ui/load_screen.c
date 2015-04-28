@@ -8,7 +8,8 @@ void* updateTime(void*);
 void* display_disk_info(void*);
 
 int load_screen() {
-
+// for teset
+	srand(time(NULL));
 	pthread_t timer_thread, screen_thread, controller_thread;
 	int ret;
 

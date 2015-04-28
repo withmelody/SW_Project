@@ -83,7 +83,7 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-void do_selected_menu(int selected) {
+void do_selected_menu(int selected, int sub_selected) {
 	switch( selected ) {
 		case 3:
 			about();
@@ -174,7 +174,7 @@ void input_select_menu() {
 		}
 		change_select_menu_color(selected, sub_selected);
 		if (run_flag)
-			do_selected_menu(selected);
+			do_selected_menu(selected, sub_selected);
 
 	}
 }
