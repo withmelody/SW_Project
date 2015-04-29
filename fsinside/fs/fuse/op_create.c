@@ -38,7 +38,9 @@ static tiny_inode *__create_file(tiny_inode *parent_inode, const char *name)
 			if ( strcmp(tmp_dirblk.dirEntries[j].name, "") == 0 ) {
 				tmp_dirblk.dirEntries[j].inodeNum = inode_no;
 				tmp_dirblk.dirEntries[j].type = FILE_TYPE_FILE;
-				strncpy(tmp_dirblk.dirEntries[j].name, name, NAME_LEN_MAX);
+				strncpy(tmp_dirblk.dirEntries[j].name, name, NAME_LEN_MAX - 1);
+				tmp_dirblk.dirEntries[j].name[NAME_LEN_MAX - 1] = '\0';
+				WriteDirBlock(&tmp_dirblk, parent_inode->i_block[i]);
 				goto __create_file_finalize;
 			}
 		}
@@ -87,6 +89,10 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	path_copy = (char*)malloc(strlen(path) + 1);
 	strcpy(path_copy, path);
 	base_name = basename(path_copy);
+	if (strlen(base_name) > NAME_LEN_MAX - 1) {
+		ret = -ENAMETOOLONG;
+		goto err;
+	}
 	pDentry = __find_dentry(&i_tmp, base_name);
 
 	/* There is no such file */

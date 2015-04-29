@@ -94,6 +94,7 @@ int tiny_releasedir(const char *path, struct fuse_file_info *info);
 /*OK*/void *tiny_init(struct fuse_conn_info *conn);
 void tiny_destroy(void *user_data);
 int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info);
+int tiny_utimens(const char *path, const struct timespec tv[2]);
 
 #endif /* _TINYFS_H_ */
 

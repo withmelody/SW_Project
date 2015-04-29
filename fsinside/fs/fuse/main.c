@@ -37,7 +37,7 @@ static struct fuse_operations tiny_ops = {
 	.ftruncate      = NULL,
 	.fgetattr       = NULL,
 	.lock           = NULL,
-	.utimens        = NULL,
+	.utimens        = tiny_utimens,
 	.bmap           = NULL,
 };
 

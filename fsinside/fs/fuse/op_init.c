@@ -29,16 +29,6 @@ void *tiny_init(struct fuse_conn_info *conn)
 
 	memset(&tiny_superblk, 0x00, sizeof(tiny_superblk));
 
-//////////////////////////////////////////////////////////////////////
-// 모두 block 단위임
-//	tiny_superblk.s_ibitmap_size = (FS_INODE_COUNT / 8/*1byte*/ / BLOCK_SIZE == 0) ? 1 : (int)(ceil((double)FS_INODE_COUNT / (double)8 / (double)BLOCK_SIZE));// FS_INODE_COUNT / 8/*1byte*/ / BLOCK_SIZE + 1;	// block 단위
-//	tiny_superblk.s_inodeblk_size = (int)(ceil((double)FS_INODE_COUNT / (double)NUM_OF_INODE_IN_1BLK)); // block 단위
-//	tiny_superblk.s_datablk_size = (FS_DISK_CAPACITY / BLOCK_SIZE - 1/*FileSysInfo block*/ /* - 1*//*BlockBitmap block*/
-//						- (double)tiny_superblk.s_ibitmap_size - (double)tiny_superblk.s_inodeblk_size);
-//	tiny_superblk.s_dbitmap_size = ceil(tiny_superblk.s_datablk_size / 8/*1byte*/ / BLOCK_SIZE);	// block 단위
-//	tiny_superblk.s_datablk_size = tiny_superblk.s_datablk_size - tiny_superblk.s_dbitmap_size;
-//
-//////////////////////////////////////////////////////////////////////
 	Init();			// 버퍼캐시 생성 및 초기화
 
 	DevLoad();		// 디스크 로드
@@ -47,16 +37,19 @@ void *tiny_init(struct fuse_conn_info *conn)
 
 	if(tiny_superblk.s_nblk == 0) { // 0이 초기값인 임의의 데이터 확인
 		type = MT_TYPE_FORMAT;
-//////////////////////////////////////////////////////////////////////
-// 모두 block 단위임
-		tiny_superblk.s_ibitmap_size = (FS_INODE_COUNT / 8/*1byte*/ / BLOCK_SIZE == 0) ? 1 : (int)(ceil((double)FS_INODE_COUNT / (double)8 / (double)BLOCK_SIZE));// FS_INODE_COUNT / 8/*1byte*/ / BLOCK_SIZE + 1;	// block 단위
-		tiny_superblk.s_inodeblk_size = (int)(ceil((double)FS_INODE_COUNT / (double)NUM_OF_INODE_IN_1BLK)); // block 단위
-		tiny_superblk.s_datablk_size = (FS_DISK_CAPACITY / BLOCK_SIZE - 1/*FileSysInfo block*/ /* - 1*//*BlockBitmap block*/
-				- (double)tiny_superblk.s_ibitmap_size - (double)tiny_superblk.s_inodeblk_size);
-		tiny_superblk.s_dbitmap_size = ceil(tiny_superblk.s_datablk_size / 8/*1byte*/ / BLOCK_SIZE);	// block 단위
-		tiny_superblk.s_datablk_size = tiny_superblk.s_datablk_size - tiny_superblk.s_dbitmap_size;
-//
-//////////////////////////////////////////////////////////////////////
+
+		tiny_superblk.s_ibitmap_size =
+			(FS_INODE_COUNT/*128*/ / 8 / BLOCK_SIZE == 0) ? 1 : (int)(ceil((double)FS_INODE_COUNT / (double)8 / (double)BLOCK_SIZE));
+		tiny_superblk.s_inodeblk_size =
+			(int)(ceil((double)FS_INODE_COUNT / (double)NUM_OF_INODE_IN_1BLK));
+
+		tiny_superblk.s_datablk_size =
+			(FS_DISK_CAPACITY / BLOCK_SIZE - 1 - (double)tiny_superblk.s_ibitmap_size - (double)tiny_superblk.s_inodeblk_size);
+		tiny_superblk.s_dbitmap_size =
+			ceil((double)tiny_superblk.s_datablk_size / 8 / BLOCK_SIZE);
+		tiny_superblk.s_datablk_size =
+			tiny_superblk.s_datablk_size - tiny_superblk.s_dbitmap_size;
+
 	} else if ( tiny_superblk.s_nblk > 0 ) {
 		type = MT_TYPE_READWRITE;
 	} else {

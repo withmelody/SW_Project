@@ -22,6 +22,8 @@ tiny_dentry *__find_dentry(tiny_inode *dir, const char *entry_name)
 	return NULL;
 }
 
+/*
+   -> op_getattr.c
 int tiny_getattr(const char *path, struct stat *stbuf)
 {
 	int res = 0;
@@ -32,11 +34,14 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 	if (strcmp(path, "/") == 0) {
 		stbuf->st_mode = S_IFDIR | 0755;
 		stbuf->st_nlink = 2;
-	} else
-		res = -ENOENT;
+	} else {
+		stbuf->st_mode = S_IFREG | 0555;
+		stbuf->st_nlink = 1;
+	}
 
 	return res;
 }
+*/
 
 /*
    -> op_readdir.c
@@ -61,11 +66,14 @@ int tiny_mkdir(const char *path, mode_t mode)
 	return 0;
 }
 
+/*
+   -> op_unlink.c
 int tiny_unlink(const char *path)
 {
 	fprintf(stderr, "[TINYFS] %s", __func__);
 	return 0;
 }
+*/
 
 int tiny_rmdir(const char *path)
 {
@@ -145,3 +153,9 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info)
 	return 0;
 }
 */
+
+int tiny_utimens(const char *path, const struct timespec tv[2])
+{
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
+	return 0;
+}
