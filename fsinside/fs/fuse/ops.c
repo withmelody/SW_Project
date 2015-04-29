@@ -1,6 +1,21 @@
 #include <errno.h>
 #include "tinyfs.h"
 
+int __find_inodeno_for_dir(tiny_inode *dir) {
+	tiny_dirblk *dirblk;
+	tiny_dentry *dentry;
+	Buf *buf;
+	int i, j;
+
+	if ( dir->i_type != FILE_TYPE_DIR ) {
+		return -1;
+	}
+
+	buf = BufRead(dir->i_block[0]);
+	dirblk = __get_dirblk_from_buf(buf);
+	return dirblk->dirEntries[0].inodeNum;
+}
+
 tiny_dentry *__find_dentry(tiny_inode *dir, const char *entry_name)
 {
 	tiny_dirblk *dirblk;
@@ -60,11 +75,13 @@ int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 }
 */
 
+/*
 int tiny_mkdir(const char *path, mode_t mode)
 {
 	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
+*/
 
 /*
    -> op_unlink.c
@@ -75,12 +92,13 @@ int tiny_unlink(const char *path)
 }
 */
 
+/*
 int tiny_rmdir(const char *path)
 {
 	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
-
+*/
 int tiny_rename(const char *before, const char *after)
 {
 	fprintf(stderr, "[TINYFS] %s\n", __func__);

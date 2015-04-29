@@ -1,5 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <errno.h>
 #include "tinyfs.h"
 #include "fs.h"
 
@@ -404,7 +409,7 @@ int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 		return 0;
 	}
 	// 모든 indirect block을 사용중이며 또한 모든 directory block에 빈 공간이 없다.
-	return WRONG_VALUE;
+	return -EDQUOT;
 }
 int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 {
@@ -461,7 +466,7 @@ int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 			}
 		}
 	}
-	return -1;
+	return -ENOENT;
 }
 int DirIsEmpty(tiny_inode* inodeInfo)
 {
