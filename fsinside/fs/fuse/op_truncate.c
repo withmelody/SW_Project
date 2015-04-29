@@ -68,7 +68,7 @@ int tiny_truncate(const char *path, off_t size)
 			blkidx_after++;
 		}
 
-		for (i = target_inode.i_nblk - 1; i > blkidx_after; i--) {
+		for (i = target_inode.i_nblk - 1; i >= blkidx_after; i--) {
 			SetBlockAllocToFree(target_inode.i_block[i]);
 			target_inode.i_nblk--;
 		}
