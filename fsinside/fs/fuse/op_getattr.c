@@ -10,7 +10,7 @@ extern FileSysInfo tiny_superblk;
 int tiny_getattr(const char *path, struct stat *stbuf)
 {
 	tiny_inode		i_tmp;
-	tiny_inode		*target;
+	tiny_inode		target_inode;
 	tiny_dentry		*pDentry;
 	char *token;
 	char *path_copy;
@@ -54,6 +54,7 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 		}
 		stbuf->st_mode = S_IFDIR | 0755;
 	} else {
+		ReadInode(&target_inode, pDentry->inodeNum);
 		memset(stbuf, 0, sizeof(struct stat));
 		switch (pDentry->type) {
 		case FILE_TYPE_DIR:
@@ -61,6 +62,7 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 			break;
 		case FILE_TYPE_FILE:
 			stbuf->st_mode = S_IFREG | 0664;
+			stbuf->st_size = target_inode.i_size;
 			break;
 		}
 	}

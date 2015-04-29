@@ -10,7 +10,7 @@
 #include "disk.h"
 #include "buf.h"
 
-#define FS_DISK_CAPACITY	(8388608) /* 8M */
+#define FS_DISK_CAPACITY		(8 * 1024 * 1024) /* 8M */
 #define FS_INODE_COUNT			(128)
 #define BLOCK_SIZE				(512)
 #define NUM_OF_INODE_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_inode))

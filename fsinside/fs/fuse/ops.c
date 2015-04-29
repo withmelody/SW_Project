@@ -28,7 +28,7 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 {
 	int res = 0;
 
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 
 	memset(stbuf, 0, sizeof(struct stat));
 	if (strcmp(path, "/") == 0) {
@@ -48,7 +48,7 @@ int tiny_getattr(const char *path, struct stat *stbuf)
 int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		off_t offset, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 
 	if (strcmp(path, "/") != 0)
 		return -ENOENT;
@@ -62,7 +62,7 @@ int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 int tiny_mkdir(const char *path, mode_t mode)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 
@@ -70,61 +70,70 @@ int tiny_mkdir(const char *path, mode_t mode)
    -> op_unlink.c
 int tiny_unlink(const char *path)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 */
 
 int tiny_rmdir(const char *path)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 
 int tiny_rename(const char *before, const char *after)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 
+/*
+   -> op_truncate.c
 int tiny_truncate(const char *path, off_t size)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
+*/
 
 /*
    -> op_open.c
 int tiny_open(const char *path, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 */
 
+/*
+   -> op_read.c
 int tiny_read(const char *path, char *buf, size_t size,
 		off_t offset, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
+*/
 
+/*
+   -> op_write.c
 int tiny_write(const char *path, const char *buf, size_t size,
 		off_t offset, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
+*/
 
 int tiny_release(const char *path, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 
 int tiny_releasedir(const char *path, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 
@@ -132,7 +141,7 @@ int tiny_releasedir(const char *path, struct fuse_file_info *info)
    -> op_init.c
 void *tiny_init(struct fuse_conn_info *conn)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
  */
@@ -141,7 +150,7 @@ void *tiny_init(struct fuse_conn_info *conn)
    -> op_destroy.c
 void tiny_destroy(void *user_data)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 }
 */
 
@@ -149,7 +158,7 @@ void tiny_destroy(void *user_data)
    -> op_create.c
 int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info)
 {
-	fprintf(stderr, "[TINYFS] %s", __func__);
+	fprintf(stderr, "[TINYFS] %s\n", __func__);
 	return 0;
 }
 */
