@@ -9,14 +9,17 @@
 #include <time.h>
 
 #include "color.h"
+#include "define_mode.h"
 #include "windows_info.h"
+#include "diskInfo.h"
+#include "../messageQ/msglib.h"
+#include "../tinyfs.h"
 
 #define true 1
 #define false 0
 
-#define NUM_OF_BLOCKS 10240//1024 * 1024//2400 //1024
-
-#define FILE_SYSTEM_MAX_SIZE 8*1024*1024
+int PROGRAM_EXIT_FLAG;
+int CURRENT_MODE;
 
 typedef struct __FB{
 	int isUse;
@@ -38,6 +41,10 @@ typedef enum __BlockInfo{
 	WRITING,
 	LOCKED
 } BlockInfo;
+
+InodeBitmap_t ibm;
+BlockBitmap_t bbm;
+
 
 int displayDisk_width;
 int displayDisk_height;

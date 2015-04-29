@@ -8,6 +8,8 @@
 #define FS_COLOR_LOCKED  3
 #define FS_COLOR_IDLE    4
 
+#define FS_INODE_COLOR_UNUSED 3
+#define FS_INODE_COLOR_USED   4
 
 
 // Disk Usage percentage colors

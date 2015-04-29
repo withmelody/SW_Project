@@ -4,28 +4,26 @@ extern Position bottom_menu_pos;
 
 char* menu_str[] = {
 	// Must contain blank
-	" FSinside(f) ",
-	" Edit(e)     ",
+	" Bitmap(b)   ",
+	" Current(c)  ",
 	" Show(o)     ",
 	" About(a)    ",
 	" Exit(x)     "
 };
 
 char* submenu1_str[] = {
-	" Open        ",
-	" Save        ",
-	" About       ",
+	" Show Inodes ",
+	" Show Blocks ",
 };
 
 char* submenu2_str[] = {
-	" Copy        ",
-	" Cut         ",
-	" Paste       ",
+	" Inode       ",
+	" Block       ",
 };
 
 char* submenu3_str[] = {
 	" Inode Bitmap",
-	" Blcok Bitmap",
+	" Block Bitmap",
 	" Event Inode ",
 	" Event Block ",
 	" Cache       ",
@@ -108,24 +106,27 @@ void diskUsage_color_init() {
 	init_pair(DU_COLOR_USAGE, COLOR_WHITE, COLOR_MAGENTA);
 }
 
-void displayBar(int usage, int bar_width) {
+void displayBar(int usage) {
 	int i;
+	int bar_width = terminal_screen_col - 2;
 
 	chtype ch_usage = ' ';
 	chtype ch_free  = ' ';
 	addch(ch_usage | COLOR_PAIR(DU_COLOR_USAGE));
 	addch(ch_free  | COLOR_PAIR(DU_COLOR_FREE ));
 
+	int x, y;
+	getbegyx(display_diskUsage, y, x);
+	move(y+1, x+1);
+
 	int usage_percent = bar_width * ((double) usage / 100);
-
-	//  usage_percent = 10;
-
+//	werase(display_diskUsage);
 	wattron(display_diskUsage, COLOR_PAIR(DU_COLOR_FREE));
 	for (i=0; i<usage_percent; i++) {
 		mvwaddch(display_diskUsage, 0, i, ch_usage);
 		mvwaddch(display_diskUsage, 1, i, ch_usage);
 	}
-	//  mvwprintw(display_diskUsage, 1, bar_width / 2, "feawfeawfeawfaew%d %d %f", usage_percent, bar_width, usage_percent/(float)bar_width);
+
 	wattroff(display_diskUsage, COLOR_PAIR(DU_COLOR_FREE));
 
 	wattron(display_diskUsage, COLOR_PAIR(DU_COLOR_USAGE));
@@ -134,7 +135,10 @@ void displayBar(int usage, int bar_width) {
 		mvwaddch(display_diskUsage, 1, i, ch_free);
 	}
 	wattroff(display_diskUsage, COLOR_PAIR(DU_COLOR_USAGE));
-
+	wrefresh(display_diskUsage);
+//	werase(top_clock);
+	redrawwin(top_clock);
+//	wrefresh(top_clock);
 }
 
 void displayDiskUsage() {
@@ -145,8 +149,14 @@ void displayDiskUsage() {
 	diskUsage_color_init();
 
 	// for test
-	displayBar(rand() % 100, bar_width);
+//	displayBar(rand() % 100);//, bar_width);
 
 	wrefresh(display_diskUsage);
 }
 
+void update_DisplayBar(SuperBlk_t* sb) {
+	int disk_space = sb->fsi.s_ndatablk;
+	int disk_usage = sb->fsi.s_nblk_use;
+	int disk_free  = sb->fsi.s_nblk_free;
+	displayBar( (int) (100 * ( (float) disk_usage / (float) disk_space )) );
+};

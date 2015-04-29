@@ -5,7 +5,7 @@ int main(int argc, char** argv) {
 	// Get terminal size
 	initscr();
 	getmaxyx(stdscr, terminal_screen_row, terminal_screen_col);
-
+/*
 	// Check terminal width 
 	if (terminal_screen_col < 197) {
 		fprintf(stderr, " - FSinside initialize error : \r\n");
@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 		endwin();
 		return 0;
 	}
-
+*/
 	// Screen Initialize
 	if (has_colors() == FALSE) {
 		fprintf(stderr, " - FSinside initialize error : \r\n");
@@ -23,6 +23,9 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
+	raw();
+//	cbreak();
+	
 	// Do not print keyboard input
 	noecho();
 
@@ -30,7 +33,11 @@ int main(int argc, char** argv) {
 	curs_set(0);
 
 	// Enable keypad
-    keypad(stdscr, TRUE);
+	keypad(stdscr, TRUE);
+
+	// Variable init
+	CURRENT_MODE = DISPLAY_INODE_BITMAP;
+	PROGRAM_EXIT_FLAG = false;
 
 	// Print screens
 	load_screen();

@@ -86,6 +86,7 @@ void exit_fsinside() {
 		wrefresh(exit_popup);
 	}
 _EXIT_YES_SELECTED_:
+	PROGRAM_EXIT_FLAG = true;
 	endwin();
 	exit(0);
 
@@ -173,10 +174,18 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+void set_show_bitmap(int sub_selected) {
+	if (sub_selected == 0) 
+		CURRENT_MODE = DISPLAY_INODE_BITMAP;
+	else if (sub_selected == 1)
+		CURRENT_MODE = DISPLAY_BLOCK_BITMAP;
+}
 
 void do_selected_menu(int selected, int sub_selected) {
 	switch( selected ) {
+		case 0:
+			set_show_bitmap(sub_selected);
+			break;
 		case 3:
 			about();
 			break;
@@ -213,10 +222,10 @@ void input_select_menu() {
 				break;
 			case KEY_ENTER:
 			case '\n':
-				run_flag = true;;
+				run_flag = true;
 				break;
-			case 'f':
-			case 'F':
+			case 'b':
+			case 'B':
 				sub_selected = 0;
 				run_flag = true;
 				selected = 0;
