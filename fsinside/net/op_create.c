@@ -6,57 +6,123 @@
 #include "buf.h"
 #include "tinyfs.h"
 #include "fs.h"
+#include "msglib/msglib.h"
 
 extern FileSysInfo tiny_superblk;
 
-static tiny_inode *__create_file(tiny_inode *parent_inode, const char *name)
+static int __create_file(tiny_inode *parent_inode, const char *name)
 {
-	int i, j;
-	tiny_inode* target = NULL;
+	int qid = OpenMQ(5000);
+	tiny_inode target;
 	tiny_dirblk tmp_dirblk;
-	unsigned int inode_no;
+	int target_inodeno;
+	int parent_inodeno;
+	int i, j;
 
 	// 1. get inode number
-	inode_no = GetFreeInode();
+	target_inodeno = GetFreeInode();
 	if ( SetInodeFreeToAlloc() == -1 ) {
-		goto __create_file_finalize;
+		goto __create_file_success;
 	}
 
-	target = (tiny_inode*)calloc(sizeof(tiny_inode), 1);
-
-	target->i_nblk = 0;
-	target->i_size = 0;
-	target->i_type = FILE_TYPE_FILE;
+	target.i_nblk = 0;
+	target.i_size = 0;
+	target.i_type = FILE_TYPE_FILE;
 
 	// 2. write a inode entry into inode block
-	WriteInode(target, inode_no);
+	WriteInode(&target, target_inodeno);
 
 	// 3. find a empty place for dentry
 	for ( i = 0 ; i < parent_inode->i_nblk ; i++ ) {
 		ReadDirBlock(&tmp_dirblk, parent_inode->i_block[i]);
 		for ( j = 0 ; j < NUM_OF_DIRENT_IN_1BLK ; j++ ) {
+			if ( i == 0 && j == 0 ) {
+				parent_inodeno = tmp_dirblk.dirEntries[0].inodeNum;
+			}
 			if ( strcmp(tmp_dirblk.dirEntries[j].name, "") == 0 ) {
-				tmp_dirblk.dirEntries[j].inodeNum = inode_no;
+				tmp_dirblk.dirEntries[j].inodeNum = target_inodeno;
 				tmp_dirblk.dirEntries[j].type = FILE_TYPE_FILE;
-				strncpy(tmp_dirblk.dirEntries[j].name, name, NAME_LEN_MAX);
-				goto __create_file_finalize;
+				strncpy(tmp_dirblk.dirEntries[j].name, name, NAME_LEN_MAX - 1);
+				tmp_dirblk.dirEntries[j].name[NAME_LEN_MAX - 1] = '\0';
+				WriteDirBlock(&tmp_dirblk, parent_inode->i_block[i]);
+				goto __create_file_success;
 			}
 		}
 	}
-	
-	// error occured!
-	free(target);
-	target = NULL;
-	SetInodeAllocToFree(inode_no);
 
-__create_file_finalize:
-	return target;
+	//TODO: allocate new i_block
+	if ( parent_inode->i_nblk != TINY_N_DIRECT_BLOCKS ) {
+		parent_inode->i_block[parent_inode->i_nblk++] = GetFreeBlock();
+		SetBlockFreeToAlloc();
+
+		ReadDirBlock(&tmp_dirblk, 
+				parent_inode->i_block[parent_inode->i_nblk-1]);
+		tmp_dirblk.dirEntries[0].inodeNum = target_inodeno;
+		tmp_dirblk.dirEntries[0].type = FILE_TYPE_FILE;
+		strncpy(tmp_dirblk.dirEntries[0].name, name, NAME_LEN_MAX - 1);
+		tmp_dirblk.dirEntries[0].name[NAME_LEN_MAX - 1] = '\0';
+		WriteDirBlock(&tmp_dirblk, 
+				parent_inode->i_block[parent_inode->i_nblk-1]);
+		WriteInode(parent_inode, parent_inodeno);
+
+		goto __create_file_success;
+	}
+
+	// err: already using all i_block -> return NULL;
+	// error occured!
+__create_file_failed:
+	SetInodeAllocToFree(target_inodeno);
+
+__create_file_success:
+
+	if(qid < 0)
+	{
+		printf("q open fail\n");
+		return ;
+	}
+
+	SuperBlk_t sb;
+	sb.fsi = tiny_superblk;
+	if(SendMQ(qid, MSG_SUPER_BLOCK, &sb) < 0)
+	{
+		printf("superblk send fail\n");
+		return ;
+	}
+
+	InodeBitmap_t ibm;
+	ibm.size = tiny_superblk.s_ninode / 8; /*byte*/
+	memcpy(ibm.s_ibitmap_ptr, tiny_superblk.s_ibitmap_ptr, ibm.size);
+	if(SendMQ(qid, MSG_INODE_BITMAP, &ibm) < 0)
+	{
+		printf("ibm send fail\n");
+		return ;
+	}
+
+	BlockBitmap_t bbm;
+	bbm.size = tiny_superblk.s_datablk_size / 8;  /*byte*/
+	memcpy(bbm.s_dbitmap_ptr, tiny_superblk.s_dbitmap_ptr, bbm.size);
+	if(SendMQ(qid, MSG_BLOCK_BITMAP, &bbm) < 0)
+	{
+		printf("bbm send fail\n");
+		return ;
+	}
+
+	FileIO_t fio;
+	memcpy(&fio.inode, &target, sizeof(tiny_inode));
+	fio.dentry.inodeNum = target_inodeno;
+	fio.flag = 'w';
+	if(SendMQ(qid, MSG_FILEIO, &fio) < 0)
+	{
+		printf("fio send fail\n");
+		return ;
+	}
+	return target_inodeno;
 }
 
 int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 {
 	tiny_inode		i_tmp;
-	tiny_inode		*target;
+	int				target_inodeno;
 	tiny_dentry		*pDentry;
 	char *token;
 	char *path_copy;
@@ -77,7 +143,7 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 			ret = -ENOTDIR;
 			goto err;
 		}
-		
+
 		ReadInode(&i_tmp, pDentry->inodeNum);
 		token = strtok(NULL, "/");
 	}
@@ -87,17 +153,20 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	path_copy = (char*)malloc(strlen(path) + 1);
 	strcpy(path_copy, path);
 	base_name = basename(path_copy);
+	if (strlen(base_name) > NAME_LEN_MAX - 1) {
+		ret = -ENAMETOOLONG;
+		goto err;
+	}
 	pDentry = __find_dentry(&i_tmp, base_name);
 
 	/* There is no such file */
 	if (pDentry == NULL) {
-		//TODO: create a new file
-		target = __create_file(&i_tmp, base_name);
-		if (!target) {
+		target_inodeno = __create_file(&i_tmp, base_name);
+		if (target_inodeno < 0) {
 			ret = -EDQUOT;
 			goto err;
 		}
-		fi->fh = (uint64_t)target;
+		fi->fh = (uint64_t)target_inodeno;
 	} else {
 		ret = -EEXIST;
 		goto err;
@@ -105,6 +174,5 @@ int tiny_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 
 err:
 	free(path_copy);
-
 	return ret;
 }

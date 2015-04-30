@@ -1,0 +1,2 @@
+#define DISPLAY_INODE_BITMAP (1)
+#define DISPLAY_BLOCK_BITMAP (2)

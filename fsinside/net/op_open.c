@@ -10,7 +10,6 @@ extern FileSysInfo tiny_superblk;
 int tiny_open(const char *path, struct fuse_file_info *fi)
 {
 	tiny_inode		i_tmp;
-	tiny_inode		*target;
 	tiny_dentry		*pDentry;
 	char *token;
 	char *path_copy;
@@ -59,10 +58,8 @@ int tiny_open(const char *path, struct fuse_file_info *fi)
 		goto err;
 	}
 
-	/* Get inode of the target */
-	target = (tiny_inode*)malloc(sizeof(tiny_inode));
-	ReadInode(target, pDentry->inodeNum);
-	fi->fh = (uint64_t)target;
+	/* Get inode number of the target */
+	fi->fh = (uint64_t)pDentry->inodeNum;
 
 err:
 	free(path_copy);

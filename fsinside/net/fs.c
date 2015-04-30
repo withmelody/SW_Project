@@ -1,18 +1,25 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <errno.h>
 #include "tinyfs.h"
 #include "fs.h"
+
+#include "msglib/msglib.h"
 
 extern FileSysInfo tiny_superblk;
 
 int GetFreeEntry(char* Bitmap, int BitmapBlockSize)
 {
-/*
- * precondition		: usage ) GetFreeEntry(tiny_superblk.s_ibitmap_ptr, tiny_superblk.s_ibitmap_size);
- * 					  BitmapBlockSize는 Mount()에서 이미 구해진 블럭사이즈 변수이다.
- * postcondition	: 해당 비트의 위치를 리턴함
- * 					  실패시 -1 리턴
- */
+	/*
+	 * precondition		: usage ) GetFreeEntry(tiny_superblk.s_ibitmap_ptr, tiny_superblk.s_ibitmap_size);
+	 * 					  BitmapBlockSize는 Mount()에서 이미 구해진 블럭사이즈 변수이다.
+	 * postcondition	: 해당 비트의 위치를 리턴함
+	 * 					  실패시 -1 리턴
+	 */
 	int blockno = 0;
 	int bitno = 0;
 	int i = 0;
@@ -32,11 +39,11 @@ int GetFreeEntry(char* Bitmap, int BitmapBlockSize)
 }
 int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)
 {
-/*
- * precondition		: usage ) SetFreeToAlloc(tiny_superblk.s_dbitmap_ptr, tiny_superblk.s_dbitmap_size, dest);
- * postcondition	: 해당 dest의 bit를 사용중(0)으로 바꾼다.
- * 					  성공시 0, 해당 bitmap이 모두 사용중이면 -1 리턴
- */
+	/*
+	 * precondition		: usage ) SetFreeToAlloc(tiny_superblk.s_dbitmap_ptr, tiny_superblk.s_dbitmap_size, dest);
+	 * postcondition	: 해당 dest의 bit를 사용중(0)으로 바꾼다.
+	 * 					  성공시 0, 해당 bitmap이 모두 사용중이면 -1 리턴
+	 */
 	int blockno = 0;
 	int bitno = 0;
 	int bitLocation = 0;
@@ -53,54 +60,54 @@ int SetFreeToAlloc(char* Bitmap, int BitmapBlockSize)
 }
 int GetFreeInode()
 {
-/*
- * precondition		:
- * postcondition	: first-fit 조건임. free inode number를 반환한다.
- * 					  성공시 0, inode가 모두 사용중이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: first-fit 조건임. free inode number를 반환한다.
+	 * 					  성공시 0, inode가 모두 사용중이면 -1 리턴
+	 */
 	if ( tiny_superblk.s_ninode_free == 0 )	return WRONG_VALUE;
 	return GetFreeEntry(tiny_superblk.s_ibitmap_ptr, tiny_superblk.s_ibitmap_size);
 }
 int GetFreeBlock()
 {
-/*
- * precondition		:
- * postcondition	: first-fit 조건임. free block number를 반환한다.
- * 					  성공시 0, block이 모두 사용중이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: first-fit 조건임. free block number를 반환한다.
+	 * 					  성공시 0, block이 모두 사용중이면 -1 리턴
+	 */
 	if ( tiny_superblk.s_nblk_free == 0 )	return WRONG_VALUE;
 	return tiny_superblk.s_datablk_start + GetFreeEntry(tiny_superblk.s_dbitmap_ptr, tiny_superblk.s_dbitmap_size);
 }
 int SetInodeFreeToAlloc()
 {
-/*
- * precondition		:
- * postcondition	: first-fit 조건임. inodebitmap에서 제일 앞쪽 미사용중인 inode를
- * 					  사용중(bit:0)으로 바꾼다. 성공시 0, 모두 사용중이라면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: first-fit 조건임. inodebitmap에서 제일 앞쪽 미사용중인 inode를
+	 * 					  사용중(bit:0)으로 바꾼다. 성공시 0, 모두 사용중이라면 -1 리턴
+	 */
 	if ( tiny_superblk.s_ninode_free == 0 )	return WRONG_VALUE;
 	IncUseInode();
 	return SetFreeToAlloc(tiny_superblk.s_ibitmap_ptr, tiny_superblk.s_ibitmap_size);
 }
 int SetBlockFreeToAlloc()
 {
-/*
- * precondition		:
- * postcondition	: first-fit 조건임. blockbitmap에서 제일 앞쪽 미사용중인 block을
- * 					  사용중(bit:0)으로 바꾼다. 성공시 0, 모두 사용중이라면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: first-fit 조건임. blockbitmap에서 제일 앞쪽 미사용중인 block을
+	 * 					  사용중(bit:0)으로 바꾼다. 성공시 0, 모두 사용중이라면 -1 리턴
+	 */
 	if ( tiny_superblk.s_nblk_free == 0 )	return WRONG_VALUE;
 	IncUseBlock();
 	return SetFreeToAlloc(tiny_superblk.s_dbitmap_ptr, tiny_superblk.s_dbitmap_size);
 }
 int SetInodeAllocToFree(int inodeno)
 {
-/*
- * precondition		:
- * postcondition	: 인자 inodeno는 inode number이다.
- * 					  해당 inode number를 inodebitmap에서 free 상태로 만든다.
- * 					  성공시 0, 해당 inode number가 이미 free 상태이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 inodeno는 inode number이다.
+	 * 					  해당 inode number를 inodebitmap에서 free 상태로 만든다.
+	 * 					  성공시 0, 해당 inode number가 이미 free 상태이면 -1 리턴
+	 */
 	int block = inodeno / 8/*size of char*/;
 	int bitno = inodeno % 8/*size of char*/;
 
@@ -117,12 +124,12 @@ int SetInodeAllocToFree(int inodeno)
 }
 int SetBlockAllocToFree(int blockno)
 {
-/*
- * precondition		:
- * postcondition	: 인자 blockno는 block number이다.
- * 					  해당 block number를 blockbitmap에서 free 상태로 만든다.
- * 					  성공시 0, 해당 block number가 이미 free 상태이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 blockno는 block number이다.
+	 * 					  해당 block number를 blockbitmap에서 free 상태로 만든다.
+	 * 					  성공시 0, 해당 block number가 이미 free 상태이면 -1 리턴
+	 */
 	int block = (blockno - tiny_superblk.s_datablk_start) / 8/*size of char*/;
 	int bitno = (blockno - tiny_superblk.s_datablk_start) % 8/*size of char*/;
 
@@ -145,12 +152,12 @@ int SetBlockAllocToFree(int blockno)
 }
 int IncUseInode()	// Inode 1개 사용
 {
-/*
- * precondition		:
- * postcondition	: 사용 inode를 1 증가시키고
- * 					  미사용 inode를 1 감소시킨다
- * 					  성공시 0, 이미 미사용 inode가 0이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 사용 inode를 1 증가시키고
+	 * 					  미사용 inode를 1 감소시킨다
+	 * 					  성공시 0, 이미 미사용 inode가 0이면 -1 리턴
+	 */
 	if ( 0 < tiny_superblk.s_ninode_free )
 	{
 		tiny_superblk.s_ninode_use++;
@@ -161,12 +168,12 @@ int IncUseInode()	// Inode 1개 사용
 }
 int DecUseInode()	// Inode 1개 해제
 {
-/*
- * precondition		:
- * postcondition	: 사용 inode를 1 감소시키고
- * 					  미사용 inode를 1 증가시킨다
- * 					  성공시 0, 이미 사용 inode가 0이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 사용 inode를 1 감소시키고
+	 * 					  미사용 inode를 1 증가시킨다
+	 * 					  성공시 0, 이미 사용 inode가 0이면 -1 리턴
+	 */
 	if ( 0 < tiny_superblk.s_ninode_use )
 	{
 		tiny_superblk.s_ninode_use--;
@@ -177,12 +184,12 @@ int DecUseInode()	// Inode 1개 해제
 }
 int IncUseBlock()	// Block 1개 사용
 {
-/*
- * precondition		:
- * postcondition	: 사용 block를 1 증가시키고
- * 					  미사용 block를 1 감시킨다
- * 					  성공시 0, 이미 사용 block이 0이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 사용 block를 1 증가시키고
+	 * 					  미사용 block를 1 감시킨다
+	 * 					  성공시 0, 이미 사용 block이 0이면 -1 리턴
+	 */
 	if ( 0 < tiny_superblk.s_nblk_free)
 	{
 		tiny_superblk.s_nblk_use++;
@@ -193,12 +200,12 @@ int IncUseBlock()	// Block 1개 사용
 }
 int DecUseBlock()	// Block 1개 해제
 {
-/*
- * precondition		:
- * postcondition	: 사용 block를 1 감소시키고
- * 					  미사용 block를 1 증가시킨다
- * 					  성공시 0, 이미 사용 block 0이면 -1 리턴
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 사용 block를 1 감소시키고
+	 * 					  미사용 block를 1 증가시킨다
+	 * 					  성공시 0, 이미 사용 block 0이면 -1 리턴
+	 */
 	if ( 0 < tiny_superblk.s_nblk_use )
 	{
 		tiny_superblk.s_nblk_use--;
@@ -209,11 +216,11 @@ int DecUseBlock()	// Block 1개 해제
 }
 void ReadInode(tiny_inode* inodeInfo, int inodeNo)
 {
-/*
- * precondition		:
- * postcondition	: 인자 inodeNo는 inode number이다.
- * 					  해당 inode number를 가진 inodeInfo를 디스크에서 읽어온다.
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 inodeNo는 inode number이다.
+	 * 					  해당 inode number를 가진 inodeInfo를 디스크에서 읽어온다.
+	 */
 	Buf* pBuf = NULL;
 	tiny_inode* pMem = NULL;
 	int block = tiny_superblk.s_inodeblk_start + inodeNo / NUM_OF_INODE_IN_1BLK;	// inodeNo가 위치한 블럭
@@ -226,11 +233,11 @@ void ReadInode(tiny_inode* inodeInfo, int inodeNo)
 }
 void WriteInode(tiny_inode* inodeInfo, int inodeNo)
 {
-/*
- * precondition		:
- * postcondition	: 인자 inodeNo는 inodeInfo의 inode number이다.
- * 					  inodeInfo를 디스크에 저장한다.
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 inodeNo는 inodeInfo의 inode number이다.
+	 * 					  inodeInfo를 디스크에 저장한다.
+	 */
 	Buf* pBuf = NULL;
 	void* pMem = malloc(BLOCK_SIZE);
 	tiny_inode* pCur = pMem;
@@ -246,11 +253,11 @@ void WriteInode(tiny_inode* inodeInfo, int inodeNo)
 }
 void ReadDirBlock(tiny_dirblk* dirBlock, int blockNo)
 {
-/*
- * precondition		:
- * postcondition	: 인자 blockNo는 block number이다.
- * 					  해당 block number의 block을 디스크에서 읽어 온다.
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 blockNo는 block number이다.
+	 * 					  해당 block number의 block을 디스크에서 읽어 온다.
+	 */
 	Buf* pBuf = NULL;
 
 	pBuf = BufRead(blockNo);
@@ -258,11 +265,11 @@ void ReadDirBlock(tiny_dirblk* dirBlock, int blockNo)
 }
 void WriteDirBlock(tiny_dirblk* dirBlock, int blockNo)
 {
-/*
- * precondition		:
- * postcondition	: 인자 blockNo는 dirBlock의 block number이다.
- * 					  dirBlock을 디스크에 저장한다.
- */
+	/*
+	 * precondition		:
+	 * postcondition	: 인자 blockNo는 dirBlock의 block number이다.
+	 * 					  dirBlock을 디스크에 저장한다.
+	 */
 	Buf* pBuf = NULL;
 
 	pBuf = BufRead(blockNo);
@@ -270,21 +277,21 @@ void WriteDirBlock(tiny_dirblk* dirBlock, int blockNo)
 }
 void GetEntryPath(char* abspath, char* filename)
 {
-/*
- * precondition		: GetEntryName()을 통해 filename을 미리 추출해놀것
- * 					  abspath != NULL, filename != NULL
- * postcondition	: 절대경로 abspath를 해당 파일 또는 디렉토리의 상위디렉토리 경로까지만 나타냄
- */
+	/*
+	 * precondition		: GetEntryName()을 통해 filename을 미리 추출해놀것
+	 * 					  abspath != NULL, filename != NULL
+	 * postcondition	: 절대경로 abspath를 해당 파일 또는 디렉토리의 상위디렉토리 경로까지만 나타냄
+	 */
 	char* ptr = strstr(abspath, filename);
 	memset(ptr-1, 0, strlen(ptr) + 1);
 }
 int GetEntryName(char* dest, char* abspath)
 {
-/*
- * precondition		: dest != NULL, abspath != NULL
- * postcondition	: 절대경로 abspath에서 최하위 엔트리네임만 dest에 복사
- * 					  성공시 0, 최하위 엔트리 네임이 NAME_LEN_MAX를 넘는다면 -1 리턴
-*/
+	/*
+	 * precondition		: dest != NULL, abspath != NULL
+	 * postcondition	: 절대경로 abspath에서 최하위 엔트리네임만 dest에 복사
+	 * 					  성공시 0, 최하위 엔트리 네임이 NAME_LEN_MAX를 넘는다면 -1 리턴
+	 */
 	//
 	char* ptr = malloc(strlen(abspath)+1);
 	char* del = ptr;
@@ -304,12 +311,12 @@ int GetEntryName(char* dest, char* abspath)
 }
 int GetFreeDir(tiny_dirblk* dirBlock)
 {
-/*
- * precondition		: dirBlock != NULL
- * postcondition	: SetFreeDir()에서 밖엔 쓰이지 않는다.
- * 					  제일 앞쪽부터 찾아 비어있는 dirent index를 리턴함
- * 					  성공시 미사용 중인 entry index, 모두 사용중이면 -1 리턴
-*/
+	/*
+	 * precondition		: dirBlock != NULL
+	 * postcondition	: SetFreeDir()에서 밖엔 쓰이지 않는다.
+	 * 					  제일 앞쪽부터 찾아 비어있는 dirent index를 리턴함
+	 * 					  성공시 미사용 중인 entry index, 모두 사용중이면 -1 리턴
+	 */
 	int i = 0;
 
 	for ( i = 0 ; i < NUM_OF_DIRENT_IN_1BLK ; i++ )
@@ -323,12 +330,13 @@ int GetFreeDir(tiny_dirblk* dirBlock)
 }
 int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 {
-/*
- * precondition		: inodeInfo != NULL, dirname != NULL
- * postcondition	: 해당 inodeInfo의 indirect block에 directory entry가 생성됨
- * 					  제일 앞쪽부터 찾아 비어있는 directory entry index에 name과 inodeno를 할당
- * 					  free directory entry가 없으면 -1 리턴
-*/
+	/*
+	 * precondition		: inodeInfo != NULL, dirname != NULL
+	 * postcondition	: 해당 inodeInfo의 indirect block에 directory entry가 생성됨
+	 * 					  제일 앞쪽부터 찾아 비어있는 directory entry index에 name과 inodeno를 할당
+	 * 					  free directory entry가 없으면 -1 리턴
+	 */
+	int qid = OpenMQ(5000);
 	int block = 0;
 	int index = 0;
 	int	parent_inodeno = 0;
@@ -353,8 +361,8 @@ int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 			newtiny_inode.i_type = FILE_TYPE_DIR;
 			newtiny_inode.i_block[0] = GetFreeBlock();
 			SetBlockFreeToAlloc();
-		////////////////////////////////////////////
-		//	생성한 directory block 초기화
+			////////////////////////////////////////////
+			//	생성한 directory block 초기화
 			ReadDirBlock(&dirBlock, newtiny_inode.i_block[0]);
 			strcpy(dirBlock.dirEntries[0].name, ".");
 			dirBlock.dirEntries[0].inodeNum = current_inodeno;
@@ -363,9 +371,51 @@ int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 			dirBlock.dirEntries[1].inodeNum = parent_inodeno;
 			dirBlock.dirEntries[1].type = FILE_TYPE_DIR;
 			WriteDirBlock(&dirBlock, newtiny_inode.i_block[0]);
-		//
-		////////////////////////////////////////////
+			//
+			////////////////////////////////////////////
 			WriteInode(&newtiny_inode, current_inodeno);
+			if(qid < 0)
+			{
+				printf("q open fail\n");
+				return ;
+			}
+
+			SuperBlk_t sb;
+			sb.fsi = tiny_superblk;
+			if(SendMQ(qid, MSG_SUPER_BLOCK, &sb) < 0)
+			{
+				printf("superblk send fail\n");
+				return ;
+			}
+
+			InodeBitmap_t ibm;
+			ibm.size = tiny_superblk.s_ninode / 8; /*byte*/
+			memcpy(ibm.s_ibitmap_ptr, tiny_superblk.s_ibitmap_ptr, ibm.size);
+			if(SendMQ(qid, MSG_INODE_BITMAP, &ibm) < 0)
+			{
+				printf("ibm send fail\n");
+				return ;
+			}
+
+			BlockBitmap_t bbm;
+			bbm.size = tiny_superblk.s_datablk_size / 8;  /*byte*/
+			memcpy(bbm.s_dbitmap_ptr, tiny_superblk.s_dbitmap_ptr, bbm.size);
+			if(SendMQ(qid, MSG_BLOCK_BITMAP, &bbm) < 0)
+			{
+				printf("bbm send fail\n");
+				return ;
+			}
+
+			FileIO_t fio;
+			memcpy(&fio.inode, &newtiny_inode, sizeof(tiny_inode));
+			fio.dentry.inodeNum = current_inodeno;
+			fio.flag = 'D';
+			if(SendMQ(qid, MSG_FILEIO, &fio) < 0)
+			{
+				printf("fio send fail\n");
+				return ;
+			}
+
 			return 0;
 		}
 	}
@@ -387,8 +437,8 @@ int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 		newtiny_inode.i_type = FILE_TYPE_DIR;
 		newtiny_inode.i_block[0] = GetFreeBlock();
 		SetBlockFreeToAlloc();
-	////////////////////////////////////////////
-	//	생성한 directory block 초기화
+		////////////////////////////////////////////
+		//	생성한 directory block 초기화
 		ReadDirBlock(&dirBlock, newtiny_inode.i_block[0]);
 		memset(&dirBlock, 0, sizeof(tiny_dirblk));
 		strcpy(dirBlock.dirEntries[0].name, ".");
@@ -398,22 +448,65 @@ int MakeDirentry(tiny_inode* inodeInfo, char* dirname)
 		dirBlock.dirEntries[1].inodeNum = parent_inodeno;
 		dirBlock.dirEntries[1].type = FILE_TYPE_DIR;
 		WriteDirBlock(&dirBlock, newtiny_inode.i_block[0]);
-	//
-	////////////////////////////////////////////
+		//
+		////////////////////////////////////////////
 		WriteInode(&newtiny_inode, current_inodeno);
+
+
+		if(qid < 0)
+		{
+			printf("q open fail\n");
+			return ;
+		}
+
+		SuperBlk_t sb;
+		sb.fsi = tiny_superblk;
+		if(SendMQ(qid, MSG_SUPER_BLOCK, &sb) < 0)
+		{
+			printf("superblk send fail\n");
+			return ;
+		}
+
+		InodeBitmap_t ibm;
+		ibm.size = tiny_superblk.s_ninode / 8; /*byte*/
+		memcpy(ibm.s_ibitmap_ptr, tiny_superblk.s_ibitmap_ptr, ibm.size);
+		if(SendMQ(qid, MSG_INODE_BITMAP, &ibm) < 0)
+		{
+			printf("ibm send fail\n");
+			return ;
+		}
+
+		BlockBitmap_t bbm;
+		bbm.size = tiny_superblk.s_datablk_size / 8;  /*byte*/
+		memcpy(bbm.s_dbitmap_ptr, tiny_superblk.s_dbitmap_ptr, bbm.size);
+		if(SendMQ(qid, MSG_BLOCK_BITMAP, &bbm) < 0)
+		{
+			printf("bbm send fail\n");
+			return ;
+		}
+
+		FileIO_t fio;
+		memcpy(&fio.inode, &newtiny_inode, sizeof(tiny_inode));
+		fio.dentry.inodeNum = current_inodeno;
+		fio.flag = 'D';
+		if(SendMQ(qid, MSG_FILEIO, &fio) < 0)
+		{
+			printf("fio send fail\n");
+			return ;
+		}
 		return 0;
 	}
 	// 모든 indirect block을 사용중이며 또한 모든 directory block에 빈 공간이 없다.
-	return WRONG_VALUE;
+	return -EDQUOT;
 }
 int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 {
-/*
- * precondition		: inodeInfo != NULL, dirname != NULL
- * postcondition	: dirname은 삭제를 원하는 디렉토리명이며,
- * 					  inodeInfo는 dirname을 가지고 있을 것으로 추정되는 inode이다.
- * 					  성공시 0, 실패시 -1 리턴
-*/
+	/*
+	 * precondition		: inodeInfo != NULL, dirname != NULL
+	 * postcondition	: dirname은 삭제를 원하는 디렉토리명이며,
+	 * 					  inodeInfo는 dirname을 가지고 있을 것으로 추정되는 inode이다.
+	 * 					  성공시 0, 실패시 -1 리턴
+	 */
 	int block = 0, index = 0;
 	int	parent_inodeno = 0;
 	int	current_inodeno = 0;
@@ -461,15 +554,15 @@ int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 			}
 		}
 	}
-	return -1;
+	return -ENOENT;
 }
 int DirIsEmpty(tiny_inode* inodeInfo)
 {
-/*
- * precondition		: inodeInfo != NULL
- * postcondition	: inodeInfo가 비어있는 디렉토리이면 1 리턴
- * 					  비어있지 않으면 0 리턴, 디렉토리가 아니면 -1 리턴
-*/
+	/*
+	 * precondition		: inodeInfo != NULL
+	 * postcondition	: inodeInfo가 비어있는 디렉토리이면 1 리턴
+	 * 					  비어있지 않으면 0 리턴, 디렉토리가 아니면 -1 리턴
+	 */
 	int block = 0, index = 0;
 	tiny_dirblk dirBlock;
 
@@ -479,7 +572,7 @@ int DirIsEmpty(tiny_inode* inodeInfo)
 	for( index = 0 ; index < MAX_INDEX_OF_DIRBLK ; index++ )
 	{	// .과 ..이 있는 블럭일때
 		if( strcmp(dirBlock.dirEntries[index].name, ".") == 0
-			|| strcmp(dirBlock.dirEntries[index].name, "..") == 0)
+				|| strcmp(dirBlock.dirEntries[index].name, "..") == 0)
 			continue;
 		if( strcmp(dirBlock.dirEntries[index].name, "") != 0)
 			return FALSE;
