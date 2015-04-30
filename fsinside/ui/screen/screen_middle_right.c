@@ -9,39 +9,62 @@ void* middle_right_screen_init(void* nouse) {
 
 	displayDisk_width  = windowW - 2;
 	displayDisk_height = windowH - 2;
-	superblock_win = subwin(stdscr, windowH, windowW, 11, windowW);
-	wborder(superblock_win, '#', '#', '#', '#', '#', '#', '#', '#');
+	fileinfo_window = subwin(stdscr, windowH, windowW, 11, windowW);
+	wborder(fileinfo_window, '#', '#', '#', '#', '#', '#', '#', '#');
 
-	wbkgd(superblock_win, 0);
+	wbkgd(fileinfo_window, 0);
 
-	wrefresh(superblock_win);
+	wrefresh(fileinfo_window);
 
 }
 
-void displayBar(int);
+void printCurrentEvent(FileIO_t* fio) {
+	int i = 0;
+	int block_index;
 
-void print_superblock(SuperBlk_t* sb) {
-	int y ,x;
-	int disk_space = sb->fsi.s_ndatablk;
-	int disk_usage = sb->fsi.s_nblk_use;
-	int disk_free  = sb->fsi.s_nblk_free;
-	displayBar( (int) (100 * ( (float) disk_usage / (float) disk_space )) );
-/*
-	mvwprintw(superblock_win, 3,  3, "%d %d %d", disk_space, disk_usage, disk_free);  
-	getmaxyx(display_diskUsage, y, x);
-	mvwprintw(superblock_win, 4,  3, "%d %d", x, y);
-	getyx(display_diskUsage, y, x);
-	mvwprintw(superblock_win, 5,  3, "%d %d BEFORE : ",x, y);
-	 wmove(display_diskUsage, 1, 1);
-getyx(display_diskUsage, y, x);
-	mvwprintw(superblock_win, 6,  3, "%d %d BEFORE : ",x, y);
-	 
-	displayBar(disk_usage);
-*/
-	// Update disk space bar
-	THREAD_LOCK;
-	wrefresh(superblock_win);
-	THREAD_UNLOCK;
+	werase(fileinfo_window);
+	wborder(fileinfo_window, '#', '#', '#', '#', '#', '#', '#', '#');
+
+	mvwprintw(fileinfo_window, 6, 14,  "File I/O Information");
+	switch(fio->flag) {
+		case 'a':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Get Attribute");
+			break;
+		case 'r':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Read");
+			break;
+		case 'w':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Write");
+			break;
+		case 'd':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Remove");
+			break;
+
+			// Directory Operation
+
+		case 'D':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Make Directory");
+			break;
+		case 'R':
+			mvwprintw(fileinfo_window, 8, 14,  "Operation : Read Directory");
+			break;
+
+	}
+	mvwprintw(fileinfo_window, 9, 14,  "Length : %d", fio->size);
+
+	mvwprintw(fileinfo_window, 11, 14,  "Inode Number : %d", fio->dentry.inodeNum);
+	mvwprintw(fileinfo_window, 12, 14,  "Inode Size : %d", fio->inode.i_size);
+	mvwprintw(fileinfo_window, 13, 14,  "Number of using block(s) : %d", fio->inode.i_nblk);
+
+	mvwprintw(fileinfo_window, 15, 14,  "Block Address :");
+	while(i < 8) {
+		block_index = fio->inode.i_block[i];
+		if (block_index < 0)
+			break;
+		mvwprintw(fileinfo_window, 16, 14 + (10 * i), "[%06d]", block_index);
+		i++;
+
+	}
+
+	wrefresh(fileinfo_window);
 }
-
-

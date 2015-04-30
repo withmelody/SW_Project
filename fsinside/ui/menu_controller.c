@@ -3,6 +3,7 @@
 
 #define EXIT_POPUP_WIDTH (terminal_screen_col/4-8)
 
+extern int isDiskChanged;
 static int exit_flag;
 
 void exit_fsinside() {
@@ -130,15 +131,12 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 		wbkgd(submenu1[i], 0);
 		wrefresh(submenu1[i]);
 	}
+	/*
 	for(i=0; i<SUBMENU_2_SELECT_MAX; i++) {
 		wbkgd(submenu2[i], 0);
 		wrefresh(submenu2[i]);
 	}
-	for(i=0; i<SUBMENU_3_SELECT_MAX; i++) {
-		wbkgd(submenu3[i], 0);
-		wrefresh(submenu3[i]);
-	}
-
+*/
 	switch(selected) {
 		case 0:	
 			for(i=0; i<SUBMENU_1_SELECT_MAX; i++) {
@@ -149,6 +147,7 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 				wrefresh(submenu1[i]);
 			}
 			break;
+			/*
 		case 1:	
 			for(i=0; i<SUBMENU_2_SELECT_MAX; i++) {
 				if (sub_selected == i)
@@ -158,16 +157,7 @@ void sub_change_select_menu_color(int selected, int sub_selected) {
 				wrefresh(submenu2[i]);
 			}
 			break;
-		case 2:	
-			for(i=0; i<SUBMENU_3_SELECT_MAX; i++) {
-				if (sub_selected == i)
-					wbkgd(submenu3[sub_selected], COLOR_PAIR(MN_COLOR_SELECT));
-				else
-					wbkgd(submenu3[i], 0);
-				wrefresh(submenu3[i]);
-			}
-			break;
-
+			*/
 	}
 
 	//	mvwprintw(stdscr, 3, 3, "%d %d", selected, sub_selected);
@@ -179,6 +169,7 @@ void set_show_bitmap(int sub_selected) {
 		CURRENT_MODE = DISPLAY_INODE_BITMAP;
 	else if (sub_selected == 1)
 		CURRENT_MODE = DISPLAY_BLOCK_BITMAP;
+	isDiskChanged = true;
 }
 
 void do_selected_menu(int selected, int sub_selected) {
@@ -186,10 +177,10 @@ void do_selected_menu(int selected, int sub_selected) {
 		case 0:
 			set_show_bitmap(sub_selected);
 			break;
-		case 3:
+		case 2:
 			about();
 			break;
-		case 4:
+		case 3:
 			exit_fsinside();
 			break;
 	}
@@ -230,29 +221,23 @@ void input_select_menu() {
 				run_flag = true;
 				selected = 0;
 				break;
-			case 'e':
-			case 'E':
+			case 'C':
+			case 'c':
 				sub_selected = 0;
 				run_flag = true;
 				selected = 1;
-				break;
-			case 'o':
-			case 'O':
-				sub_selected = 0;
-				run_flag = true;
-				selected = 2;
 				break;
 			case 'a':
 			case 'A':
 				sub_selected = 0;
 				run_flag = true;
-				selected = 3;
+				selected = 2;
 				break;
 			case 'x':
 			case 'X':
 				sub_selected = 0;
 				run_flag = true;;
-				selected = 4;
+				selected = 3;
 				break;
 			default:
 				break;
@@ -264,14 +249,12 @@ void input_select_menu() {
 				if (sub_selected < 0) sub_selected = SUBMENU_1_SELECT_MAX - 1;
 				else if (sub_selected == SUBMENU_1_SELECT_MAX) sub_selected = 0;
 				break;
+	/*
 			case 1:
 				if (sub_selected < 0) sub_selected = SUBMENU_2_SELECT_MAX - 1;
 				else if (sub_selected == SUBMENU_2_SELECT_MAX) sub_selected = 0;
 				break;
-			case 2:
-				if (sub_selected < 0) sub_selected = SUBMENU_3_SELECT_MAX - 1;
-				else if (sub_selected == SUBMENU_3_SELECT_MAX) sub_selected = 0;
-				break;
+				*/
 		}
 		change_select_menu_color(selected, sub_selected);
 		if (run_flag)

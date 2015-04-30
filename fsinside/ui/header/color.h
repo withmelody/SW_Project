@@ -7,6 +7,7 @@
 #define FS_COLOR_WRITING 2
 #define FS_COLOR_LOCKED  3
 #define FS_COLOR_IDLE    4
+#define FS_COLOR_REMOVED 3	// Same color as locked
 
 #define FS_INODE_COLOR_UNUSED 3
 #define FS_INODE_COLOR_USED   4

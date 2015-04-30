@@ -1,5 +1,6 @@
 #include "../header/project.h"
 #include <pthread.h>
+extern isDiskChanged;
 extern isAboutOpen;
 extern Position bottom_menu_pos;
 void* refresh_bitmap_screen(void*);
@@ -49,14 +50,24 @@ void* refresh_bitmap_screen(void* nouse) {
 
 	/////////////////////////////
 	// test code
+
 	while(1) {
 
-		THREAD_LOCK;
 
-		if (isAboutOpen)
+		if (isAboutOpen) {
+
+			nanosleep(&ts, NULL);
 			continue;
+		}
 
+		if (!isDiskChanged) {
+			nanosleep(&ts, NULL);
+			continue;
+		}
+
+		THREAD_LOCK;
 		werase(disk_screen);
+		wrefresh(displayDisk_frame);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		//
@@ -64,10 +75,6 @@ void* refresh_bitmap_screen(void* nouse) {
 		//
 		// Use global value : ibm
 		if (CURRENT_MODE == DISPLAY_INODE_BITMAP) {
-
-			//mvwprintw(disk_screen, 3, 3, " INODE : [[ %d ]]    ", ibm.size);
-			//	wrefresh(disk_screen);
-			//	continue;
 
 			for(i=0; i< windowH; i++) {
 				for(j=0;j< windowW; j++) {
@@ -78,19 +85,17 @@ void* refresh_bitmap_screen(void* nouse) {
 					for (k=0x01; k < 0x100; k = k << 1) {
 						if ( (k & ibm.s_ibitmap_ptr[index]) != 0 ) {
 							wattron(disk_screen, COLOR_PAIR(FS_INODE_COLOR_UNUSED));
-							//mvwprintw(disk_screen, i, j, " ");
+							wprintw(disk_screen, "1");
 							wprintw(disk_screen, "1");
 							wattroff(disk_screen, COLOR_PAIR(FS_INODE_COLOR_UNUSED));
 						}
 						else {
 							wattron(disk_screen, COLOR_PAIR(FS_INODE_COLOR_USED));
-							//mvwprintw(disk_screen, i, j, " ");
+							wprintw(disk_screen, "0");
 							wprintw(disk_screen, "0");
 							wattroff(disk_screen, COLOR_PAIR(FS_INODE_COLOR_USED));
 						}
 					}
-
-					//	wprintw(disk_screen, "[%d] %2X ", index, (char) ibm.s_ibitmap_ptr[index]);
 				}
 			}
 
@@ -117,7 +122,7 @@ void* refresh_bitmap_screen(void* nouse) {
 					tmp++;
 
 					// Initialize All temp blocks
-			//		blocks[index].isUse = blocks[index].isReading = blocks[index].isWriting = blocks[index].isLocked = false;
+					//		blocks[index].isUse = blocks[index].isReading = blocks[index].isWriting = blocks[index].isLocked = false;
 
 					if  ( (k & bbm.s_dbitmap_ptr[i]) == 0) {
 						blocks[index].isUse = true;
@@ -128,46 +133,66 @@ void* refresh_bitmap_screen(void* nouse) {
 			}
 
 			//////////////////////////////
-			// n block = 1024
-			// screen = 2400
+			//
+			// Print blocks
+
+			//			for(index=0; index< bbm.size; index++) {
 			for(i=0; i<windowH; i++) {
 				for(j=0;j<windowW; j++) {
 					index = j + (i * windowW);
 					if (index >= bbm.size)
 						break;
+
 					// Free block
 					if (blocks[index].isUse == false) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_UNUSED));
-						mvwprintw(disk_screen, i, j, ".");
+						//mvwprintw(disk_screen, i, j, ".");
+						wprintw(disk_screen, ".");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_UNUSED));
+						continue;
 					}
 					// Used block
 					else {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_IDLE));
 						mvwprintw(disk_screen, i, j, " ");
+						//wprintw(disk_screen, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_IDLE));
 					}
-					if (blocks[index].isLocked) {
+					if (blocks[index].isRemoved) {
+						wattron(disk_screen, COLOR_PAIR(FS_COLOR_REMOVED));
+						mvwprintw(disk_screen, i, j, " ");
+						//wprintw(disk_screen, " ");
+						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_REMOVED));
+						blocks[index].isRemoved = false;
+					}
+					/*  NOT USED
+						if (blocks[index].isLocked) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_LOCKED));
 						mvwprintw(disk_screen, i, j, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_LOCKED));
-					}
+						}
+					 */
 					if (blocks[index].isReading) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_READING));
 						mvwprintw(disk_screen, i, j, " ");
+						//wprintw(disk_screen, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_READING));
+						blocks[index].isReading = false;
 					}
 					if (blocks[index].isWriting) {
 						wattron(disk_screen, COLOR_PAIR(FS_COLOR_WRITING));
 						mvwprintw(disk_screen, i, j, " ");
+						//wprintw(disk_screen, " ");
 						wattroff(disk_screen, COLOR_PAIR(FS_COLOR_WRITING));
+						blocks[index].isWriting = false;
 					}
 				}
 			}
 			wrefresh(displayDisk_frame);
-			wrefresh(disk_screen);
+			wrefresh(disk_screen);	
 		}
+		isDiskChanged = false;
 		THREAD_UNLOCK;
 		nanosleep(&ts, NULL);
+		}
 	}
-}

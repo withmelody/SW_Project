@@ -35,11 +35,13 @@ RECV_MQ(Ctrl, Msg_t)
 RECV_MQ(SuperBlk, SuperBlk_t)
 RECV_MQ(InodeBM, InodeBitmap_t)
 RECV_MQ(BlockBM, BlockBitmap_t)
+RECV_MQ(FileIO, FileIO_t)
 
 SEND_MQ(Ctrl, Msg_t)
 SEND_MQ(SuperBlk, SuperBlk_t)
 SEND_MQ(InodeBM, InodeBitmap_t)
 SEND_MQ(BlockBM, BlockBitmap_t)
+SEND_MQ(FileIO, FileIO_t)
 
 long SendMQ(int qid, MSG_TYPE type, void *data)
 {
@@ -67,12 +69,18 @@ long SendMQ(int qid, MSG_TYPE type, void *data)
 			}
 			break;
 		case MSG_BLOCK_BITMAP:
-			printf("size = %d\n", (*(BlockBitmap_t*)data).size);
 			if(SendBlockBM(qid, *(BlockBitmap_t*)data) < 0) {
 				printf("bbm send fail %d\n", errno);
 				return -1L;
 			}
 			break;
+		case MSG_FILEIO:
+			if(SendFileIO(qid, *(FileIO_t*)data) < 0) {
+				printf("fio send fail %d\n", errno);
+				return -1L;
+			}
+			break;
+
 		default:
 			return 1L;
 	}

@@ -5,8 +5,6 @@ extern Position bottom_menu_pos;
 char* menu_str[] = {
 	// Must contain blank
 	" Bitmap(b)   ",
-	" Current(c)  ",
-	" Show(o)     ",
 	" About(a)    ",
 	" Exit(x)     "
 };
@@ -14,19 +12,6 @@ char* menu_str[] = {
 char* submenu1_str[] = {
 	" Show Inodes ",
 	" Show Blocks ",
-};
-
-char* submenu2_str[] = {
-	" Inode       ",
-	" Block       ",
-};
-
-char* submenu3_str[] = {
-	" Inode Bitmap",
-	" Block Bitmap",
-	" Event Inode ",
-	" Event Block ",
-	" Cache       ",
 };
 
 void create_submenu() {//int setflag, int menu_index) {
@@ -44,26 +29,15 @@ void create_submenu() {//int setflag, int menu_index) {
 	}
 	wbkgd(submenu1[0], COLOR_PAIR(44));
 
+	/*
 	box(submenu2[0], 0, 0);
 	for(i=0; i<SUBMENU_2_SELECT_MAX; i++) {
 		submenu2[i]= subwin(stdscr, 1, 15, bottom_menu_pos.y + 10 + i, 5 +  bottom_menu_x_distance);
 		mvwprintw(submenu2[i], 0, 1, "%s", submenu2_str[i]);
 		wrefresh(submenu2[i]);
 	}
-
-	box(submenu3[0], 0, 0);
-	for(i=0; i<SUBMENU_3_SELECT_MAX; i++) {
-		submenu3[i]= subwin(stdscr, 1, 15, bottom_menu_pos.y + 10 + i, 5 +  bottom_menu_x_distance * 2);
-		mvwprintw(submenu3[i], 0, 1, "%s", submenu3_str[i]);
-		wrefresh(submenu3[i]);
-	}
+	*/
 }
-
-void menu_color_init() {
-	//        Status         Font         Background
-	//  init_pair(COLOR_UNUSED,  COLOR_BLACK, COLOR_BLACK);
-}
-
 
 // BOTTOM MENU CREATE
 void menu_create() {
@@ -88,7 +62,6 @@ void displayMenu() {
 	int i;
 	chtype ch_border = '#';
 	bottom_menu = subwin(stdscr,0, terminal_screen_col, bottom_menu_pos.y , 0);
-	menu_color_init();
 	menu_create();
 	wborder(bottom_menu, '#', '#', '#', '#', '#', '#', '#', '#');
 	for (i=0; i<terminal_screen_col; i++)

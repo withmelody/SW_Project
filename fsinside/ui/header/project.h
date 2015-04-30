@@ -30,6 +30,7 @@ typedef struct __FB{
 	int isReading;
 	int isWriting;
 	int isLocked;
+	int isRemoved;
 	Position pos;
 } FileBlock;
 
@@ -48,7 +49,6 @@ typedef enum __BlockInfo{
 
 InodeBitmap_t ibm;
 BlockBitmap_t bbm;
-
 
 int displayDisk_width;
 int displayDisk_height;

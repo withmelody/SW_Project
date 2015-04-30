@@ -44,6 +44,7 @@ typedef struct {
 	tiny_inode inode;
 	tiny_dentry dentry;
 	char flag;
+	unsigned int size;
 } FileIO_t;
 
 ///

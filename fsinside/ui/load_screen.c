@@ -6,6 +6,7 @@ Position bottom_menu_pos = {0, 0};
 // flushinp
 
 void  input_select_menu();
+void createSuperBlockWindow();
 //int updateTime(WINDOW*, void*);
 void* updateTime(void*);
 void* display_disk_info(void*);
@@ -19,7 +20,7 @@ int load_screen() {
 
 //	use_window(&timer_thread, NULL, 0);
 	// use_window
-	printLogo();
+//	printLogo();
 //	use_window(top_clock, updateTime, 0);
 
 	ret = pthread_create(&timer_thread, 0, updateTime, 0);	
@@ -44,6 +45,7 @@ void* display_disk_info(void* nouse) {
 	displayDiskUsage();
 	printLogo();
 
+	createSuperBlockWindow();
 //	THREAD_UNLOCK;
 }
 /*

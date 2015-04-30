@@ -4,7 +4,7 @@ OPT = -lfuse -D_FILE_OFFSET_BITS=64 -lm -g
 TARGET = tinyfs
 
 $(TARGET) : $(OBJ)
-	$(CC) -o $(TARGET) $(OBJ) $(OPT)
+	$(CC) -o $(TARGET) $(OBJ) msglib/msglib.o $(OPT)
 $(OBJ) : $(SRC)
 	$(CC) -c $(SRC) $(OPT)
 

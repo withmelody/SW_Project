@@ -10,7 +10,10 @@
 #include "disk.h"
 #include "buf.h"
 
-#define FS_DISK_CAPACITY	(8388608) /* 8M */
+//#define FS_DISK_CAPACITY		(8 * 1024 * 1024) /* 8M */
+//#define FS_INODE_COUNT			(128)
+//#define BLOCK_SIZE				(512)
+#define FS_DISK_CAPACITY		(8 * 1024 * 1024) /* 8M */
 #define FS_INODE_COUNT			(128)
 #define BLOCK_SIZE				(512)
 #define NUM_OF_INODE_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_inode))
@@ -94,6 +97,7 @@ int tiny_releasedir(const char *path, struct fuse_file_info *info);
 /*OK*/void *tiny_init(struct fuse_conn_info *conn);
 void tiny_destroy(void *user_data);
 int tiny_create(const char *path, mode_t mode, struct fuse_file_info *info);
+int tiny_utimens(const char *path, const struct timespec tv[2]);
 
 #endif /* _TINYFS_H_ */
 

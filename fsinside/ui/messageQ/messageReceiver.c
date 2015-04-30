@@ -4,26 +4,29 @@
 #include "msglib.h"
 #include "../header/project.h"
 
+void printSuperBlock(SuperBlk_t *);
 void print_superblock(SuperBlk_t *);
 void updateBlocks(BlockBitmap_t *);
 void updateInodes(InodeBitmap_t *);
 void updateBlocks_for_IO(FileIO_t *);
 
+SuperBlk_t sb;
 void LoadSuperBlk(int qid)
 {
-	SuperBlk_t sb;
-
+//	THREAD_LOCK;
 	if(RecvSuperBlk(qid, &sb) < 0)
 	{
 		printf("super block recv fail\n");
 		return ;
 	}
-	update_DisplayBar(&sb);
+	printSuperBlock(&sb);
+//	THREAD_UNLOCK;
 }
 
 void LoadInodeBM(int qid)
 {
 	InodeBitmap_t ibm;
+//	THREAD_LOCK;
 
 	if(RecvInodeBM(qid, &ibm) < 0)
 	{
@@ -31,11 +34,13 @@ void LoadInodeBM(int qid)
 		return ;
 	}
 	updateInodes(&ibm);
+//	THREAD_UNLOCK;
 }
 
 void LoadBlockBM(int qid)
 {
 	BlockBitmap_t bbm;
+//	THREAD_LOCK;
 
 	if(RecvBlockBM(qid, &bbm) < 0)
 	{
@@ -43,16 +48,22 @@ void LoadBlockBM(int qid)
 		return ;
 	}
 	updateBlocks(&bbm);
+//	THREAD_UNLOCK;
 }
 
 void LoadFileIO(int qid) {
 	FileIO_t fio;
+//	THREAD_LOCK;
 	if(RecvFileIO(qid, &fio) < 0)
 	{
 		printf("FILE IO recv fail\n");
 		return ;
 	}
+	int i;
+	for(i=0; i<12; i++)
+		fio.inode.i_block[i] -= sb.fsi.s_datablk_start;
 	updateBlocks_for_IO(&fio);
+//	THREAD_UNLOCK;
 }
 
 void* messageReceiver(void* nouse)
@@ -67,7 +78,7 @@ void* messageReceiver(void* nouse)
 		printf("q open fail\n");
 		return NULL;
 	}
-	
+
 	while(!PROGRAM_EXIT_FLAG)
 	{
 		mtype = RecvCtrl(qid, &ctrl_msg);
@@ -94,6 +105,6 @@ void* messageReceiver(void* nouse)
 		}
 	}
 	RemoveMQ(qid);
-	
+
 	return NULL;
 }
