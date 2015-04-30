@@ -58,6 +58,7 @@ int tiny_mkdir(const char *path, mode_t mode)
 	if (child_dentry == NULL) {
 		// make a directory!!
 		ret = MakeDirentry(&parent_inode, base_name);
+		BufSync();
 		goto err;
 	} else {
 		// already file exists
