@@ -13,6 +13,8 @@ void updateBlocks_for_IO(FileIO_t* fio) {
 	int i = 0;
 	int block_index;
 	char mode = fio->flag;
+	
+	THREAD_LOCK;
 
 	while(i < 8) {
 		block_index = fio->inode.i_block[i];
@@ -21,14 +23,21 @@ void updateBlocks_for_IO(FileIO_t* fio) {
 		if (block_index < 0)
 			break;
 		i++;
-		if (mode == 'r') {
+		if (mode == 'r') {		// Reading
 			blocks[block_index].isReading = true;
 			blocks[block_index].isWriting = false;
 		}
-		else if (mode == 'w') {
+		else if (mode == 'w') {	// Writing
 			blocks[block_index].isReading = false;
 			blocks[block_index].isWriting = true;
 		}
+		else if (mode == 'i') {	// Idle
+			blocks[block_index].isReading = false;
+			blocks[block_index].isWriting = false;
+		}
 	}
+
+	THREAD_UNLOCK;
+
 	//memcpy(&bbm, block_bitmap, sizeof(BlockBitmap_t));
 }

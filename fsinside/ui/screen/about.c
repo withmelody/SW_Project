@@ -15,6 +15,7 @@ void about_print_right_side();
 void init_about_color();
 
 void about() {
+	THREAD_LOCK;
 	isAboutOpen = true;
 	int ret;
 	pthread_t draw_bean_thread;
@@ -46,8 +47,11 @@ void about() {
 	delwin(bean_window);
 	wclear(about_window);
 	delwin(about_window);
+	wclear(bean_window_frame);
+	delwin(bean_window_frame);
 	redrawwin(stdscr);
 	isAboutOpen = false;
+	THREAD_UNLOCK;
 }
 
 void init_about_color() {
@@ -69,7 +73,6 @@ void about_print_right_side() {
 	wattron(about_window, A_UNDERLINE);
 	mvwprintw(about_window,	base, left_black,          "                                                                                       ");
 	wattroff(about_window, A_UNDERLINE);
-	//mvwprintw(about_window,	base + 2,  left_black,     "%d", logo_count);//     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          @@@@        @@@@+           ");
 
 	wattron(about_window, ABOUT_COLOR_PAIR(logo_count));
 	mvwprintw(about_window,	base + 3,  left_black,     "     @@@@@@@@@@:  @@@@@@@@@ ,@@@@                          @@@@        @@@@+           ");
@@ -158,6 +161,7 @@ void main_bean() {
 	struct timespec ts = {0, 70000000};
 	while(bean_loop) {
 		nanosleep(&ts, NULL);
+//		THREAD_LOCK;
 		about_print_right_side();
 		wmove(bean_window, 0, 0);
 		switch(bean_motion++%13) {
@@ -176,6 +180,7 @@ void main_bean() {
 			case 12 : bean12(); break;
 		}
 		wrefresh(bean_window);
+//		THREAD_UNLOCK;
 	}
 }
 

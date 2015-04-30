@@ -4,6 +4,9 @@
 
 void printLogo() {
 	int left_black = (LOGO_WIDTH) / 2;
+
+	THREAD_LOCK;
+
 	top_clock = subwin(stdscr,11, terminal_screen_col, 0, 0);
 	box(top_clock, 0, 0);
 	wborder(top_clock, '|', '|', '-', '-', '+', '+', '+', '+');
@@ -16,8 +19,10 @@ void printLogo() {
 	mvwprintw(top_clock,    7   , left_black,     "   sMMMMN+```````` :s/:::::::hMMMN//MMMMMy -NMMMMy   oMMMMN/ `ohhhhhhdMMMMMh oMMMMN/ yMMMMN-  .mMMMMh`:NMMMMs.........`      ");
 	mvwprintw(top_clock,    8   , left_black,     "  +MMMMMy         .mMMMMMMMMMMMMNo-NMMMMm``dMMMMm`  :NMMMMs smhyyyyyydMMMNy`:NMMMMs .NMMMMNhyhNMMMMN. sMMMMMdyyyyyyhy.       ");
 	mvwprintw(top_clock,    9   , left_black,     "  .ooooo.         `/++++++++++/- `+ooooo: :+++++:  `/+++++. /+++++++++++:` `/+++++.  -+++++++:/++++/  `:++++++++++++.    ");
-
+	
 	wrefresh(top_clock);
+
+	THREAD_UNLOCK;
 }
 
 

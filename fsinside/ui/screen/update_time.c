@@ -1,5 +1,6 @@
 #include "../header/project.h"
 
+//int updateTime(WINDOW* _top_clock, void* data) {
 void* updateTime(void* nouse) {
 	time_t      tloc;
 	struct tm   *tp;
@@ -16,7 +17,9 @@ void* updateTime(void* nouse) {
 
 		mvwprintw(top_clock, 2 , x - 15, "%s", str_date);
 		mvwprintw(top_clock, 3 , x - 13, "%s", str_time);
+		THREAD_LOCK;
 		wrefresh(top_clock);
+		THREAD_UNLOCK;
 		sleep(1);
 	}
 }

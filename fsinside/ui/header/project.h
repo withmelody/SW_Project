@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <pthread.h>
 
 #include "color.h"
 #include "define_mode.h"
@@ -17,6 +18,9 @@
 
 #define true 1
 #define false 0
+
+#define THREAD_LOCK   {pthread_mutex_lock(&curses_mutex);}
+#define THREAD_UNLOCK {pthread_mutex_unlock(&curses_mutex);}
 
 int PROGRAM_EXIT_FLAG;
 int CURRENT_MODE;
@@ -48,5 +52,7 @@ BlockBitmap_t bbm;
 
 int displayDisk_width;
 int displayDisk_height;
+
+pthread_mutex_t curses_mutex;
 
 #endif // __PROJECT_H__

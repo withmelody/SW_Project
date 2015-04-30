@@ -5,4 +5,4 @@ gcc -g -W  \
 		  screen/screen_top.c screen/screen_bottom.c \
 		  messageQ/messageReceiver.c messageQ/msglib.c \
 		  -lncurses -lpthread -D_FILE_OFFSET_BITS=64
-./a.out
+#./a.out

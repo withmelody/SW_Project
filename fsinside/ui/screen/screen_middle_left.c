@@ -51,6 +51,8 @@ void* refresh_bitmap_screen(void* nouse) {
 	// test code
 	while(1) {
 
+		THREAD_LOCK;
+
 		if (isAboutOpen)
 			continue;
 
@@ -165,6 +167,7 @@ void* refresh_bitmap_screen(void* nouse) {
 			wrefresh(displayDisk_frame);
 			wrefresh(disk_screen);
 		}
+		THREAD_UNLOCK;
 		nanosleep(&ts, NULL);
 	}
 }

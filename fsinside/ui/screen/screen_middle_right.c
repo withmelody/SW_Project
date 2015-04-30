@@ -39,8 +39,9 @@ getyx(display_diskUsage, y, x);
 	displayBar(disk_usage);
 */
 	// Update disk space bar
-
+	THREAD_LOCK;
 	wrefresh(superblock_win);
+	THREAD_UNLOCK;
 }
 
 

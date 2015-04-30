@@ -23,8 +23,9 @@ int main(int argc, char** argv) {
 		return 0;
 	}
 
-	raw();
-//	cbreak();
+	pthread_mutex_init(&curses_mutex, NULL);
+
+//	raw();
 	
 	// Do not print keyboard input
 	noecho();

@@ -119,6 +119,8 @@ void displayBar(int usage) {
 	getbegyx(display_diskUsage, y, x);
 	move(y+1, x+1);
 
+	THREAD_LOCK;
+
 	int usage_percent = bar_width * ((double) usage / 100);
 //	werase(display_diskUsage);
 	wattron(display_diskUsage, COLOR_PAIR(DU_COLOR_FREE));
@@ -126,7 +128,6 @@ void displayBar(int usage) {
 		mvwaddch(display_diskUsage, 0, i, ch_usage);
 		mvwaddch(display_diskUsage, 1, i, ch_usage);
 	}
-
 	wattroff(display_diskUsage, COLOR_PAIR(DU_COLOR_FREE));
 
 	wattron(display_diskUsage, COLOR_PAIR(DU_COLOR_USAGE));
@@ -139,6 +140,8 @@ void displayBar(int usage) {
 //	werase(top_clock);
 	redrawwin(top_clock);
 //	wrefresh(top_clock);
+
+	THREAD_UNLOCK;
 }
 
 void displayDiskUsage() {
@@ -150,7 +153,6 @@ void displayDiskUsage() {
 
 	// for test
 //	displayBar(rand() % 100);//, bar_width);
-
 	wrefresh(display_diskUsage);
 }
 
