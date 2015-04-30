@@ -99,6 +99,7 @@ int tiny_rmdir(const char *path)
 	return 0;
 }
 */
+
 int tiny_rename(const char *before, const char *after)
 {
 	fprintf(stderr, "[TINYFS] %s\n", __func__);

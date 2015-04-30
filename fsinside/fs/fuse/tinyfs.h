@@ -10,14 +10,17 @@
 #include "disk.h"
 #include "buf.h"
 
-#define FS_DISK_CAPACITY		(8 * 1024 * 1024) /* 8M */
-#define FS_INODE_COUNT			(128)
-#define BLOCK_SIZE				(512)
+//#define FS_DISK_CAPACITY		(8 * 1024 * 1024) /* 8M */
+//#define FS_INODE_COUNT			(128)
+//#define BLOCK_SIZE				(512)
+#define FS_DISK_CAPACITY		(16 * 1024 * 1024) /* 16M */
+#define FS_INODE_COUNT			(256)
+#define BLOCK_SIZE				(1024)
 #define NUM_OF_INODE_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_inode))
 #define NUM_OF_DIRENT_IN_1BLK	(BLOCK_SIZE / sizeof(tiny_dentry))
 #define MAX_INDEX_OF_DIRBLK		(NUM_OF_DIRENT_IN_1BLK)
 #define NAME_LEN_MAX			(60)
-#define TINY_N_DIRECT_BLOCKS	(12)
+#define TINY_N_DIRECT_BLOCKS	(24)
 
 typedef enum { 
 	MT_TYPE_UNKNOWN = 0,

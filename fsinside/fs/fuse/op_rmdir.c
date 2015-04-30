@@ -34,8 +34,8 @@ int tiny_rmdir(const char *path)
 	memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 
 	while (token) {
-		memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 		d_tmp = __find_dentry(&i_tmp, token);
+
 		if (!d_tmp || d_tmp->type == FILE_TYPE_FILE) {
 			ret = -ENOTDIR;
 			goto err1;
@@ -43,6 +43,8 @@ int tiny_rmdir(const char *path)
 
 		ReadInode(&i_tmp, d_tmp->inodeNum);
 		token = strtok(NULL, "/");
+
+		memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 	}
 
 	/* Get dentry of the target */
