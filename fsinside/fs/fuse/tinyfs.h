@@ -76,6 +76,7 @@ typedef struct {
 #define __get_dirblk_from_buf(buf)	\
 	((tiny_dirblk*)((buf)->pMem))
 
+int __find_inodeno_for_dir(tiny_inode *dir);
 tiny_dentry *__find_dentry(tiny_inode *dir, const char *entry_name);
 
 int tiny_getattr(const char *path, struct stat *stbuf);
