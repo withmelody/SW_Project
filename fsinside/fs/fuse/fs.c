@@ -463,6 +463,10 @@ int RemoveDirentry(tiny_inode* inodeInfo, char* dirname)
 					WriteDirBlock(&dirBlock, inodeInfo->i_block[block]);
 					return 0;
 				}
+				else if ( ret_value == FALSE ) {
+					// 디렉토리 비어있지 않음
+					return -ENOTEMPTY;
+				}
 			}
 		}
 	}

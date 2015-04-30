@@ -34,8 +34,8 @@ int tiny_mkdir(const char *path, mode_t mode)
 	memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 
 	while (token) {
-		memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 		d_tmp = __find_dentry(&i_tmp, token);
+
 		if (!d_tmp || d_tmp->type == FILE_TYPE_FILE) {
 			ret = -ENOTDIR;
 			goto err;
@@ -43,6 +43,8 @@ int tiny_mkdir(const char *path, mode_t mode)
 
 		ReadInode(&i_tmp, d_tmp->inodeNum);
 		token = strtok(NULL, "/");
+
+		memcpy(&parent_inode, &i_tmp, sizeof(tiny_inode));
 	}
 
 	/* Get dentry of the target */
@@ -55,9 +57,7 @@ int tiny_mkdir(const char *path, mode_t mode)
 	/* There is no such file */
 	if (child_dentry == NULL) {
 		// make a directory!!
-		if ( MakeDirentry(&parent_inode, base_name) == WRONG_VALUE ) {
-			return -EDQUOT;
-		}
+		ret = MakeDirentry(&parent_inode, base_name);
 		goto err;
 	} else {
 		// already file exists
