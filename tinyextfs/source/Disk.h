@@ -3,10 +3,13 @@
 
 
 #define BLOCK_SIZE 512
+//#define BLOCK_SIZE 1024
 
 extern void DevInit(void);
 
 extern void DevLoad(void);
+
+extern void DevRelease(void);
 
 extern void DevMoveBlock(int blkno);
     

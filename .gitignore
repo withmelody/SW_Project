@@ -1,5 +1,7 @@
 *.swp
+test/
 tinyextfs/source/FileSystem
 tinyextfs/source/MY_DISK
 tinyextfs/source/OBJ/*
-
+fuse-2.9.3/
+fuse-ext2/

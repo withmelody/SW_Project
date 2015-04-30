@@ -1,0 +1,4 @@
+*.o
+tinyfs
+MY_DISK
+mnt/

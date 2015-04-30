@@ -137,7 +137,7 @@ void BufInsert(Buf* pBuf, BufList listNum)
 Buf* BufFind(int blkno)
 {
 /*
- * precondition		: usage ) pNew = GetObject(9);
+ * precondition		: usage ) pNew = BufFind(9);
  * postcondition	: If successful, this returns the pointer of the found Buf.
  *					  Otherwise, it returns NULL.
  * 					  Not remove the Buf from the hash table or two lists.
@@ -254,7 +254,6 @@ void InitObjectLink(Buf* pBuf)
 	pBuf->link.tqe_next = NULL;
 	pBuf->link.tqe_prev = NULL;
 }
-// function appended from assignment2
 Buf* BufRead(int blkno)
 {
 /*
