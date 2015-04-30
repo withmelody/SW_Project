@@ -1,1 +1,0 @@
-./tinyfs -d ./bbb -o auto_unmount

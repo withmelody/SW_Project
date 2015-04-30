@@ -1,6 +1,5 @@
 #include <math.h>
 #include "tinyfs.h"
-#include "msglib/msglib.h"
 extern FileSysInfo tiny_superblk;
 
 void *tiny_init(struct fuse_conn_info *conn)
@@ -20,7 +19,6 @@ void *tiny_init(struct fuse_conn_info *conn)
 	 * 				  file system info, inode bitmap, block bitmap을
 	 * 				  정의된 in-memory data structure에 load한다.
 	 */
-	int qid = OpenMQ(5000);
 	int i = 0;
 	Buf* pBuf = NULL;
 	tiny_inode	inodeInfo;
@@ -138,36 +136,4 @@ void *tiny_init(struct fuse_conn_info *conn)
 			}
 			break;
 	}
-	if(qid < 0)
-	{
-		printf("q open fail\n");
-		return ;
-	}
-
-	SuperBlk_t sb;
-	sb.fsi = tiny_superblk;
-	if(SendMQ(qid, MSG_SUPER_BLOCK, &sb) < 0)
-	{
-		printf("superblk send fail\n");
-		return ;
-	}
-
-	InodeBitmap_t ibm;
-	ibm.size = tiny_superblk.s_ninode / 8; /*byte*/
-	memcpy(ibm.s_ibitmap_ptr, tiny_superblk.s_ibitmap_ptr, ibm.size);
-	if(SendMQ(qid, MSG_INODE_BITMAP, &ibm) < 0)
-	{
-		printf("ibm send fail\n");
-		return ;
-	}
-
-	BlockBitmap_t bbm;
-	bbm.size = tiny_superblk.s_datablk_size / 8;  /*byte*/
-	memcpy(bbm.s_dbitmap_ptr, tiny_superblk.s_dbitmap_ptr, bbm.size);
-	if(SendMQ(qid, MSG_BLOCK_BITMAP, &bbm) < 0)
-	{
-		printf("bbm send fail\n");
-		return ;
-	}
-
 }

@@ -18,7 +18,7 @@ int tiny_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	int ret = 0;
 	int i, j;
 
-	/* Get inode of the parent directory */
+
 	path_copy = (char*)malloc(strlen(path) + 1);
 	strcpy(path_copy, path);
 	token = strtok(path_copy, "/");
