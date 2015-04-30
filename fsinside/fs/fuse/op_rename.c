@@ -88,6 +88,7 @@ static int _overwrite_dentry(tiny_inode *parent_inode,
 				}
 				SetInodeAllocToFree(target_dentry_remove->inodeNum);
 
+				strncpy(target_dentry_add->name, target_dentry_remove->name, NAME_LEN_MAX);
 				memcpy(&dirblk->dirEntries[j], target_dentry_add,
 						sizeof(tiny_dentry));
 				BufDelete(pBuf);
